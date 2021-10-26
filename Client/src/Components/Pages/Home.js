@@ -28,17 +28,12 @@ const Header = () => {
         </Grid>
         <Grid item xs={3} sm={3} md={3}>
           <Paper elevation={0}>
-            <Stack direction="row" spacing={1} p={1}>
-              <Avatar>SN</Avatar>
-              <Box>
-                <Typography fontSize={13}>Hello</Typography>
-                <Typography>Samba NDIAYE</Typography>
-              </Box>
-            </Stack>
+            <Box p={2}>
+              <Typography>Publicités</Typography>
+            </Box>
           </Paper>
         </Grid>
       </Grid>
-      <Typography fontSize={13}>15 Résultats</Typography>
     </Box>
   );
 };
@@ -116,21 +111,13 @@ const Body = () => {
       </Box>
     );
   };
-  const Right = () => {
-    return (
-      <Paper elevation={0} sx={{ p: 2 }}>
-        <Typography>Publicités</Typography>
-      </Paper>
-    );
-  };
+
   return (
     <Grid container spacing={2} p={1}>
       <Grid item xs={9} md={9} lg={9}>
         <Left />
       </Grid>
-      <Grid item xs={3} md={3} lg={3}>
-        <Right />
-      </Grid>
+      <Grid item xs={3} md={3} lg={3}></Grid>
     </Grid>
   );
 };
@@ -145,7 +132,7 @@ const Home = () => {
   return (
     <div style={{ background: "#F6F6F9", flex: 1 }}>
       <HomeContext.Provider value={{ flights }}>
-        <Container style={{ background: "#F6F6F9", minWidth: "90%" }}>
+        <Container style={{ background: "#F6F6F9", minWidth: "100%" }}>
           <Header />
           <Body />
         </Container>
