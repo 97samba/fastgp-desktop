@@ -6,6 +6,8 @@ import {
   FaCreditCard,
   FaDotCircle,
   FaGlobeAfrica,
+  FaPlaneArrival,
+  FaPlaneDeparture,
   FaRegDotCircle,
   FaShippingFast,
   FaSuitcase,
@@ -13,69 +15,7 @@ import {
 } from "react-icons/fa";
 import { IoIosAirplane } from "react-icons/io";
 import moment from "moment";
-moment.locale("fr", {
-  months:
-    "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
-      "_"
-    ),
-  monthsShort: "janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
-  monthsParseExact: true,
-  weekdays: "dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),
-  weekdaysShort: "dim._lun._mar._mer._jeu._ven._sam.".split("_"),
-  weekdaysMin: "Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),
-  weekdaysParseExact: true,
-  longDateFormat: {
-    LT: "HH:mm",
-    LTS: "HH:mm:ss",
-    L: "DD/MM/YYYY",
-    LL: "D MMMM YYYY",
-    LLL: "D MMMM YYYY HH:mm",
-    LLLL: "dddd D MMMM YYYY HH:mm",
-  },
-  calendar: {
-    sameDay: "[Aujourd’hui à] LT",
-    nextDay: "[Demain à] LT",
-    nextWeek: "dddd [à] LT",
-    lastDay: "[Hier à] LT",
-    lastWeek: "dddd [dernier à] LT",
-    sameElse: "L",
-  },
-  relativeTime: {
-    future: "dans %s",
-    past: "il y a %s",
-    s: "quelques secondes",
-    m: "une minute",
-    mm: "%d minutes",
-    h: "une heure",
-    hh: "%d heures",
-    d: "un jour",
-    dd: "%d jours",
-    M: "un mois",
-    MM: "%d mois",
-    y: "un an",
-    yy: "%d ans",
-  },
-  dayOfMonthOrdinalParse: /\d{1,2}(er|e)/,
-  ordinal: function (number) {
-    return number + (number === 1 ? "er" : "e");
-  },
-  meridiemParse: /PD|MD/,
-  isPM: function (input) {
-    return input.charAt(0) === "M";
-  },
-  // In case the meridiem units are not separated around 12, then implement
-  // this function (look at locale/id.js for an example).
-  // meridiemHour : function (hour, meridiem) {
-  //     return /* 0-23 hour, given meridiem token and hour 1-12 */ ;
-  // },
-  meridiem: function (hours, minutes, isLower) {
-    return hours < 12 ? "PD" : "MD";
-  },
-  week: {
-    dow: 1, // Monday is the first day of the week.
-    doy: 4, // Used to determine first week of the year.
-  },
-});
+
 const Flight = ({ data }) => {
   const Middle = () => {
     return (
@@ -121,9 +61,13 @@ const Flight = ({ data }) => {
           BNC
         </Typography> */}
         <Typography fontSize={20}>{data.departure}</Typography>
-        <Typography fontSize={12} color="#808080" noWrap={false}>
-          {moment(data.lastDepot).format("dddd D MMMM")}
-        </Typography>
+
+        <Stack direction="row" alignItems="center" spacing={0.5}>
+          <FaPlaneDeparture color="gray" size={12} />
+          <Typography fontSize={12} color="#808080" nowrap={true}>
+            {moment(data.lastDepot).format("dddd D MMM")}
+          </Typography>
+        </Stack>
       </Stack>
     );
   };
@@ -135,43 +79,79 @@ const Flight = ({ data }) => {
           ROM
         </Typography> */}
         <Typography fontSize={20}>{data.destination}</Typography>
-        <Typography fontSize={12} color="#808080" nowrap={true}>
-          {moment(data.distributionDate).format("dddd D MMMM")}
-        </Typography>
+        <Stack direction="row" alignItems="center" spacing={0.5}>
+          <FaPlaneArrival color="gray" size={12} />
+          <Typography fontSize={12} color="#808080" nowrap={true}>
+            {moment(data.distributionDate).format("dddd D MMM")}
+          </Typography>
+        </Stack>
       </Stack>
     );
   };
   const Coupon = () => {
     return (
-      <Stack direction="column" flex={2} borderLeft={0.1} borderColor="#E2E2E2" p={2}>
-        <Stack direction="row" spacing={1}>
-          <Paper sx={{ padding: 0.4, border: 1, borderColor: "#C5C5C5" }} elevation={0}>
-            <FaSuitcaseRolling size={13} color="gray" />
-          </Paper>
-          <Paper sx={{ padding: 0.4, border: 1, borderColor: "#C5C5C5" }} elevation={0}>
-            <FaSuitcase size={13} color="gray" />
-          </Paper>
-          <Paper sx={{ padding: 0.4, border: 1, borderColor: "#C5C5C5" }} elevation={0}>
-            <FaCreditCard size={13} color="gray" />
-          </Paper>
-          <Paper sx={{ padding: 0.4, border: 1, borderColor: "#C5C5C5" }} elevation={0}>
-            <FaCoins size={13} color="gray" />
-          </Paper>
-        </Stack>
-        <Stack direction="row" my={1}>
-          <Typography fontSize={14} color="#494aa2">
-            $
-          </Typography>
-          <Stack direction="row">
-            <Typography fontSize={22} fontWeight="555" color="#494aa2">
-              {data.pricePerKg}
-            </Typography>
+      <Box>
+        <Box
+          bgcolor="#f6f6f9"
+          px={1}
+          py={0.6}
+          mt={-0.1}
+          position="absolute"
+          ml={-1}
+          sx={{
+            borderBottomLeftRadius: 10,
+            borderBottomRightRadius: 10,
+            borderLeft: 1,
+            borderRight: 1,
+            borderColor: "#E2E2E2",
+          }}
+        ></Box>
+
+        <Stack direction="column" borderLeft={0.1} borderColor="#E2E2E2" p={2}>
+          <Stack direction="row" spacing={1}>
+            <Paper sx={{ padding: 0.4, border: 1, borderColor: "#C5C5C5" }} elevation={0}>
+              <FaSuitcaseRolling size={13} color="gray" />
+            </Paper>
+            <Paper sx={{ padding: 0.4, border: 1, borderColor: "#C5C5C5" }} elevation={0}>
+              <FaSuitcase size={13} color="gray" />
+            </Paper>
+            <Paper sx={{ padding: 0.4, border: 1, borderColor: "#C5C5C5" }} elevation={0}>
+              <FaCreditCard size={13} color="gray" />
+            </Paper>
+            <Paper sx={{ padding: 0.4, border: 1, borderColor: "#C5C5C5" }} elevation={0}>
+              <FaCoins size={13} color="gray" />
+            </Paper>
           </Stack>
+          <Stack direction="row" my={1}>
+            <Typography fontSize={14} color="#494aa2">
+              $
+            </Typography>
+            <Stack direction="row">
+              <Typography fontSize={22} fontWeight="555" color="#494aa2">
+                {data.pricePerKg}
+              </Typography>
+            </Stack>
+          </Stack>
+          <Button variant="contained" size="small" fullWidth color="warning">
+            Voir
+          </Button>
         </Stack>
-        <Button variant="contained" size="small" fullWidth color="warning">
-          Voir
-        </Button>
-      </Stack>
+        <Box
+          bgcolor="#f6f6f9"
+          px={1}
+          py={0.6}
+          position="absolute"
+          ml={-1}
+          mt={-0.7}
+          sx={{
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            borderLeft: 1,
+            borderRight: 1,
+            borderColor: "#E2E2E2",
+          }}
+        ></Box>
+      </Box>
     );
   };
   const Ticket = () => {
@@ -231,22 +211,13 @@ const Flight = ({ data }) => {
       </Box>
     );
   };
-  const GPAvatar = () => {
-    return (
-      <Stack justifyContent="center" flex={1} alignItems="center">
-        <Avatar sx={{ width: 30, height: 30 }}>
-          <Typography fontSize={13}>{data.publisher.firstName[0].toUpperCase()}</Typography>
-        </Avatar>
-        <Typography fontSize={12}>{data.publisher.firstName}</Typography>
-      </Stack>
-    );
-  };
+
   return (
     <Paper
       sx={{
-        boxShadow: "1px 1px 3px 1px #e2e2e2",
+        // boxShadow: "1px 1px 3px 1px #e2e2e2",
         border: 1,
-        borderColor: "#F2F2F2",
+        borderColor: "#E2E2E2",
         marginBottom: 3,
       }}
       elevation={0}
