@@ -20,6 +20,9 @@ export default function NavBar() {
           </Typography>
 
           <Button color="inherit" style={{ textTransform: "none" }}>
+            Shop
+          </Button>
+          <Button color="inherit" style={{ textTransform: "none" }}>
             Envoyer un colis
           </Button>
           <Button color="inherit" style={{ textTransform: "none" }}>

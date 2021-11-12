@@ -1,6 +1,6 @@
 import { Avatar, Button, Chip, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useContext } from "react";
 import {
   FaCoins,
   FaCreditCard,
@@ -15,9 +15,15 @@ import {
 } from "react-icons/fa";
 import { IoIosAirplane } from "react-icons/io";
 import moment from "moment";
+import { SearchPageContext } from "./Pages/Search";
 
 const Flight = ({ data }) => {
   const Middle = () => {
+    const calculateWeight = () => {
+      let weight = 0;
+      data.suitcases.map((suitecase) => (weight += suitecase.weight));
+      return weight;
+    };
     return (
       <Stack justifyContent="space-between">
         <Box>
@@ -47,7 +53,7 @@ const Flight = ({ data }) => {
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} my={1}>
           <Typography fontSize={12} color="#494aa2">
-            54 kg
+            {calculateWeight()} kg
           </Typography>
           <FaSuitcase color="#494aa2" size={12} />
         </Stack>
@@ -60,12 +66,12 @@ const Flight = ({ data }) => {
         {/* <Typography fontSize={13} fontWeight="bold" color="#494aa2">
           BNC
         </Typography> */}
-        <Typography fontSize={20}>{data.departure}</Typography>
+        <Typography fontSize={20}>{data.departure.name}</Typography>
 
         <Stack direction="row" alignItems="center" spacing={0.5}>
           <FaPlaneDeparture color="gray" size={12} />
-          <Typography fontSize={12} color="#808080" nowrap={true}>
-            {moment(data.lastDepot).format("dddd D MMM")}
+          <Typography fontSize={13} color="#808080">
+            {moment(data.departureDate).format("dddd D MMM")}
           </Typography>
         </Stack>
       </Stack>
@@ -78,10 +84,10 @@ const Flight = ({ data }) => {
         {/* <Typography fontSize={13} fontWeight="bold" color="#494aa2">
           ROM
         </Typography> */}
-        <Typography fontSize={20}>{data.destination}</Typography>
+        <Typography fontSize={20}>{data.destination.name}</Typography>
         <Stack direction="row" alignItems="center" spacing={0.5}>
           <FaPlaneArrival color="gray" size={12} />
-          <Typography fontSize={12} color="#808080" nowrap={true}>
+          <Typography fontSize={13} color="#808080">
             {moment(data.distributionDate).format("dddd D MMM")}
           </Typography>
         </Stack>
@@ -89,6 +95,7 @@ const Flight = ({ data }) => {
     );
   };
   const Coupon = () => {
+    const { viewFlight } = useContext(SearchPageContext);
     return (
       <Box>
         <Box
@@ -123,16 +130,32 @@ const Flight = ({ data }) => {
             </Paper>
           </Stack>
           <Stack direction="row" my={1}>
-            <Typography fontSize={14} color="#494aa2">
-              $
-            </Typography>
-            <Stack direction="row">
+            <Stack direction="row" alignItems="flex-end" spacing={1} flexGrow={1}>
               <Typography fontSize={22} fontWeight="555" color="#494aa2">
-                {data.pricePerKg}
+                {data.prices.filter((price) => price.type === "pricePerKG")[0].price}
               </Typography>
+              <Typography fontSize={16} fontWeight="555" color="#494aa2">
+                $
+              </Typography>
+              <Typography variant="caption"> /kg</Typography>
             </Stack>
+            {/* <Stack direction="row" alignItems="flex-end" spacing={0.5}>
+              <Typography fontSize={19} fontWeight="555" color="#494aa2">
+                {data.prices.filter((price) => price.type === "pricePerSuitcase")[0].price}
+              </Typography>
+              <Typography fontSize={16} fontWeight="555" color="#494aa2">
+                $
+              </Typography>
+              <Typography variant="caption"> /valise</Typography>
+            </Stack> */}
           </Stack>
-          <Button variant="contained" size="small" fullWidth color="warning">
+          <Button
+            variant="contained"
+            size="small"
+            fullWidth
+            color="warning"
+            onClick={() => viewFlight(data)}
+          >
             Voir
           </Button>
         </Stack>
@@ -173,38 +196,45 @@ const Flight = ({ data }) => {
             <Box>
               <Typography fontSize={12}>{data.publisher.firstName}</Typography>
               <Stack direction="row" alignItems="center" spacing={0.3}>
-                <Typography fontSize={9}>1h </Typography>
+                <Typography fontSize={9}>{moment(data.createdAt).fromNow()}</Typography>
                 <Typography fontSize={9}>. </Typography>
                 <FaGlobeAfrica size={10} color="#C5C5C5" />
               </Stack>
             </Box>
           </Stack>
           <Stack direction="row-reverse" spacing={0.5} flex={1}>
-            <Chip
-              label="Livraison"
-              variant="filled"
-              icon={<FaShippingFast size={15} color="gray" />}
-              sx={{ borderColor: "#C5C5C5" }}
-              size="small"
-            />
-            <Chip
-              label="Wave"
-              variant="filled"
-              icon={<FaCoins size={12} color="gray" />}
-              sx={{ borderColor: "#C5C5C5" }}
-              size="small"
-            />
+            {data.canShip ? (
+              <Chip
+                label="Livraison"
+                variant="filled"
+                icon={<FaShippingFast size={15} color="gray" />}
+                sx={{ borderColor: "#C5C5C5" }}
+                size="small"
+              />
+            ) : null}
+            {data.paymentMethod
+              .filter((payment) => payment.supported)
+              .map((method, index) => (
+                <Chip
+                  label={method.label}
+                  key={index}
+                  variant="filled"
+                  icon={<FaCoins size={12} color="gray" />}
+                  sx={{ borderColor: "#C5C5C5" }}
+                  size="small"
+                />
+              ))}
           </Stack>
         </Stack>
 
-        <Grid p={2} container flex={1} alignItems="center" height="90%">
-          <Grid item md={3}>
+        <Grid p={2} container flex={1} alignItems="center">
+          <Grid item md={3} sm={4} lg={3} xl={3}>
             <Left />
           </Grid>
-          <Grid item md={6}>
+          <Grid item md={6} sm={4} lg={6} xl={6}>
             <Middle />
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={3} sm={4} lg={3} xl={3}>
             <Right />
           </Grid>
         </Grid>
@@ -223,10 +253,10 @@ const Flight = ({ data }) => {
       elevation={0}
     >
       <Grid container>
-        <Grid item md={9} flex={1} alignItems="center">
+        <Grid item md={9} sm={9} xl={9} lg={9} alignItems="center">
           <Ticket />
         </Grid>
-        <Grid item md={3}>
+        <Grid item md={3} sm={3} xl={3} lg={3}>
           <Coupon />
         </Grid>
       </Grid>

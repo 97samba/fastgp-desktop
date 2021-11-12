@@ -1,13 +1,17 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import NavBar from "./Components/NavBar";
-import Home from "./Components/Pages/Home";
 import DateAdaptater from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material";
 import moment from "moment";
 import Creation from "./Components/Pages/Creation";
+import Account from "./Components/Pages/Account";
+import Search from "./Components/Pages/Search";
+import Home from "./Components/Pages/Home";
+import View from "./Components/Pages/View";
+import Footer from "./Components/Footer";
 moment.locale("fr", {
   months:
     "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
@@ -79,24 +83,47 @@ const App = () => {
         main: "#494aa2",
       },
     },
+    typography: {
+      fontFamily: [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        '"Inter"',
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        "sans-serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(","),
+    },
   });
   return (
-    <div style={{ background: "#F6F6F9", minWidth: "100%" }}>
+    // <div style={{ background: "#F6F6F9", minWidth: "100%" }}>
+    <div style={{ minWidth: "100%" }}>
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={DateAdaptater}>
+          <NavBar />
           <Router>
             <Switch>
-              <Route exact path="/home">
-                <NavBar />
+              <Route exact path="/">
                 <Home />
               </Route>
-              {/* <Route path="/create"> */}
-              <Route path="/">
-                <NavBar />
+              <Route exact path="/search">
+                <Search />
+              </Route>
+              <Route path="/create">
                 <Creation />
+              </Route>
+              <Route path="/view">
+                <View />
+              </Route>
+              <Route path="/account">
+                <Account />
               </Route>
             </Switch>
           </Router>
+          <Footer />
         </LocalizationProvider>
       </ThemeProvider>
     </div>

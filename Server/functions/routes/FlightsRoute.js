@@ -1,7 +1,15 @@
 const router = require("express").Router();
-const { GetAllFlights, PostAFlight, DeleteAFlight, EditAFlight } = require("../APIs/Flight");
+const {
+  GetAllFlights,
+  GetSomeFlights,
+  PostAFlight,
+  DeleteAFlight,
+  EditAFlight,
+} = require("../APIs/Flight");
 
 router.get("/GetAllFlights", GetAllFlights);
+
+router.get("/GetSomeFlights", GetSomeFlights);
 
 router.post("/PostAFlight", PostAFlight);
 
