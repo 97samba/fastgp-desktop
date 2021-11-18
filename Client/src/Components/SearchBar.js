@@ -143,7 +143,6 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
     }
   };
   useEffect(() => {
-    console.log(`history`, history.location);
     if (history.location.state) {
       setdeparture(history.location.state.departure);
       setdestination(history.location.state.destination);
@@ -165,10 +164,18 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
       }}
     >
       <Grid container spacing={2}>
-        <Grid item md={3} lg={3} xl={3}>
+        <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
           <Departure size={size} />
         </Grid>
-        <Grid item md={1} lg={1} xl={1}>
+        <Grid
+          item
+          xs={1}
+          sm={1}
+          md={1}
+          lg={1}
+          xl={1}
+          sx={{ display: { sm: "none", xs: "none", md: "block" } }}
+        >
           <Button
             fullWidth
             variant="outlined"
@@ -178,10 +185,10 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
             <AiOutlineSwap size={20} />
           </Button>
         </Grid>
-        <Grid item md={3} lg={3} xl={3}>
+        <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
           <Destination size={size} />
         </Grid>
-        <Grid item md={3} lg={3} xl={3}>
+        <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
           <DesktopDatePicker
             type="date"
             value={departureDate}
@@ -190,7 +197,7 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
             onChange={(value) => setDepartureDate(value)}
           />
         </Grid>
-        <Grid item md={2} lg={2} xl={2}>
+        <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
           <Button
             fullWidth
             size="small"

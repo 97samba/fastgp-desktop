@@ -31,7 +31,7 @@ export const verifyNewPost = (
       acceptJJ: acceptJJ === "oui",
       depotAddress: depotAddress,
       retraitAddress: retraitAddress,
-      prices: prices,
+      prices: transformPrices(prices),
       publisher: publisher,
       contacts: contacts,
       facebookLink: facebookLink,
@@ -40,6 +40,14 @@ export const verifyNewPost = (
       canShip: canShip(destination),
       createdAt: new Date(),
     });
+};
+
+const transformPrices = (prices) => {
+  var prix = {};
+  prices.map((price) => {
+    prix = { ...prix, [price.type]: price.price };
+  });
+  return prix;
 };
 
 const VerifyCountries = (departure, destination) => {

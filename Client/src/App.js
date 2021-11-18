@@ -12,6 +12,7 @@ import Search from "./Components/Pages/Search";
 import Home from "./Components/Pages/Home";
 import View from "./Components/Pages/View";
 import Footer from "./Components/Footer";
+import GPViewer from "./Components/Pages/GPViewer";
 moment.locale("fr", {
   months:
     "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
@@ -80,7 +81,17 @@ const App = () => {
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#494aa2",
+        // main: "#494aa2",
+        main: "#535591",
+      },
+      secondary: {
+        main: "#535591",
+      },
+      info: {
+        main: "#f4a261",
+      },
+      warning: {
+        main: "#e76f51",
       },
     },
     typography: {
@@ -120,6 +131,9 @@ const App = () => {
               </Route>
               <Route path="/account">
                 <Account />
+              </Route>
+              <Route path="/GPprofile">
+                <GPViewer />
               </Route>
             </Switch>
           </Router>

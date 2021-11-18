@@ -796,18 +796,26 @@ const Creation = () => {
             <Stack direction="row" p={1} alignItems="center" justifyContent="space-between">
               <Stack direction="row" alignItems="center">
                 <FaPlaneDeparture color="#A5A5A5" />
-                <Typography ml={2}>{departure.name}</Typography>
+                <Typography ml={2}>{departure && departure.name}</Typography>
               </Stack>
-              {departure.name ? <FaCheckCircle color="green" /> : <FaRegCircle color="gray" />}
+              {departure && departure.name ? (
+                <FaCheckCircle color="green" />
+              ) : (
+                <FaRegCircle color="gray" />
+              )}
             </Stack>
           </Paper>
           <Paper elevation={0} sx={{ border: 1, borderColor: "#D5D5D5" }}>
             <Stack direction="row" p={1} alignItems="center" justifyContent="space-between">
               <Stack direction="row" alignItems="center">
                 <FaPlaneArrival color="#A5A5A5" />
-                <Typography ml={2}>{destination.name}</Typography>
+                <Typography ml={2}>{destination && destination.name}</Typography>
               </Stack>
-              {destination.name ? <FaCheckCircle color="green" /> : <FaRegCircle color="gray" />}
+              {destination && destination.name ? (
+                <FaCheckCircle color="green" />
+              ) : (
+                <FaRegCircle color="gray" />
+              )}
             </Stack>
           </Paper>
           <Paper elevation={0} sx={{ border: 1, borderColor: "#D5D5D5" }}>

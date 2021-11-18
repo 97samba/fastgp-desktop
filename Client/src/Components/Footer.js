@@ -1,7 +1,8 @@
-import { Divider, Grid, Stack, Typography } from "@mui/material";
+import { colors, Divider, Grid, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { FaFacebook, FaInstagram, FaPlaneDeparture, FaTwitter, FaYoutube } from "react-icons/fa";
+import COLORS from "../colors";
 
 const Footer = () => {
   const socials = [
@@ -11,7 +12,7 @@ const Footer = () => {
     { icon: <FaTwitter size={20} />, link: "http://www.twitter.fr" },
   ];
   return (
-    <Box minHeight="200px" bgcolor="#494aa2" mt={5}>
+    <Box minHeight="200px" bgcolor={COLORS.primary} mt={5}>
       <Box mx={10} color="white">
         <Grid container pt={5}>
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>

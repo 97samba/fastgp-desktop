@@ -16,6 +16,7 @@ import {
 import { IoIosAirplane } from "react-icons/io";
 import moment from "moment";
 import { SearchPageContext } from "./Pages/Search";
+import colors from "../colors";
 
 const Flight = ({ data }) => {
   const Middle = () => {
@@ -40,22 +41,23 @@ const Flight = ({ data }) => {
           flex={1}
           alignItems="center"
           spacing={1}
+          color="#535591"
         >
-          <FaDotCircle size={13} color="#494aa2" />
+          <FaDotCircle size={13} />
           <Box flex={1}>
             <Divider orientation="horizontal" />
           </Box>
-          <IoIosAirplane size={20} color="#494aa2" />
+          <IoIosAirplane size={20} />
           <Box flex={1}>
             <Divider orientation="horizontal" />
           </Box>
-          <FaRegDotCircle size={13} color="#494aa2" />
+          <FaRegDotCircle size={13} />
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} my={1}>
-          <Typography fontSize={12} color="#494aa2">
+          <Typography fontSize={12} color="gray">
             {calculateWeight()} kg
           </Typography>
-          <FaSuitcase color="#494aa2" size={12} />
+          <FaSuitcase color="#e76f51" size={12} />
         </Stack>
       </Stack>
     );
@@ -66,11 +68,13 @@ const Flight = ({ data }) => {
         {/* <Typography fontSize={13} fontWeight="bold" color="#494aa2">
           BNC
         </Typography> */}
-        <Typography fontSize={20}>{data.departure.name}</Typography>
+        <Typography fontSize={20} color="secondary">
+          {data.departure.name}
+        </Typography>
 
         <Stack direction="row" alignItems="center" spacing={0.5}>
-          <FaPlaneDeparture color="gray" size={12} />
-          <Typography fontSize={13} color="#808080">
+          <FaPlaneDeparture color={colors.warning} size={12} />
+          <Typography fontSize={13} color="GrayText">
             {moment(data.departureDate).format("dddd D MMM")}
           </Typography>
         </Stack>
@@ -84,10 +88,12 @@ const Flight = ({ data }) => {
         {/* <Typography fontSize={13} fontWeight="bold" color="#494aa2">
           ROM
         </Typography> */}
-        <Typography fontSize={20}>{data.destination.name}</Typography>
+        <Typography fontSize={20} color="secondary">
+          {data.destination.name}
+        </Typography>
         <Stack direction="row" alignItems="center" spacing={0.5}>
-          <FaPlaneArrival color="gray" size={12} />
-          <Typography fontSize={13} color="#808080">
+          <FaPlaneArrival color={colors.warning} size={12} />
+          <Typography fontSize={13} color="info">
             {moment(data.distributionDate).format("dddd D MMM")}
           </Typography>
         </Stack>
@@ -131,10 +137,10 @@ const Flight = ({ data }) => {
           </Stack>
           <Stack direction="row" my={1}>
             <Stack direction="row" alignItems="flex-end" spacing={1} flexGrow={1}>
-              <Typography fontSize={22} fontWeight="555" color="#494aa2">
-                {data.prices.filter((price) => price.type === "pricePerKG")[0].price}
+              <Typography fontSize={22} fontWeight="555" color="primary">
+                {data.prices.pricePerKG}
               </Typography>
-              <Typography fontSize={16} fontWeight="555" color="#494aa2">
+              <Typography fontSize={16} fontWeight="555" color="primary">
                 $
               </Typography>
               <Typography variant="caption"> /kg</Typography>
@@ -249,6 +255,7 @@ const Flight = ({ data }) => {
         border: 1,
         borderColor: "#E2E2E2",
         marginBottom: 3,
+        "&:hover": { boxShadow: "1px 1px 4px 1px #E5E5E5", border: 0 },
       }}
       elevation={0}
     >

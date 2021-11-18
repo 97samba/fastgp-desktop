@@ -192,8 +192,8 @@ const Home = () => {
   const [flights, setflights] = useState([]);
   return (
     <SearchPageContext.Provider value={{ flights, setflights }}>
-      <Container>
-        <Box>
+      <Box>
+        <Container>
           <Grid container>
             <Grid item md={6} lg={6} xl={6} p={5}>
               <Stack justifyContent="center" py={4} spacing={2}>
@@ -225,13 +225,19 @@ const Home = () => {
             <Grid item md={6} lg={6} xl={6} mb={5}>
               <img src={PresentationImage} alt="presentation" width="60%" />
             </Grid>
-            <Grid item md={12} lg={12} xl={12} bgcolor="#F5F5F5" minHeight={300} mt={5}>
-              <SearchPaper />
-              <PopularDestinations />
-            </Grid>
           </Grid>
+        </Container>
+        <Box bgcolor="#F5F5F5">
+          <Container>
+            <Grid container>
+              <Grid item md={12} lg={12} xl={12} minHeight={300} mt={5}>
+                <SearchPaper />
+                <PopularDestinations />
+              </Grid>
+            </Grid>
+          </Container>
         </Box>
-      </Container>
+      </Box>
     </SearchPageContext.Provider>
   );
 };
