@@ -13,6 +13,10 @@ import Home from "./Components/Pages/Home";
 import View from "./Components/Pages/View";
 import Footer from "./Components/Footer";
 import GPViewer from "./Components/Pages/GPViewer";
+import Login from "./Components/Pages/Login";
+import NotFound from "./Components/Pages/NotFound";
+import Register from "./Components/Pages/Register";
+import AuthProvider from "./Providers/AuthProvider";
 moment.locale("fr", {
   months:
     "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
@@ -114,28 +118,21 @@ const App = () => {
     <div style={{ minWidth: "100%" }}>
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={DateAdaptater}>
-          <NavBar />
           <Router>
-            <Switch>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route exact path="/search">
-                <Search />
-              </Route>
-              <Route path="/create">
-                <Creation />
-              </Route>
-              <Route path="/view">
-                <View />
-              </Route>
-              <Route path="/account">
-                <Account />
-              </Route>
-              <Route path="/GPprofile">
-                <GPViewer />
-              </Route>
-            </Switch>
+            <AuthProvider>
+              <NavBar />
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route exact path="/search" component={Search} />
+                <Route path="/create" component={Creation} />
+                <Route path="/view" component={View} />
+                <Route path="/account" component={Account} />
+                <Route path="/GPprofile" component={GPViewer} />
+                <Route path="/login" component={Login} />
+                <Route path="/register" component={Register} />
+                <Route component={NotFound} />
+              </Switch>
+            </AuthProvider>
           </Router>
           <Footer />
         </LocalizationProvider>

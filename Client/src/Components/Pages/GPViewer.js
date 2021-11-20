@@ -6,11 +6,13 @@ import {
   Grid,
   Pagination,
   Paper,
+  Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import axios from "axios";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   FaCertificate,
   FaFacebook,
@@ -26,8 +28,11 @@ import {
   IoLogoFacebook,
   IoLogoInstagram,
 } from "react-icons/io5";
+import { useHistory } from "react-router";
 import COLORS from "../../colors";
+import { ENV } from "../../Env";
 import ProfilPic from "../../Images/profile.svg";
+import { AuthContext } from "../../Providers/AuthProvider";
 
 const Right = () => {
   const Location = () => {
@@ -134,6 +139,7 @@ const MyFlights = () => {
   );
 };
 const Presentation = () => {
+  const { user, state, verifyToken } = useContext(GPViewerContext);
   const socials = [
     { icon: <FaFacebook size={17} />, link: "http://www.facebook.fr" },
     { icon: <FaInstagram size={17} />, link: "http://www.instagram.fr" },
@@ -149,24 +155,34 @@ const Presentation = () => {
       </Paper>
       <Stack direction="row" alignItems="flex-start">
         <Box width="20%" height="20%" p={2} mt={-10}>
-          <Box bgcolor="white" borderRadius="100%" p={0.5}>
-            <Avatar alt="test" src={ProfilPic} sx={{ width: "100%", height: "100%" }} />
-          </Box>
+          {state.loading ? (
+            <Box bgcolor="white" borderRadius="100%" width={150} p={0.5}>
+              <Skeleton width={150} height={150} variant="circular" />
+            </Box>
+          ) : (
+            <Box bgcolor="white" borderRadius="100%" p={0.5}>
+              <Avatar alt="test" src={ProfilPic} sx={{ width: "100%", height: "100%" }} />
+            </Box>
+          )}
         </Box>
         <Box m={2} flexGrow={1}>
-          <Typography variant="h5">Marvin Steward</Typography>
+          <Typography variant="h4">
+            {state.loading ? <Skeleton width="80%" /> : user.firstName + " " + user.lastName}
+          </Typography>
           <Stack direction="row" spacing={2} alignItems="center">
-            <Typography color="GrayText" variant="body1">
-              Covaliseur (GP)
+            <Typography color="GrayText" variant="body1" minWidth="50%">
+              {state.loading ? <Skeleton width="80%" /> : "Covaliseur (GP)"}
             </Typography>
-            <FaCertificate size={12} color={COLORS.primary} />
+            {!state.loading && <FaCertificate size={12} color={COLORS.primary} />}
           </Stack>
           <Typography color="GrayText" variant="body1">
-            New York, United States
+            {state.loading ? <Skeleton width="50%" /> : "New York, United States"}
           </Typography>
           <Stack direction="row" spacing={2} my={2} color="GrayText">
             {socials.map((social, index) => (
-              <Box key={index}>{social.icon}</Box>
+              <Box minWidth={20} key={index}>
+                {state.loading ? <Skeleton variant="circular" /> : social.icon}
+              </Box>
             ))}
           </Stack>
         </Box>
@@ -178,37 +194,71 @@ const Presentation = () => {
             p={2}
           >
             <Stack direction="column" alignItems="center">
-              <Typography>33</Typography>
+              <Typography variant="body1" minWidth={20}>
+                {state.loading ? <Skeleton width="100%" /> : "33"}
+              </Typography>
               <Typography>Vols</Typography>
             </Stack>
             <Stack direction="column" alignItems="center">
-              <Typography>234</Typography>
+              <Typography variant="body1" minWidth={20}>
+                {state.loading ? <Skeleton width="100%" /> : "234"}
+              </Typography>
               <Typography>Abonnés</Typography>
             </Stack>
             <Stack direction="column" alignItems="center">
-              <Typography>456</Typography>
+              <Typography variant="body1" minWidth={20}>
+                {state.loading ? <Skeleton width="100%" /> : "456"}
+              </Typography>
               <Typography>Colis</Typography>
             </Stack>
           </Stack>
-          <Button startIcon={<FaUserPlus />} fullWidth variant="contained">
-            Suivre
-          </Button>
+          {state.loading ? (
+            <Skeleton width="100%" height={40} />
+          ) : (
+            <Button startIcon={<FaUserPlus />} fullWidth variant="contained">
+              Suivre
+            </Button>
+          )}
         </Box>
       </Stack>
     </Paper>
   );
 };
+export const GPViewerContext = createContext();
 
 const GPViewer = () => {
+  const { checkConnectivity, verifyToken } = useContext(AuthContext);
+  const [state, setstate] = useState({ loading: true });
+  const [user, setuser] = useState({});
+
+  useEffect(() => {
+    checkConnectivity(true);
+    getProfileDetails();
+  }, []);
+  const getProfileDetails = () => {
+    verifyToken();
+    axios.defaults.headers.common = {
+      Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
+    };
+    axios
+      .get(`${ENV.proxy}userDetails`)
+      .then((result) => {
+        setuser(result.data.user);
+        setstate({ ...state, loading: false });
+      })
+      .catch((error) => console.log(`error.response`, error.response));
+  };
   return (
     <Container>
-      <Grid container spacing={2}>
-        <Grid item sm={12} md={9} xl={9} lg={9}>
-          <Presentation />
-          <MyFlights />
+      <GPViewerContext.Provider value={{ user, state }}>
+        <Grid container spacing={2}>
+          <Grid item sm={12} md={9} xl={9} lg={9}>
+            <Presentation />
+            <MyFlights />
+          </Grid>
+          <Right />
         </Grid>
-        <Right />
-      </Grid>
+      </GPViewerContext.Provider>
     </Container>
   );
 };

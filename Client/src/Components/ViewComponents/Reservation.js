@@ -58,7 +58,7 @@ const Reservation = () => {
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-            <Typography sx={{ width: "33%", flexShrink: 0 }}>Remplissez votre ticket</Typography>
+            <Typography>Remplissez votre ticket</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Grid container my={1} rowSpacing={2} columnSpacing={4}>

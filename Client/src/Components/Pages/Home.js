@@ -1,24 +1,19 @@
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import {
   Button,
   Card,
   CardContent,
   CardMedia,
   Container,
-  Divider,
   Grid,
-  InputBase,
   Paper,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import PresentationImage from "../../Images/undraw_airport_re_oqk1.svg";
 import paris from "../../Images/paris.jpg";
-import { GiAirplaneArrival, GiAirplaneDeparture } from "react-icons/gi";
-import { AiOutlineSwap } from "react-icons/ai";
+import { GiAirplaneDeparture } from "react-icons/gi";
 import { FaAward, FaCoins, FaSuitcase, FaUserAlt } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import { SearchPageContext } from "./Search";

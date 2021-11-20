@@ -104,7 +104,7 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
   const [departureDate, setDepartureDate] = useState(new Date());
   const [departureError, setdepartureError] = useState(false);
   const [destinationError, setdestinationError] = useState(false);
-
+  const [dateOpen, setdateOpen] = useState(false);
   const switchDestinations = () => {
     var newDep = departure;
     setdestination(newDep);
@@ -193,8 +193,13 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
             type="date"
             value={departureDate}
             label="Date de départ"
-            renderInput={(params) => <TextField {...params} fullWidth size={size} />}
+            renderInput={(params) => (
+              <TextField {...params} fullWidth size={size} onClick={() => setdateOpen(true)} />
+            )}
             onChange={(value) => setDepartureDate(value)}
+            open={dateOpen}
+            onOpen={() => setdateOpen(true)}
+            onClose={() => setdateOpen(false)}
           />
         </Grid>
         <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
