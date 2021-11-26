@@ -167,7 +167,7 @@ const FlightList = () => {
         {loading || initializing ? (
           <Box pt={2}>
             {[1, 2, 3, 4, 5].map((data, index) => (
-              <FlightSkeleton data={data} index={index} />
+              <FlightSkeleton index={index} />
             ))}
           </Box>
         ) : (

@@ -2,7 +2,7 @@ import { Grid, Paper, Skeleton, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 
-const FlightSkeleton = ({ data }) => {
+const FlightSkeleton = () => {
   const Left = () => {
     return (
       <Stack direction="column" spacing={1}>
@@ -64,7 +64,7 @@ const FlightSkeleton = ({ data }) => {
           py={0.6}
           position="absolute"
           ml={-1}
-          mt={-0.7}
+          mt={-1}
           sx={{
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,

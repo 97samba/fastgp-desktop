@@ -1,11 +1,13 @@
 import { Button, Divider, Paper, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useContext } from "react";
 import { FaCheckCircle, FaCommentDots, FaStar, FaStarHalfAlt, FaUser } from "react-icons/fa";
 
 import ProfilPic from "../../Images/profile.svg";
+import { ViewContext } from "../Pages/View";
 
 const ProfilDescriptor = ({ state }) => {
+  const { visitProfil } = useContext(ViewContext);
   return (
     <Paper sx={{ p: 3 }}>
       <Box>
@@ -27,7 +29,13 @@ const ProfilDescriptor = ({ state }) => {
         </Stack>
         <Divider sx={{ my: 1 }} />
         <Stack spacing={2} my={2}>
-          <Button variant="contained" fullWidth color="warning" endIcon={<FaUser />}>
+          <Button
+            variant="contained"
+            fullWidth
+            color="warning"
+            endIcon={<FaUser />}
+            onClick={visitProfil}
+          >
             Voir profil
           </Button>
           <Button variant="contained" fullWidth color="primary" endIcon={<FaCommentDots />}>

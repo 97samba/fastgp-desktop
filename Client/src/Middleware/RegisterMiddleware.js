@@ -18,3 +18,7 @@ export const ValidateBirthday = (birthday) => {
   }
   return "13 ans minimum";
 };
+
+//pour les GP
+
+export function validateGpInfo() {}

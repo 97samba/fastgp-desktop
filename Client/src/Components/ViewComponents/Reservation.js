@@ -8,6 +8,7 @@ import {
   FormLabel,
   Grid,
   InputLabel,
+  ListItemIcon,
   MenuItem,
   Paper,
   Radio,
@@ -36,8 +37,17 @@ import { ViewContext } from "../Pages/View";
 import { GiHeartNecklace } from "react-icons/gi";
 
 const Reservation = () => {
-  const { sender, setsender, receiver, setreceiver } = useContext(ViewContext);
+  const { sender, setsender, receiver, setreceiver, currentUser } = useContext(ViewContext);
   const [isReceiver, setisReceiver] = useState("yes");
+  const [state, setstate] = useState({ itemType: "thing", itemDescription: "" });
+
+  function handleBagageTypeChange(e) {
+    setstate({ ...state, itemType: e.target.value });
+  }
+  function handleItemDescriptionChange(e) {
+    setstate({ ...state, itemDescription: e.target.value });
+  }
+
   const bagageType = [
     { label: "Colis pesé", value: "thing", icon: <FaWeightHanging /> },
     { label: "Téléphone", value: "phone", icon: <IoPhonePortraitOutline /> },
@@ -61,7 +71,7 @@ const Reservation = () => {
             <Typography>Remplissez votre ticket</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Grid container my={1} rowSpacing={2} columnSpacing={4}>
+            <Grid container mb={1} rowSpacing={2} columnSpacing={4}>
               <Grid item xs={12} md={12} xl={12} lg={12}>
                 <Typography fontWeight="bold" color="GrayText" variant="body2">
                   Envoyeur
@@ -71,6 +81,7 @@ const Reservation = () => {
                 <TextField
                   label="Prenom"
                   size="small"
+                  disabled={currentUser?.uid}
                   value={sender.firstName}
                   fullWidth
                   InputProps={{ endAdornment: <FaUserCircle color="gray" /> }}
@@ -82,6 +93,7 @@ const Reservation = () => {
                   label="Nom"
                   size="small"
                   value={sender.lastName}
+                  disabled={currentUser?.uid}
                   fullWidth
                   InputProps={{ endAdornment: <FaUserCircle color="gray" /> }}
                   onChange={(e) => setsender({ ...sender, lastName: e.target.value })}
@@ -99,19 +111,33 @@ const Reservation = () => {
                 />
               </Grid>
               <Grid item md={6} lg={6} xl={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Type colis</InputLabel>
-                  <Select fullWidth size="small" defaultValue="thing" label="Type de Colis">
-                    {bagageType.map((type, index) => (
-                      <MenuItem key={index} value={type.value}>
-                        <Stack direction="row" alignItems="center" spacing={1}>
-                          <Box color="GrayText">{type.icon}</Box>
-                          <Typography> {type.label}</Typography>
-                        </Stack>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <TextField
+                  select
+                  label="Type de bagage"
+                  fullWidth
+                  size="small"
+                  value={state.itemType}
+                  onChange={handleBagageTypeChange}
+                >
+                  {bagageType.map((type, index) => (
+                    <MenuItem value={type.value} key={index}>
+                      <ListItemIcon>{type.icon}</ListItemIcon>
+                      {type.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item md={12} lg={12} xl={12}>
+                <TextField
+                  label="Description du contenu"
+                  minRows={2}
+                  placeholder="Ex : description du colis, modéle téléphone, modéle ordinateur, document, nombre d'article ...etc "
+                  multiline
+                  fullWidth
+                  size="small"
+                  value={state.itemDescription}
+                  onChange={handleItemDescriptionChange}
+                />
               </Grid>
               <Grid item md={12} lg={12} xl={12}>
                 <Stack direction="row" alignItems="center" spacing={3}>
@@ -161,6 +187,7 @@ const Reservation = () => {
                     size="small"
                     type="tel"
                     value={receiver.phoneNumber}
+                    helperText="Avec whatsapp de préférence"
                     fullWidth
                     InputProps={{ endAdornment: <FaPhoneAlt color="gray" /> }}
                     onChange={(e) => setreceiver({ ...receiver, phoneNumber: e.target.value })}

@@ -4,6 +4,7 @@ import {
   Container,
   Divider,
   Grid,
+  LinearProgress,
   Pagination,
   Paper,
   Skeleton,
@@ -11,13 +12,16 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   FaCertificate,
   FaFacebook,
   FaInstagram,
+  FaRegStar,
+  FaStar,
+  FaStarHalfAlt,
   FaTwitter,
+  FaUserEdit,
   FaUserPlus,
   FaYoutube,
 } from "react-icons/fa";
@@ -27,27 +31,50 @@ import {
   IoCallOutline,
   IoLogoFacebook,
   IoLogoInstagram,
+  IoLogoWhatsapp,
 } from "react-icons/io5";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import COLORS from "../../colors";
-import { ENV } from "../../Env";
+import { currentUser, useAuth } from "../../firebase/auth";
+import { FollowGP, getUserFlights, UnFollowGP, userDetails } from "../../firebase/db";
 import ProfilPic from "../../Images/profile.svg";
-import { AuthContext } from "../../Providers/AuthProvider";
+import Flight from "../Flight";
+import FlightSkeleton from "../FlightSkeleton";
 
-const Right = () => {
+const Right = ({ userFlights }) => {
   const Location = () => {
+    const [destinations, setdestinations] = useState([]);
+    var locs = [];
+    useEffect(() => {
+      userFlights.length > 0 &&
+        userFlights.map((flight) => {
+          !locs.includes(flight.departure.name + ", " + flight.departure.country) &&
+            locs.push(flight.departure.name + ", " + flight.departure.country);
+          !locs.includes(flight.destination.name + ", " + flight.destination.country) &&
+            locs.push(flight.destination.name + ", " + flight.destination.country);
+        });
+      setdestinations(locs);
+    }, [userFlights]);
     return (
       <Paper variant="outlined">
         <Box p={2}>
-          <Typography fontWeight={700}>Localisation (s)</Typography>
-          <Stack direction="row" spacing={2} alignItems="center" color="GrayText" py={1}>
-            <IoBusinessSharp />
-            <Typography>Dakar, Sénégal</Typography>
-          </Stack>
-          <Stack direction="row" spacing={2} alignItems="center" color="GrayText">
-            <IoBusinessOutline />
-            <Typography>Paris, France</Typography>
-          </Stack>
+          <Typography fontWeight={700} color="primary">
+            Localisation (s)
+          </Typography>
+          {destinations.length > 0 &&
+            destinations.map((loc, index) => (
+              <Stack
+                direction="row"
+                key={index}
+                spacing={2}
+                alignItems="center"
+                color="GrayText"
+                py={1}
+              >
+                <IoBusinessSharp color={COLORS.warning} />
+                <Typography color="GrayText">{loc}</Typography>
+              </Stack>
+            ))}
         </Box>
       </Paper>
     );
@@ -58,7 +85,7 @@ const Right = () => {
         <Box p={2}>
           <Typography fontWeight={700}>Réseaux</Typography>
           <Stack direction="row" spacing={2} alignItems="center" color="GrayText">
-            <IoCallOutline />
+            <IoLogoWhatsapp />
             <Typography>06 ** ** ** **</Typography>
           </Stack>
           <Stack direction="row" spacing={2} alignItems="center" color="GrayText" py={1}>
@@ -121,25 +148,197 @@ const Right = () => {
     </Grid>
   );
 };
-
-const MyFlights = () => {
+const Reviews = () => {
   return (
-    <Paper sx={{ p: 2, mb: 2 }} variant="outlined">
+    <Box my={4}>
+      <Box>
+        <Typography variant="h5" fontWeight={600} color="primary">
+          12 Notes
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+            <Paper variant="outlined" sx={{ m: 2 }}>
+              <Box p={3}>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  alignItems="flex-end"
+                  justifyContent="center"
+                  my={1}
+                  color={COLORS.warning}
+                >
+                  <Typography variant="h4" fontWeight={600}>
+                    4.5
+                  </Typography>
+                  <Typography variant="h6" fontWeight="bold">
+                    / 5
+                  </Typography>
+                </Stack>
+                <Stack direction="row" spacing={1} my={1} justifyContent="center">
+                  <FaStar color={COLORS.yellow} />
+                  <FaStar color={COLORS.yellow} />
+                  <FaStar color={COLORS.yellow} />
+                  <FaStar color={COLORS.yellow} />
+                  <FaStarHalfAlt color={COLORS.yellow} />
+                </Stack>
+                <Typography textAlign="center" variant="body1" color="GrayText">
+                  Basée sur 32 avis
+                </Typography>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
+            <Stack direction="column" spacing={2}>
+              <Stack direction="row" alignItems="center">
+                <Stack
+                  direction="row"
+                  witdh="10%"
+                  bgcolor="green"
+                  color="white"
+                  alignItems="center"
+                  spacing={1}
+                  px={1}
+                  py={0.5}
+                  borderRadius={1}
+                >
+                  <Typography>5</Typography>
+                  <FaRegStar size={18} />
+                </Stack>
+                <Box width="90%" px={2}>
+                  <LinearProgress variant="determinate" value={80} color="success" />
+                </Box>
+                <Typography color="primary" variant="body1">
+                  15
+                </Typography>
+              </Stack>
+              <Stack direction="row" alignItems="center">
+                <Stack
+                  direction="row"
+                  witdh="10%"
+                  bgcolor={COLORS.secondary}
+                  color="white"
+                  alignItems="center"
+                  spacing={1}
+                  px={1}
+                  py={0.5}
+                  borderRadius={1}
+                >
+                  <Typography>4</Typography>
+                  <FaRegStar size={18} />
+                </Stack>
+                <Box width="90%" px={2}>
+                  <LinearProgress variant="determinate" value={65} color="secondary" />
+                </Box>
+                <Typography color="primary" variant="body1">
+                  8
+                </Typography>
+              </Stack>
+              <Stack direction="row" alignItems="center">
+                <Stack
+                  direction="row"
+                  witdh="10%"
+                  bgcolor={COLORS.warning}
+                  color="white"
+                  alignItems="center"
+                  spacing={1}
+                  px={1}
+                  py={0.5}
+                  borderRadius={1}
+                >
+                  <Typography>3</Typography>
+                  <FaRegStar size={18} />
+                </Stack>
+                <Box width="90%" px={2}>
+                  <LinearProgress variant="determinate" value={45} color="warning" />
+                </Box>
+                <Typography color="primary" variant="body1">
+                  5
+                </Typography>
+              </Stack>
+              <Stack direction="row" alignItems="center">
+                <Stack
+                  direction="row"
+                  witdh="10%"
+                  bgcolor={COLORS.yellow}
+                  color="white"
+                  alignItems="center"
+                  spacing={1}
+                  px={1}
+                  py={0.5}
+                  borderRadius={1}
+                >
+                  <Typography>2</Typography>
+                  <FaRegStar size={18} />
+                </Stack>
+                <Box width="90%" px={2}>
+                  <LinearProgress variant="determinate" value={25} color="yellow" />
+                </Box>
+                <Typography color="primary" variant="body1">
+                  3
+                </Typography>
+              </Stack>
+              <Stack direction="row" alignItems="center">
+                <Stack
+                  direction="row"
+                  witdh="10%"
+                  bgcolor="red"
+                  color="white"
+                  alignItems="center"
+                  spacing={1}
+                  px={1}
+                  py={0.5}
+                  borderRadius={1}
+                >
+                  <Typography>1</Typography>
+                  <FaRegStar size={18} />
+                </Stack>
+                <Box width="90%" px={2}>
+                  <LinearProgress variant="determinate" value={10} color="error" />
+                </Box>
+                <Typography color="primary" variant="body1">
+                  1
+                </Typography>
+              </Stack>
+            </Stack>
+          </Grid>
+        </Grid>
+      </Box>
+    </Box>
+  );
+};
+const MyFlights = () => {
+  const { user, state, userFlights } = useContext(GPViewerContext);
+  return (
+    <Paper sx={{ p: 2, mb: 2, background: "#F6F6F9" }} variant="outlined">
       <Box>
         <Typography gutterBottom variant="h5" fontWeight="bold" color="GrayText">
-          Vols
+          Vols ({userFlights.length})
         </Typography>
 
         <Divider />
+        <Box>
+          {state.loadingFlights ? (
+            <Box pt={2}>
+              {[1, 2, 3].map((data, index) => (
+                <FlightSkeleton index={index} />
+              ))}
+            </Box>
+          ) : (
+            <Box pt={2}>
+              {userFlights.length > 0 &&
+                userFlights.map((data, index) => <Flight data={data} index={index} />)}
+            </Box>
+          )}
+        </Box>
         <Box display="flex" justifyContent="center" textAlign="center" flex={1} my={2}>
-          <Pagination count={5} shape="rounded" />
+          <Pagination count={2} shape="rounded" />
         </Box>
       </Box>
     </Paper>
   );
 };
 const Presentation = () => {
-  const { user, state, verifyToken } = useContext(GPViewerContext);
+  const { state, user, currentUser, follow, unFollow } = useContext(GPViewerContext);
   const socials = [
     { icon: <FaFacebook size={17} />, link: "http://www.facebook.fr" },
     { icon: <FaInstagram size={17} />, link: "http://www.instagram.fr" },
@@ -147,25 +346,20 @@ const Presentation = () => {
     { icon: <FaTwitter size={17} />, link: "http://www.twitter.fr" },
   ];
   return (
-    <Paper sx={{ p: 2, mb: 2 }} variant="outlined">
-      <Paper variant="outlined" sx={{ background: "lightGray" }}>
-        <Box flex={1}>
-          <Typography py={10}></Typography>
-        </Box>
-      </Paper>
-      <Stack direction="row" alignItems="flex-start">
-        <Box width="20%" height="20%" p={2} mt={-10}>
+    <Paper sx={{ p: 1, mb: 2 }} variant="outlined">
+      <Stack direction="row" alignItems="center">
+        <Box width="15%" height="15%" p={2}>
           {state.loading ? (
-            <Box bgcolor="white" borderRadius="100%" width={150} p={0.5}>
-              <Skeleton width={150} height={150} variant="circular" />
+            <Box borderRadius="100%" width={100} p={0.5}>
+              <Skeleton width={100} height={100} variant="circular" />
             </Box>
           ) : (
-            <Box bgcolor="white" borderRadius="100%" p={0.5}>
+            <Box bgcolor="lightgray" borderRadius="100%" p={0.5}>
               <Avatar alt="test" src={ProfilPic} sx={{ width: "100%", height: "100%" }} />
             </Box>
           )}
         </Box>
-        <Box m={2} flexGrow={1}>
+        <Stack direction="column" justifyContent="center" mx={2} flexGrow={1}>
           <Typography variant="h4">
             {state.loading ? <Skeleton width="80%" /> : user.firstName + " " + user.lastName}
           </Typography>
@@ -176,7 +370,7 @@ const Presentation = () => {
             {!state.loading && <FaCertificate size={12} color={COLORS.primary} />}
           </Stack>
           <Typography color="GrayText" variant="body1">
-            {state.loading ? <Skeleton width="50%" /> : "New York, United States"}
+            {state.loading ? <Skeleton width="50%" /> : user?.country}
           </Typography>
           <Stack direction="row" spacing={2} my={2} color="GrayText">
             {socials.map((social, index) => (
@@ -185,7 +379,7 @@ const Presentation = () => {
               </Box>
             ))}
           </Stack>
-        </Box>
+        </Stack>
         <Box m={2}>
           <Stack
             direction="row"
@@ -195,19 +389,19 @@ const Presentation = () => {
           >
             <Stack direction="column" alignItems="center">
               <Typography variant="body1" minWidth={20}>
-                {state.loading ? <Skeleton width="100%" /> : "33"}
+                {state.loading ? <Skeleton width="100%" /> : user.flights?.length}
               </Typography>
               <Typography>Vols</Typography>
             </Stack>
             <Stack direction="column" alignItems="center">
               <Typography variant="body1" minWidth={20}>
-                {state.loading ? <Skeleton width="100%" /> : "234"}
+                {state.loading ? <Skeleton width="100%" /> : user.followers.length}
               </Typography>
               <Typography>Abonnés</Typography>
             </Stack>
             <Stack direction="column" alignItems="center">
               <Typography variant="body1" minWidth={20}>
-                {state.loading ? <Skeleton width="100%" /> : "456"}
+                {state.loading ? <Skeleton width="100%" /> : user?.packages?.length}
               </Typography>
               <Typography>Colis</Typography>
             </Stack>
@@ -215,9 +409,35 @@ const Presentation = () => {
           {state.loading ? (
             <Skeleton width="100%" height={40} />
           ) : (
-            <Button startIcon={<FaUserPlus />} fullWidth variant="contained">
-              Suivre
-            </Button>
+            <Box>
+              {user.userId !== currentUser?.uid ? (
+                <Box>
+                  {user?.followers.length > 0 && user.followers.includes(currentUser?.uid) ? (
+                    <Button
+                      startIcon={<FaUserPlus />}
+                      fullWidth
+                      variant="contained"
+                      onClick={unFollow}
+                    >
+                      se désabonner
+                    </Button>
+                  ) : (
+                    <Button
+                      startIcon={<FaUserPlus />}
+                      fullWidth
+                      variant="contained"
+                      onClick={follow}
+                    >
+                      Suivre
+                    </Button>
+                  )}
+                </Box>
+              ) : (
+                <Button startIcon={<FaUserEdit />} fullWidth variant="contained">
+                  Modifier profil
+                </Button>
+              )}
+            </Box>
           )}
         </Box>
       </Stack>
@@ -227,36 +447,63 @@ const Presentation = () => {
 export const GPViewerContext = createContext();
 
 const GPViewer = () => {
-  const { checkConnectivity, verifyToken } = useContext(AuthContext);
-  const [state, setstate] = useState({ loading: true });
-  const [user, setuser] = useState({});
+  const currentUser = useAuth();
+  const history = useHistory();
+  const { id } = useParams();
+  const [state, setstate] = useState({ loading: true, loadingFlights: true });
+  const [user, setuser] = useState();
+  const [userFlights, setuserFlights] = useState([]);
+
+  const follow = async () => {
+    if (currentUser && (await FollowGP(user.email, currentUser?.uid))) {
+      setstate({ ...state, loading: true });
+      var newState = user;
+      newState.followers.push(currentUser.uid);
+      setuser(newState);
+      setstate({ ...state, loading: false });
+    } else {
+      history.push("/register");
+    }
+  };
+  const unFollow = async () => {
+    if (currentUser && (await UnFollowGP(user.email, currentUser?.uid))) {
+      setstate({ ...state, loading: true });
+      var newState = user;
+      const index = newState.followers.indexOf(currentUser.uid);
+      newState.followers.splice(index, 1);
+      setuser(newState);
+      setstate({ ...state, loading: false });
+    } else {
+      history.push("/register");
+    }
+  };
+
+  useEffect(async () => {
+    if (id) {
+      var result = await userDetails(id);
+      var flights = await getUserFlights(id);
+      setuser(result);
+      setuserFlights(flights);
+      setstate({ ...state, loading: false, loadingFlights: false });
+    } else history.push("/login");
+  }, [id]);
 
   useEffect(() => {
-    checkConnectivity(true);
-    getProfileDetails();
-  }, []);
-  const getProfileDetails = () => {
-    verifyToken();
-    axios.defaults.headers.common = {
-      Authorization: `Bearer ${localStorage.getItem("AuthToken")}`,
-    };
-    axios
-      .get(`${ENV.proxy}userDetails`)
-      .then((result) => {
-        setuser(result.data.user);
-        setstate({ ...state, loading: false });
-      })
-      .catch((error) => console.log(`error.response`, error.response));
-  };
+    console.log(`currentUser`, currentUser?.uid);
+  }, [currentUser]);
+
   return (
     <Container>
-      <GPViewerContext.Provider value={{ user, state }}>
+      <GPViewerContext.Provider value={{ user, state, userFlights, currentUser, follow, unFollow }}>
         <Grid container spacing={2}>
           <Grid item sm={12} md={9} xl={9} lg={9}>
-            <Presentation />
-            <MyFlights />
+            <Stack direction="column" spacing={4}>
+              <Presentation />
+              <MyFlights />
+              <Reviews />
+            </Stack>
           </Grid>
-          <Right />
+          <Right userFlights={userFlights} />
         </Grid>
       </GPViewerContext.Provider>
     </Container>

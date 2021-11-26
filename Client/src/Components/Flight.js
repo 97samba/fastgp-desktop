@@ -1,4 +1,4 @@
-import { Avatar, Button, Chip, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
+import { Avatar, Button, Chip, Divider, Grid, Paper, Stack, Typography, Link } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext } from "react";
 import {
@@ -15,26 +15,23 @@ import {
 } from "react-icons/fa";
 import { IoIosAirplane } from "react-icons/io";
 import moment from "moment";
-import { SearchPageContext } from "./Pages/Search";
 import colors from "../colors";
+import { useHistory } from "react-router";
+import COLORS from "../colors";
 
 const Flight = ({ data }) => {
+  const history = useHistory();
+  const viewFlight = (flight) => {
+    history.push(`/view/${flight.id}`, flight);
+  };
+  const calculateWeight = () => {
+    let weight = 0;
+    data.suitcases.map((suitecase) => (weight += suitecase.weight));
+    return weight;
+  };
   const Middle = () => {
-    const calculateWeight = () => {
-      let weight = 0;
-      data.suitcases.map((suitecase) => (weight += suitecase.weight));
-      return weight;
-    };
     return (
-      <Stack justifyContent="space-between">
-        <Box>
-          <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} my={1}>
-            <Typography fontSize={12} color="#494aa2">
-              {/* 54 kg */}
-            </Typography>
-            {/* <FaSuitcase color="#494aa2" size={12} /> */}
-          </Stack>
-        </Box>
+      <Stack justifyContent="space-between" spacing={2}>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -53,7 +50,7 @@ const Flight = ({ data }) => {
           </Box>
           <FaRegDotCircle size={13} />
         </Stack>
-        <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} my={1}>
+        <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} my={2}>
           <Typography fontSize={12} color="gray">
             {calculateWeight()} kg
           </Typography>
@@ -85,23 +82,35 @@ const Flight = ({ data }) => {
   const Right = () => {
     return (
       <Stack direction="column" spacing={1} alignItems="flex-end">
-        {/* <Typography fontSize={13} fontWeight="bold" color="#494aa2">
-          ROM
-        </Typography> */}
         <Typography fontSize={20} color="secondary">
           {data.destination.name}
         </Typography>
-        <Stack direction="row" alignItems="center" spacing={0.5}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={0.5}
+          mt={1}
+          sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
+        >
           <FaPlaneArrival color={colors.warning} size={12} />
-          <Typography fontSize={13} color="info">
+          <Typography fontSize={13} color="Graytext">
             {moment(data.distributionDate).format("dddd D MMM")}
+          </Typography>
+        </Stack>
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={0.5}
+          sx={{ display: { xs: "flex", md: "none", sm: "flex" } }}
+        >
+          <Typography variant="body1" fontWeight={555} color={COLORS.warning}>
+            {data.prices.pricePerKG} €
           </Typography>
         </Stack>
       </Stack>
     );
   };
   const Coupon = () => {
-    const { viewFlight } = useContext(SearchPageContext);
     return (
       <Box>
         <Box
@@ -120,7 +129,7 @@ const Flight = ({ data }) => {
           }}
         ></Box>
 
-        <Stack direction="column" borderLeft={0.1} borderColor="#E2E2E2" p={2}>
+        <Stack borderLeft={0.1} borderColor="#E2E2E2" p={2}>
           <Stack direction="row" spacing={1}>
             <Paper sx={{ padding: 0.4, border: 1, borderColor: "#C5C5C5" }} elevation={0}>
               <FaSuitcaseRolling size={13} color="gray" />
@@ -171,7 +180,7 @@ const Flight = ({ data }) => {
           py={0.6}
           position="absolute"
           ml={-1}
-          mt={-0.7}
+          mt={-1.1}
           sx={{
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
@@ -196,11 +205,15 @@ const Flight = ({ data }) => {
           borderColor="#e2e2e2"
         >
           <Stack direction="row" alignItems="center" flex={1} spacing={1}>
-            <Avatar sx={{ width: 24, height: 24 }}>
-              <Typography fontSize={11}>{data.publisher.firstName[0].toUpperCase()}</Typography>
-            </Avatar>
+            <Link underline="none" href={`/GPprofile/${data.ownerId}`}>
+              <Avatar sx={{ width: 24, height: 24 }}>
+                <Typography fontSize={11}>{data.publisher.firstName[0].toUpperCase()}</Typography>
+              </Avatar>
+            </Link>
             <Box>
-              <Typography fontSize={12}>{data.publisher.firstName}</Typography>
+              <Link underline="hover" href={`/GPprofile/${data.ownerId}`}>
+                <Typography fontSize={12}>{data.publisher.firstName}</Typography>
+              </Link>
               <Stack direction="row" alignItems="center" spacing={0.3}>
                 <Typography fontSize={9}>{moment(data.createdAt).fromNow()}</Typography>
                 <Typography fontSize={9}>. </Typography>
@@ -234,13 +247,13 @@ const Flight = ({ data }) => {
         </Stack>
 
         <Grid p={2} container flex={1} alignItems="center">
-          <Grid item md={3} sm={4} lg={3} xl={3}>
+          <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
             <Left />
           </Grid>
-          <Grid item md={6} sm={4} lg={6} xl={6}>
+          <Grid item xs={4} md={6} sm={4} lg={6} xl={6}>
             <Middle />
           </Grid>
-          <Grid item md={3} sm={4} lg={3} xl={3}>
+          <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
             <Right />
           </Grid>
         </Grid>
@@ -260,10 +273,17 @@ const Flight = ({ data }) => {
       elevation={0}
     >
       <Grid container>
-        <Grid item md={9} sm={9} xl={9} lg={9} alignItems="center">
+        <Grid item xs={12} sm={12} md={9} xl={9} lg={9} alignItems="center" flex={1}>
           <Ticket />
         </Grid>
-        <Grid item md={3} sm={3} xl={3} lg={3}>
+        <Grid
+          item
+          md={3}
+          xl={3}
+          lg={3}
+          flex={1}
+          sx={{ display: { xs: "none", sm: "none", md: "block" } }}
+        >
           <Coupon />
         </Grid>
       </Grid>

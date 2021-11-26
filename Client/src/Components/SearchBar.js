@@ -107,6 +107,11 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
   const [dateOpen, setdateOpen] = useState(false);
   const switchDestinations = () => {
     var newDep = departure;
+    history.replace(`/search/${destination.name}/${departure.name}/${departureDate.toJSON()}`, {
+      departure: destination,
+      destination: departure,
+      date: departureDate,
+    });
     setdestination(newDep);
     setdeparture(destination);
   };
@@ -137,7 +142,7 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
       }
     } else {
       history.push({
-        pathname: "/search",
+        pathname: `/search/${departure.name}/${destination.name}/${departureDate.toJSON()}`,
         state: { departure: departure, destination: destination, date: departureDate },
       });
     }

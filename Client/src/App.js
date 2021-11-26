@@ -17,6 +17,7 @@ import Login from "./Components/Pages/Login";
 import NotFound from "./Components/Pages/NotFound";
 import Register from "./Components/Pages/Register";
 import AuthProvider from "./Providers/AuthProvider";
+import ProfileDetails from "./Components/Pages/ProfileDetails";
 moment.locale("fr", {
   months:
     "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
@@ -97,6 +98,7 @@ const App = () => {
       warning: {
         main: "#e76f51",
       },
+      yellow: { main: "#ffaf47" },
     },
     typography: {
       fontFamily: [
@@ -115,7 +117,7 @@ const App = () => {
   });
   return (
     // <div style={{ background: "#F6F6F9", minWidth: "100%" }}>
-    <div style={{ minWidth: "100%" }}>
+    <div style={{ minWidth: "100%", background: "#fdfdfd" }}>
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={DateAdaptater}>
           <Router>
@@ -123,14 +125,17 @@ const App = () => {
               <NavBar />
               <Switch>
                 <Route exact path="/" component={Home} />
-                <Route exact path="/search" component={Search} />
+                <Route path="/search/:departureCity/:destinationCity/:date" component={Search} />
+                <Route path="/search" component={Search} />
                 <Route path="/create" component={Creation} />
-                <Route path="/view" component={View} />
+                <Route path="/view/:id" component={View} />
                 <Route path="/account" component={Account} />
+                <Route path="/GPprofile/:id" component={GPViewer} />
                 <Route path="/GPprofile" component={GPViewer} />
+                <Route path="/profilDetails/:id" component={ProfileDetails} />
                 <Route path="/login" component={Login} />
                 <Route path="/register" component={Register} />
-                <Route component={NotFound} />
+                <Route path="*" component={NotFound} />
               </Switch>
             </AuthProvider>
           </Router>

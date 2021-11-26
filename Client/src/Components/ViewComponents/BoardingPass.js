@@ -2,13 +2,24 @@ import { Divider, Grid, Paper, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext } from "react";
 import { FaPlane, FaPlaneDeparture } from "react-icons/fa";
-import { MdQrCode2 } from "react-icons/md";
 import { ViewContext } from "../Pages/View";
+import Qrcode from "react-qr-code";
 
 import COLORS from "../../colors";
 
 const BoardingPass = () => {
   const { sender, receiver, state } = useContext(ViewContext);
+
+  const QrCodePass = () => {
+    function getQRCodeValue() {
+      return state.id + ", " + sender.firstName + ", " + sender.lastName;
+    }
+    return (
+      <Stack direction="row" justifyContent="center">
+        <Qrcode value={getQRCodeValue()} bgColor="#F2F2F2F2" fgColor={COLORS.primary} size={80} />
+      </Stack>
+    );
+  };
 
   return (
     <Box>
@@ -35,13 +46,12 @@ const BoardingPass = () => {
                   borderColor: "#C5C5C5",
                 }}
               >
-                <Box py={1} p>
-                  <Box mb={3} textAlign="center" color="GrayText">
-                    <Typography variant="body2">E - Ticket</Typography>
+                <Box py={1} textAlign="center" color="GrayText">
+                  <Typography variant="body2">E - Ticket</Typography>
+                  <Box my={2}>
+                    <QrCodePass />
                   </Box>
-                  <Box textAlign="center" color="GrayText">
-                    <MdQrCode2 size="100%" />
-                  </Box>
+                  <Typography variant="caption">Traçable </Typography>
                 </Box>
               </Grid>
               <Grid

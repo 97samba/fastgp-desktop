@@ -21,27 +21,15 @@ import loginImage from "../../Images/undraw_stranded_traveler_pdbw.svg";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { AuthContext } from "../../Providers/AuthProvider";
 import { useHistory } from "react-router";
-import { login, useAuth } from "../../firebase/db";
+import { login, useAuth } from "../../firebase/auth";
 
 const Middle = ({ currentUser }) => {
   const [state, setstate] = useState({ email: "", password: "", loading: false });
   const [displayErrors, setdisplayErrors] = useState(false);
-  const logIn = () => {
-    // setstate({ ...state, loading: true });
-    login(state.email, state.password);
-    // setstate({ ...state, loading: false });
-
-    // setdisplayErrors(false);
-    // axios
-    //   .post(`${ENV.proxy}login`, state)
-    //   .then((res) => {
-    //     setstate({ ...state, loading: false });
-    //     storeTokenAndRedirect(res.data.token, "/", {});
-    //   })
-    //   .catch((error) => {
-    //     setdisplayErrors(true);
-    //     setstate({ ...state, loading: false });
-    //   });
+  const logIn = async () => {
+    setstate({ ...state, loading: true });
+    await login(state.email, state.password);
+    setstate({ ...state, loading: false });
   };
 
   return (

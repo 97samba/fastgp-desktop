@@ -1,52 +1,140 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-} from "firebase/auth";
-import { useEffect, useState } from "react";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+  getFirestore,
+  query,
+  doc,
+  getDoc,
+  where,
+  getDocs,
+  collection,
+  orderBy,
+  limit,
+  addDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
+import { app } from "./config";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDOrJ7ssiOeYkYZyfj1sY5dOe9AEveGyzQ",
-  authDomain: "fir-c69a6.firebaseapp.com",
-  projectId: "fir-c69a6",
-  storageBucket: "fir-c69a6.appspot.com",
-  messagingSenderId: "884911263833",
-  appId: "1:884911263833:web:0b3baa30046139c2b7e148",
-  measurementId: "G-E680LX8DWL",
+export const db = getFirestore(app);
+
+export const getAFlight = async (id) => {
+  var flight;
+  await getDoc(doc(db, "flights", id)).then((data) => (flight = { ...data.data(), id: data.id }));
+  return flight;
 };
 
-// Initialize Firebase
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth();
-
-export const login = (email, password) => {
-  signInWithEmailAndPassword(auth, email, password).catch((error) => console.log(`error`, error));
+export const postAflight = async (flight, email) => {
+  addDoc(collection(db, "flights"), flight)
+    .then(async (data) => {
+      console.log(`data`, data.id);
+      await updateDoc(doc(db, "users", email), { flights: arrayUnion(data.id) }).catch((error) =>
+        console.log("erreur lors de l'ajout de l'id du vol", error)
+      );
+    })
+    .then(() => console.log("ajout avec succes"))
+    .catch((error) => console.log(`erreur creation post`, error));
 };
 
-export const register = (email, password) => {
-  createUserWithEmailAndPassword(auth, email, password).catch((error) =>
-    console.log(`error`, error)
-  );
-};
-export const logout = () => {
-  signOut(auth).catch((error) => console.log(`error`, error));
-};
-
-export function useAuth() {
-  const [currentUser, setCurrentUser] = useState(null);
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => setCurrentUser(user));
-    return unsubscribe;
-  }, []);
-  return currentUser;
+export async function FollowGP(email, followerId) {
+  const ref = doc(db, "users", email);
+  var followed = false;
+  await updateDoc(ref, {
+    followers: arrayUnion(followerId),
+  })
+    .then(() => (followed = true))
+    .then(() => console.log("follow done"))
+    .catch(() => console.log("erreu lors de l'abonnement"));
+  return followed;
+}
+export async function UnFollowGP(email, followerId) {
+  const ref = doc(db, "users", email);
+  var unfollowed = false;
+  await updateDoc(ref, {
+    followers: arrayRemove(followerId),
+  })
+    .then(() => (unfollowed = true))
+    .then(() => console.log("follow done"))
+    .catch(() => console.log("erreu lors de l'abonnement"));
+  return unfollowed;
 }
 
-export function currentUser() {}
+export async function userDetails(id) {
+  const q = query(collection(db, "users"), where("userId", "==", id));
+  let user;
+  await getDocs(q)
+    .then((data) => {
+      user = data.docs[0].data();
+    })
+    .catch((erreur) => console.log("erreur", erreur));
+  return user;
+}
+export const getUserFlights = async (userId) => {
+  let flights = [];
+  const q = query(
+    collection(db, "flights"),
+    where("ownerId", "==", userId)
+    // orderBy("createdAt", "asc")
+  );
+  await getDocs(q).then((data) => {
+    data.docs.forEach((doc) => flights.push({ ...doc.data(), id: doc.id }));
+  });
+  return flights;
+};
+
+export async function GetAllFlights() {
+  const q = query(collection(db, "flights"), orderBy("createdAt"), limit(5));
+  const all = [];
+  await getDocs(q)
+    .then((snap) => {
+      snap.docs.forEach((doc) => all.push({ ...doc.data(), id: doc.id }));
+    })
+    .catch((error) => console.log(`error`, error));
+  return all;
+}
+
+export async function QueryFlights(departure, destination, date) {
+  var exactResults = await getExactResults(departure.name, destination.name, date);
+  var nearResults = await getNearResults(departure.name, destination.name, departure.country, date);
+
+  // console.log(`exactResults`, exactResults.length);
+  // console.log(`nearResults`, nearResults.length);
+  return { exact: exactResults, near: nearResults };
+}
+const getExactResults = async (departureCity, destinationCity, departureDate) => {
+  var exacts = [];
+  // var errors;
+  const q = query(
+    collection(db, "flights"),
+    where("departure.name", "==", departureCity),
+    where("destination.name", "==", destinationCity),
+    where("departureDate", ">=", departureDate)
+  );
+  await getDocs(q)
+    .then((snap) => {
+      snap.docs.forEach((doc) => exacts.push({ ...doc.data(), id: doc.id }));
+    })
+    .catch((error) => console.log(`error`, error));
+
+  return exacts;
+};
+const getNearResults = async (departureCity, destinationCity, departureCountry, departureDate) => {
+  var nearResults = [];
+  const q = query(
+    collection(db, "flights"),
+    where("departure.name", "==", departureCity),
+    where("departure.country", "==", departureCountry)
+  );
+  await getDocs(q)
+    .then((snap) => {
+      snap.docs.forEach(
+        (doc) =>
+          doc.data().departure.name != departureCity &&
+          nearResults.push({ ...doc.data(), id: doc.id })
+      );
+    })
+    .catch((error) => console.log(`error`, error));
+
+  return nearResults;
+};

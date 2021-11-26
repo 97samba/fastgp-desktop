@@ -1,10 +1,13 @@
 import { Button, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaFacebook, FaPhone, FaUserCircle, FaWhatsapp } from "react-icons/fa";
+import { ViewContext } from "../Pages/View";
 import Advertiser from "./Advertiser";
 
 const ContactInfo = ({ state, adViewed, setadViewed }) => {
   const [open, setopen] = useState(false);
+  const { currentUser } = useContext(ViewContext);
+
   const hideInformations = () => {
     return {
       phoneNumber: state.publisher.phone.substring(0, 2) + "*******",
@@ -26,7 +29,7 @@ const ContactInfo = ({ state, adViewed, setadViewed }) => {
   };
 
   useEffect(() => {
-    adViewed
+    adViewed || currentUser?.uid
       ? setdatas({
           phoneNumber: state.publisher.phone,
           facebookLink: state.facebookLink,
@@ -73,25 +76,31 @@ const ContactInfo = ({ state, adViewed, setadViewed }) => {
             {datas.facebookLink}
           </Typography>
         </Grid>
-        <Grid item md={5} lg={5} xl={5}>
-          <Button
-            variant="contained"
-            size="small"
-            color="warning"
-            fullWidth
-            onClick={openAdvertiser}
-          >
-            Voir les numéros
-          </Button>
-        </Grid>
-        <Grid item md={2} lg={2} xl={2}>
-          <Divider>ou</Divider>
-        </Grid>
-        <Grid item md={5} lg={5} xl={5}>
-          <Button variant="contained" size="small" fullWidth endIcon={<FaUserCircle />}>
-            Se connecter
-          </Button>
-        </Grid>
+        {!currentUser && (
+          <Grid item md={5} lg={5} xl={5}>
+            <Button
+              variant="contained"
+              size="small"
+              color="warning"
+              fullWidth
+              onClick={openAdvertiser}
+            >
+              Voir les numéros
+            </Button>
+          </Grid>
+        )}
+        {!currentUser?.uid && (
+          <Grid item md={2} lg={2} xl={2}>
+            <Divider>ou</Divider>
+          </Grid>
+        )}
+        {!currentUser && (
+          <Grid item md={5} lg={5} xl={5}>
+            <Button variant="contained" size="small" fullWidth endIcon={<FaUserCircle />}>
+              Se connecter
+            </Button>
+          </Grid>
+        )}
       </Grid>
       <Advertiser open={open} handleClose={handleClose} />
     </Paper>

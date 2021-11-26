@@ -1,17 +1,16 @@
 import React, { createContext, useEffect, useState } from "react";
 
 import { Container } from "@mui/material";
-import axios from "axios";
 import SignUpDialog from "../SignUpDialog";
 import moment from "moment";
 
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import Header from "../SearchComponents/Header";
 import FlightList from "../SearchComponents/FlightList";
+import { GetAllFlights, QueryFlights } from "../../firebase/db";
 
 export const SearchPageContext = createContext();
 const Search = () => {
-  const proxy = "http://localhost:5001/fir-c69a6/us-central1/api/";
   const [flights, setflights] = useState([]);
   const [filteredFlight, setfilteredFlight] = useState(flights);
   const [nearFlights, setnearFlights] = useState([]);
@@ -38,36 +37,29 @@ const Search = () => {
   });
   const [orderBy, setorderBy] = useState("Date");
   const history = useHistory();
+  const { departureCity, destinationCity, date } = useParams();
 
-  const getFlights = () => {
+  const getFlights = async () => {
     !loading && setloading(true);
     !initializing && setinitializing(true);
-
-    axios.get(`${proxy}GetAllFlights`).then((result) => {
-      setflights(result.data);
-      setfilteredFlight(result.data);
-      // getTheMinAndMaxPrice(result.data);
-      setloading(false);
-      setinitializing(false);
-    });
+    var all = await GetAllFlights();
+    setflights(all);
+    setfilteredFlight(all);
+    setloading(false);
+    setinitializing(false);
   };
 
-  const getSomeFlights = (departure, destination, date) => {
+  const getSomeFlights = async (departure, destination, date) => {
     !initializing && setinitializing(true);
     !loading && setloading(true);
-    axios
-      .get(
-        `${proxy}GetSomeFlights?depart=${departure.name}&pays=${departure.country}&destination=${destination.name}&date=${date}`
-      )
-      .then((result) => {
-        setfilteredFlight(result.data.exact);
-        setflights(result.data.exact);
-        setnearFlights(result.data.near);
-        setsuperlatives(getSuperlatives(result.data.exact));
-        getTheMinAndMaxPrice(result.data.exact);
-        setloading(false);
-        setinitializing(false);
-      });
+    const results = await QueryFlights(departure, destination, date);
+    setfilteredFlight(results?.exact);
+    setflights(results?.exact);
+    setnearFlights(results?.near);
+    setsuperlatives(getSuperlatives(results?.exact));
+    getTheMinAndMaxPrice(results?.exact);
+    setloading(false);
+    setinitializing(false);
   };
 
   const displaySearch = (state) => {
@@ -75,10 +67,6 @@ const Search = () => {
   };
   const startSearch = () => {
     getFlights();
-  };
-
-  const viewFlight = (flight) => {
-    history.push("view", flight);
   };
 
   const getSuperlatives = (datas) => {
@@ -110,15 +98,20 @@ const Search = () => {
       var newState = datas.sort((a, b) => a.prices.pricePerKG - b.prices.pricePerKG);
       setfilters({
         ...filters,
-        maxPrice: newState[datas.length - 1].prices.pricePerKG,
-        minPrice: newState[0].prices.pricePerKG - 1,
-        price: newState[datas.length - 1].prices.pricePerKG,
+        maxPrice: Number(newState[datas.length - 1].prices.pricePerKG),
+        minPrice: Number(newState[0].prices.pricePerKG - 1),
+        price: Number(newState[datas.length - 1].prices.pricePerKG),
       });
     } else {
       console.log("pas de vol");
     }
   };
 
+  useEffect(() => {
+    console.log(`departureCity`, departureCity);
+    console.log(`destinationCity`, destinationCity);
+    console.log(`date`, date);
+  }, [departureCity]);
   useEffect(() => {
     if (history.location.state) {
       displaySearch(history.location.state);
@@ -195,7 +188,6 @@ const Search = () => {
           orderBy,
           setorderBy,
 
-          viewFlight,
           filteredFlight,
           setfilteredFlight,
           superlatives,

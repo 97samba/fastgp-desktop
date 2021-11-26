@@ -11,10 +11,10 @@ import { AuthContext } from "../Providers/AuthProvider";
 import { useHistory } from "react-router-dom";
 import { Avatar, Divider, ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { FaShippingFast } from "react-icons/fa";
-import { logout, useAuth } from "../firebase/db";
+import { logout, useAuth } from "../firebase/auth";
+import { AiOutlineFieldTime } from "react-icons/ai";
 
-const UserMenu = ({ history }) => {
-  const { logOut, checkConnectivity } = useContext(AuthContext);
+const UserMenu = ({ history, currentUser }) => {
   const [anchorEl, setanchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClose = () => {
@@ -24,20 +24,30 @@ const UserMenu = ({ history }) => {
     setanchorEl(e.currentTarget);
   };
   const visitProfil = () => {
-    checkConnectivity(true);
-    history.push("GPprofile");
+    history.push(`/GPprofile/${currentUser?.uid}`);
   };
+  function handleLogOut() {
+    logout();
+    history.replace("/");
+    history.push("/");
+  }
+  function getAvatar() {
+    if (currentUser) {
+      return currentUser.displayName.charAt(0);
+    }
+  }
+
   return (
     <Box>
       <IconButton onClick={handleOpen}>
-        <Avatar>S</Avatar>
+        <Avatar>{getAvatar()}</Avatar>
       </IconButton>
-      <Menu open={open} onClose={handleClose} anchorEl={anchorEl} sx={{ mt: 1 }} elevation={0.5}>
+      <Menu open={open} onClose={handleClose} anchorEl={anchorEl} sx={{ mt: 1 }} elevation={0}>
         <MenuItem onClick={visitProfil}>
           <ListItemIcon>
             <IoPersonSharp />
           </ListItemIcon>
-          Profil
+          {currentUser?.displayName}
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
@@ -54,7 +64,7 @@ const UserMenu = ({ history }) => {
         <Box px={1}>
           <Divider />
         </Box>
-        <MenuItem onClick={logout}>
+        <MenuItem onClick={handleLogOut}>
           <ListItemIcon>
             <IoLogOut />
           </ListItemIcon>
@@ -69,9 +79,7 @@ export default function NavBar() {
   const history = useHistory();
 
   const BecomeGp = () => {
-    if (!currentUser.email) {
-      history.push("login");
-    }
+    history.push("/create");
   };
 
   return (
@@ -81,25 +89,40 @@ export default function NavBar() {
           <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Fast GP
-          </Typography>
+          <Box flexGrow={1}>
+            <Button
+              onClick={() => history.location.pathname != "/" && history.push("/")}
+              endIcon={<FaShippingFast color="white" size={25} />}
+            >
+              <Typography variant="h6" color="white">
+                Fast GP
+              </Typography>
+            </Button>
+          </Box>
 
           <Button color="inherit" style={{ textTransform: "none" }}>
             Shop
           </Button>
-          <Button color="inherit" style={{ textTransform: "none" }}>
+          <Button
+            color="inherit"
+            style={{ textTransform: "none" }}
+            onClick={() => history.push("/search")}
+          >
             Envoyer un colis
           </Button>
           <Button color="inherit" style={{ textTransform: "none" }} onClick={BecomeGp}>
             Transporter des colis
           </Button>
           {currentUser ? (
-            <UserMenu history={history} />
+            <UserMenu history={history} currentUser={currentUser} />
           ) : (
-            <Button onClick={() => history.push("login")} color="inherit">
-              Login
-            </Button>
+            <Box>
+              {currentUser === null ? (
+                <Button onClick={() => history.push("/login")} color="inherit">
+                  Login
+                </Button>
+              ) : null}
+            </Box>
           )}
         </Toolbar>
       </AppBar>

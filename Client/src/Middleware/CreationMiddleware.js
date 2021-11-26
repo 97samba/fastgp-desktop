@@ -1,5 +1,5 @@
 import moment from "moment";
-import axios from "axios";
+import { postAflight } from "../firebase/db";
 
 export const verifyNewPost = (
   departure,
@@ -10,8 +10,12 @@ export const verifyNewPost = (
   acceptJJ,
   depotAddress,
   retraitAddress,
+  ownerId,
+  email,
   prices,
   publisher,
+  contribution,
+  contributionPaymentMethod,
   contacts,
   facebookLink,
   suitcases,
@@ -21,25 +25,31 @@ export const verifyNewPost = (
   verifyContacts(publisher) &&
     verifySuitcases(suitcases) &&
     verifyDates(departureDate, distributionDate, acceptJJ) &&
-    postFlight({
-      version: "2.0",
-      departure: departure,
-      destination: destination,
-      departureDate: departureDate,
-      distributionDate: distributionDate,
-      lastDepot: lastDepot,
-      acceptJJ: acceptJJ === "oui",
-      depotAddress: depotAddress,
-      retraitAddress: retraitAddress,
-      prices: transformPrices(prices),
-      publisher: publisher,
-      contacts: contacts,
-      facebookLink: facebookLink,
-      suitcases: suitcases,
-      paymentMethod: paymentMethod,
-      canShip: canShip(destination),
-      createdAt: new Date(),
-    });
+    postAflight(
+      {
+        version: "2.0",
+        departure,
+        destination,
+        departureDate: departureDate.toJSON(),
+        distributionDate: distributionDate.toJSON(),
+        lastDepot,
+        acceptJJ: acceptJJ === "oui",
+        depotAddress,
+        retraitAddress,
+        ownerId,
+        prices: transformPrices(prices),
+        publisher,
+        contribution,
+        contributionPaymentMethod,
+        contacts,
+        facebookLink,
+        suitcases,
+        paymentMethod,
+        canShip: canShip(destination),
+        createdAt: new Date().toJSON(),
+      },
+      email
+    );
 };
 
 const transformPrices = (prices) => {
@@ -89,14 +99,6 @@ const verifySuitcases = (suitcases) => {
     }
   });
   return good;
-};
-
-const postFlight = (flight) => {
-  axios
-    .post("http://localhost:5001/fir-c69a6/us-central1/api/PostAFlight", flight)
-    .then((result) => {
-      console.log(`result`, result.data);
-    });
 };
 
 const canShip = (destination) => {
