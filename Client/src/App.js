@@ -18,6 +18,8 @@ import NotFound from "./Components/Pages/NotFound";
 import Register from "./Components/Pages/Register";
 import AuthProvider from "./Providers/AuthProvider";
 import ProfileDetails from "./Components/Pages/ProfileDetails";
+import Shop from "./Components/Pages/Shop";
+import ContactUs from "./Components/Pages/ContactUs";
 moment.locale("fr", {
   months:
     "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
@@ -135,6 +137,8 @@ const App = () => {
                 <Route path="/profilDetails/:id" component={ProfileDetails} />
                 <Route path="/login" component={Login} />
                 <Route path="/register" component={Register} />
+                <Route path="/contactUs" component={ContactUs} />
+                <Route path="/shop" component={Shop} />
                 <Route path="*" component={NotFound} />
               </Switch>
             </AuthProvider>
