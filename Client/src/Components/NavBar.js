@@ -8,12 +8,20 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { IoLogOut, IoPersonSharp, IoSettings } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
+<<<<<<< HEAD
 import { Avatar, Divider, Link, ListItemIcon, Menu, MenuItem, Stack } from "@mui/material";
 import { FaPlaneDeparture, FaShippingFast, FaShoppingBasket } from "react-icons/fa";
 import { logout, useAuth } from "../firebase/auth";
 import { IoMdHome } from "react-icons/io";
 import { GoPackage } from "react-icons/go";
 import COLORS from "../colors";
+=======
+import { Avatar, Divider, ListItemIcon, Menu, MenuItem, Stack } from "@mui/material";
+import { FaEdit, FaShippingFast } from "react-icons/fa";
+import { logout, useAuth } from "../firebase/auth";
+import { AiOutlineFieldTime } from "react-icons/ai";
+import { MdOutlineInsertPhoto } from "react-icons/md";
+>>>>>>> da76c75f33d7f54f9f7474d9cb0c3e5007d14035
 
 const UserMenu = ({ history, currentUser }) => {
   const [anchorEl, setanchorEl] = useState(null);
@@ -26,11 +34,13 @@ const UserMenu = ({ history, currentUser }) => {
   };
   const visitProfil = () => {
     history.push(`/GPprofile/${currentUser?.uid}`);
+    handleClose();
   };
   function handleLogOut() {
     logout();
     history.replace("/");
     history.push("/");
+    handleClose();
   }
   function getAvatar() {
     if (currentUser) {
@@ -43,12 +53,36 @@ const UserMenu = ({ history, currentUser }) => {
       <IconButton onClick={handleOpen}>
         <Avatar>{getAvatar()}</Avatar>
       </IconButton>
-      <Menu open={open} onClose={handleClose} anchorEl={anchorEl} sx={{ mt: 1 }} elevation={0}>
+      <Menu open={open} onClose={handleClose} anchorEl={anchorEl} sx={{ mt: 1 }} elevation={1}>
+        <Stack alignItems="center" py={2} px={4}>
+          <Avatar sx={{ width: 50, height: 50 }}>{getAvatar()}</Avatar>
+          <IconButton
+            color="primary"
+            size="small"
+            sx={{
+              mt: -2,
+              ml: 6,
+              background: "white",
+              textAlign: "center",
+            }}
+          >
+            <MdOutlineInsertPhoto />
+          </IconButton>
+          <Typography variant="body1" fontWeight="bold" color="primary">
+            {currentUser?.displayName}
+          </Typography>
+          <Typography variant="body2" color="GrayText">
+            {currentUser?.email}
+          </Typography>
+        </Stack>
+        <Box px={1}>
+          <Divider />
+        </Box>
         <MenuItem onClick={visitProfil}>
           <ListItemIcon>
             <IoPersonSharp />
           </ListItemIcon>
-          {currentUser?.displayName}
+          Mon profil
         </MenuItem>
         <MenuItem>
           <ListItemIcon>

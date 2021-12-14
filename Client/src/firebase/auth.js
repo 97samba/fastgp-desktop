@@ -131,7 +131,6 @@ export async function verifyIfUserExists(email) {
 
   return exists;
 }
-export async function SendCodeToPhone(phoneNumber) {}
 
 export function useAuth() {
   const [currentUser, setCurrentUser] = useState(undefined);

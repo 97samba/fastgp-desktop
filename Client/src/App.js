@@ -20,7 +20,10 @@ import AuthProvider from "./Providers/AuthProvider";
 import ProfileDetails from "./Components/Pages/ProfileDetails";
 import Shop from "./Components/Pages/Shop";
 import ContactUs from "./Components/Pages/ContactUs";
+<<<<<<< HEAD
 
+=======
+>>>>>>> da76c75f33d7f54f9f7474d9cb0c3e5007d14035
 moment.locale("fr", {
   months:
     "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
