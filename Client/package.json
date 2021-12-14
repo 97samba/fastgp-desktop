@@ -1,6 +1,5 @@
 {
   "name": "fastgp-desktop",
-  "proxy": "http://localhost:5001/fir-c69a6/us-central1/api",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
