@@ -75,20 +75,14 @@ const View = () => {
           <Typography>loading</Typography>
         ) : (
           <Grid container minHeight={300} spacing={2}>
-            <Grid
-              item
-              xs={12}
-              sm={3}
-              md={3}
-              lg={3}
-              xl={3}
-              order={{ xs: 1, sm: 1, md: 0 }}
-              display={{ xs: "none", sm: "none", md: "block" }}
-            >
+            <Grid item xs={12} sm={12} md={3} lg={3} xl={3} order={{ xs: 1, sm: 1, md: 0 }}>
               <ProfilDescriptor state={state} />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
               <Stack direction="column" spacing={2}>
+                <Typography color="GrayText" variant="captions">
+                  Vos deux premières livraisons sont gratuites*
+                </Typography>
                 <FlightInformations state={state} />
                 <Reservation />
                 <ContactInfo state={state} adViewed={adViewed} setadViewed={setadViewed} />
