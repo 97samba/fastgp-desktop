@@ -1,4 +1,16 @@
-import { Avatar, Button, Chip, Divider, Grid, Paper, Stack, Typography, Link } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Chip,
+  Divider,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+  Link,
+  ListItem,
+  MenuItem,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext } from "react";
 import {
@@ -154,15 +166,6 @@ const Flight = ({ data }) => {
               </Typography>
               <Typography variant="caption"> /kg</Typography>
             </Stack>
-            {/* <Stack direction="row" alignItems="flex-end" spacing={0.5}>
-              <Typography fontSize={19} fontWeight="555" color="#494aa2">
-                {data.prices.filter((price) => price.type === "pricePerSuitcase")[0].price}
-              </Typography>
-              <Typography fontSize={16} fontWeight="555" color="#494aa2">
-                $
-              </Typography>
-              <Typography variant="caption"> /valise</Typography>
-            </Stack> */}
           </Stack>
           <Button
             variant="contained"
@@ -245,18 +248,34 @@ const Flight = ({ data }) => {
               ))}
           </Stack>
         </Stack>
-
-        <Grid p={2} container flex={1} alignItems="center">
-          <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
-            <Left />
+        <Box display={{ xs: "block", sm: "block", md: "none", lg: "none", xl: "none" }}>
+          <MenuItem onClick={() => viewFlight(data)}>
+            <Grid p={2} container flex={1} alignItems="center">
+              <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
+                <Left />
+              </Grid>
+              <Grid item xs={4} md={6} sm={4} lg={6} xl={6}>
+                <Middle />
+              </Grid>
+              <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
+                <Right />
+              </Grid>
+            </Grid>
+          </MenuItem>
+        </Box>
+        <Box display={{ xs: "none", sm: "none", md: "block", lg: "block", xl: "block" }}>
+          <Grid p={2} container flex={1} alignItems="center">
+            <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
+              <Left />
+            </Grid>
+            <Grid item xs={4} md={6} sm={4} lg={6} xl={6}>
+              <Middle />
+            </Grid>
+            <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
+              <Right />
+            </Grid>
           </Grid>
-          <Grid item xs={4} md={6} sm={4} lg={6} xl={6}>
-            <Middle />
-          </Grid>
-          <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
-            <Right />
-          </Grid>
-        </Grid>
+        </Box>
       </Box>
     );
   };

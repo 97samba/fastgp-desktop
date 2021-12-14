@@ -5,9 +5,9 @@ import SignUpDialog from "../SignUpDialog";
 import moment from "moment";
 
 import { useHistory, useParams } from "react-router";
-import Header from "../SearchComponents/Header";
 import FlightList from "../SearchComponents/FlightList";
 import { GetAllFlights, QueryFlights } from "../../firebase/db";
+import DynamicSearchBar from "../SearchComponents/DynamicSearchBar";
 
 export const SearchPageContext = createContext();
 const Search = () => {
@@ -195,7 +195,7 @@ const Search = () => {
           setinitializing,
         }}
       >
-        <Header />
+        <DynamicSearchBar />
         <Container style={{ minWidth: "90%" }}>
           <FlightList />
           <SignUpDialog />

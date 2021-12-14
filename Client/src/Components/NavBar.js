@@ -8,21 +8,15 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { IoLogOut, IoPersonSharp, IoSettings } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
-<<<<<<< HEAD
 import { Avatar, Divider, Link, ListItemIcon, Menu, MenuItem, Stack } from "@mui/material";
 import { FaPlaneDeparture, FaShippingFast, FaShoppingBasket } from "react-icons/fa";
 import { logout, useAuth } from "../firebase/auth";
 import { IoMdHome } from "react-icons/io";
 import { GoPackage } from "react-icons/go";
 import COLORS from "../colors";
-=======
-import { Avatar, Divider, ListItemIcon, Menu, MenuItem, Stack } from "@mui/material";
-import { FaEdit, FaShippingFast } from "react-icons/fa";
-import { logout, useAuth } from "../firebase/auth";
-import { AiOutlineFieldTime } from "react-icons/ai";
 import { MdOutlineInsertPhoto } from "react-icons/md";
->>>>>>> da76c75f33d7f54f9f7474d9cb0c3e5007d14035
 
+const barHeight = "60 px";
 const UserMenu = ({ history, currentUser }) => {
   const [anchorEl, setanchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -140,8 +134,8 @@ export default function NavBar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, width: "100%", mb: 10 }}>
-      <AppBar position="fixed" elevation={0}>
+    <Box sx={{ flexGrow: 1, width: "100%" }} mb={7}>
+      <AppBar position="fixed" elevation={0} sx={{ height: barHeight }}>
         <Toolbar>
           <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <MenuIcon />

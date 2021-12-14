@@ -100,13 +100,13 @@ const FlightSkeleton = () => {
         </Stack>
 
         <Grid p={2} container flex={1} alignItems="center" height="90%">
-          <Grid item md={3}>
+          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
             <Left />
           </Grid>
-          <Grid item md={6} display="flex" justifyContent="center">
+          <Grid item xs={6} sm={6} md={6} lg={3} xl={3} display="flex" justifyContent="center">
             <Skeleton variant="rectangular" width={100} />
           </Grid>
-          <Grid item md={3}>
+          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
             <Right />
           </Grid>
         </Grid>
@@ -125,10 +125,10 @@ const FlightSkeleton = () => {
       elevation={0}
     >
       <Grid container>
-        <Grid item md={9} flex={1} alignItems="center">
+        <Grid item xs={12} sm={12} lg={9} xl={9} md={9} flex={1} alignItems="center">
           <Ticket />
         </Grid>
-        <Grid item md={3}>
+        <Grid item lg={3} xl={3} md={3} display={{ xs: "none", sm: "none", md: "block" }}>
           <Coupon />
         </Grid>
       </Grid>
