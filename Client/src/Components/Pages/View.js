@@ -70,22 +70,39 @@ const View = () => {
         currentUser,
       }}
     >
-      <Container sx={{ minWidth: "90%" }}>
+      <Container sx={{ minWidth: "90%", mt: 5 }}>
         {loading ? (
           <Typography>loading</Typography>
         ) : (
           <Grid container minHeight={300} spacing={2}>
-            <Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
+            <Grid
+              item
+              xs={12}
+              sm={3}
+              md={3}
+              lg={3}
+              xl={3}
+              order={{ xs: 1, sm: 1, md: 0 }}
+              display={{ xs: "none", sm: "none", md: "block" }}
+            >
               <ProfilDescriptor state={state} />
             </Grid>
-            <Grid item xs={12} sm={9} md={6} lg={6} xl={6}>
+            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
               <Stack direction="column" spacing={2}>
-                <Reservation />
                 <FlightInformations state={state} />
+                <Reservation />
                 <ContactInfo state={state} adViewed={adViewed} setadViewed={setadViewed} />
               </Stack>
             </Grid>
-            <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={3}
+              lg={3}
+              xl={3}
+              display={{ xs: "none", sm: "none", md: "block" }}
+            >
               <Summary />
             </Grid>
           </Grid>

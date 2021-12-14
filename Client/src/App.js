@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch, useLocation } from "react-router-dom";
 import NavBar from "./Components/NavBar";
 import DateAdaptater from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
@@ -20,6 +20,7 @@ import AuthProvider from "./Providers/AuthProvider";
 import ProfileDetails from "./Components/Pages/ProfileDetails";
 import Shop from "./Components/Pages/Shop";
 import ContactUs from "./Components/Pages/ContactUs";
+import Layout from "./Components/Layout";
 moment.locale("fr", {
   months:
     "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
@@ -117,31 +118,36 @@ const App = () => {
       ].join(","),
     },
   });
+
   return (
     // <div style={{ background: "#F6F6F9", minWidth: "100%" }}>
     <div style={{ minWidth: "100%", background: "#fdfdfd" }}>
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={DateAdaptater}>
           <Router>
-            <AuthProvider>
-              <NavBar />
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/search/:departureCity/:destinationCity/:date" component={Search} />
-                <Route path="/search" component={Search} />
-                <Route path="/create" component={Creation} />
-                <Route path="/view/:id" component={View} />
-                <Route path="/account" component={Account} />
-                <Route path="/GPprofile/:id" component={GPViewer} />
-                <Route path="/GPprofile" component={GPViewer} />
-                <Route path="/profilDetails/:id" component={ProfileDetails} />
-                <Route path="/login" component={Login} />
-                <Route path="/register" component={Register} />
-                <Route path="/contactUs" component={ContactUs} />
-                <Route path="/shop" component={Shop} />
-                <Route path="*" component={NotFound} />
-              </Switch>
-            </AuthProvider>
+            <Layout>
+              <AuthProvider>
+                <Switch>
+                  <Route exact path="/" component={Home} />
+                  <Route
+                    path="/search/:departureCity/:departureCountry/:destinationCity/:destinationCountry/:date"
+                    component={Search}
+                  />
+                  <Route path="/search" component={Search} />
+                  <Route path="/create" component={Creation} />
+                  <Route path="/view/:id" component={View} />
+                  <Route path="/account" component={Account} />
+                  <Route path="/GPprofile/:id" component={GPViewer} />
+                  <Route path="/GPprofile" component={GPViewer} />
+                  <Route path="/profilDetails/:id" component={ProfileDetails} />
+                  <Route path="/login" component={Login} />
+                  <Route path="/register" component={Register} />
+                  <Route path="/contactUs" component={ContactUs} />
+                  <Route path="/shop" component={Shop} />
+                  <Route path="*" component={NotFound} />
+                </Switch>
+              </AuthProvider>
+            </Layout>
           </Router>
           <Footer />
         </LocalizationProvider>

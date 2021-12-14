@@ -72,12 +72,12 @@ const Reservation = () => {
           </AccordionSummary>
           <AccordionDetails>
             <Grid container mb={1} rowSpacing={2} columnSpacing={4}>
-              <Grid item xs={12} md={12} xl={12} lg={12}>
+              <Grid item xs={12} sm={12} md={12} xl={12} lg={12}>
                 <Typography fontWeight="bold" color="GrayText" variant="body2">
                   Envoyeur
                 </Typography>
               </Grid>
-              <Grid item md={6} lg={6} xl={6}>
+              <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                 <TextField
                   label="Prenom"
                   size="small"
@@ -88,7 +88,7 @@ const Reservation = () => {
                   onChange={(e) => setsender({ ...sender, firstName: e.target.value })}
                 />
               </Grid>
-              <Grid item md={6} lg={6} xl={6}>
+              <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                 <TextField
                   label="Nom"
                   size="small"
@@ -99,7 +99,7 @@ const Reservation = () => {
                   onChange={(e) => setsender({ ...sender, lastName: e.target.value })}
                 />
               </Grid>
-              <Grid item md={6} lg={6} xl={6}>
+              <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                 <TextField
                   label="Télephone"
                   size="small"
@@ -110,7 +110,7 @@ const Reservation = () => {
                   onChange={(e) => setsender({ ...sender, phoneNumber: e.target.value })}
                 />
               </Grid>
-              <Grid item md={6} lg={6} xl={6}>
+              <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                 <TextField
                   select
                   label="Type de bagage"
@@ -127,10 +127,10 @@ const Reservation = () => {
                   ))}
                 </TextField>
               </Grid>
-              <Grid item md={12} lg={12} xl={12}>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <TextField
                   label="Description du contenu"
-                  minRows={2}
+                  minRows={3}
                   placeholder="Ex : description du colis, modéle téléphone, modéle ordinateur, document, nombre d'article ...etc "
                   multiline
                   fullWidth
@@ -139,7 +139,7 @@ const Reservation = () => {
                   onChange={handleItemDescriptionChange}
                 />
               </Grid>
-              <Grid item md={12} lg={12} xl={12}>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Stack direction="row" alignItems="center" spacing={3}>
                   <FormLabel>Etes-vous le receveur ?</FormLabel>
 
@@ -156,12 +156,12 @@ const Reservation = () => {
             </Grid>
             {isReceiver === "no" ? (
               <Grid container mb={2} rowSpacing={2} columnSpacing={4}>
-                <Grid item xs={12} md={12} xl={12} lg={12}>
+                <Grid item xs={12} sm={12} md={12} xl={12} lg={12}>
                   <Typography fontWeight="bold" color="GrayText" variant="body2">
                     Receveur
                   </Typography>
                 </Grid>
-                <Grid item md={6} lg={6} xl={6}>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                   <TextField
                     label="Prenom"
                     size="small"
@@ -171,7 +171,7 @@ const Reservation = () => {
                     onChange={(e) => setreceiver({ ...sender, firstName: e.target.value })}
                   />
                 </Grid>
-                <Grid item md={6} lg={6} xl={6}>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                   <TextField
                     label="Nom"
                     size="small"
@@ -181,7 +181,7 @@ const Reservation = () => {
                     onChange={(e) => setreceiver({ ...receiver, lastName: e.target.value })}
                   />
                 </Grid>
-                <Grid item md={6} lg={6} xl={6}>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                   <TextField
                     label="Télephone"
                     size="small"

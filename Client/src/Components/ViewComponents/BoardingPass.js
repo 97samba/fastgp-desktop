@@ -31,20 +31,20 @@ const BoardingPass = () => {
             <Grid container>
               <Grid
                 item
-                xs={12}
+                xs={6}
                 sm={2}
                 md={2}
                 lg={2}
                 xl={2}
                 bgcolor="#F2F2F2F2"
                 sx={{
-                  borderTopLeftRadius: 10,
-                  borderBottomLeftRadius: 10,
+                  borderRadius: { xs: "0px 0px 0px 10px", sm: "10px 0px 0px 10px" },
                   borderLeft: 1,
                   borderTop: 1,
                   borderBottom: 1,
                   borderColor: "#C5C5C5",
                 }}
+                order={{ xs: 1, sm: 0, md: 0 }}
               >
                 <Box py={1} textAlign="center" color="GrayText">
                   <Typography variant="body2">E - Ticket</Typography>
@@ -63,10 +63,15 @@ const BoardingPass = () => {
                 xl={7}
                 bgcolor="#F2F2F2"
                 sx={{
+                  borderRadius: { xs: "10px 10px 0px 0px", sm: "0px 0px 0px 0px" },
+
                   borderTop: 1,
-                  borderBottom: 1,
+                  borderBottom: { xs: 0, sm: "1px solid #C5C5C5" },
+                  borderLeft: { xs: "1px solid #C5C5C5", sm: 0 },
+                  borderRight: { xs: "1px solid #C5C5C5", sm: 0 },
                   borderColor: "#C5C5C5",
                 }}
+                order={{ xs: 0 }}
               >
                 <Box flex={1} p={2} mr={1}>
                   <Stack direction="row" spacing={1} mb={1}>
@@ -121,15 +126,15 @@ const BoardingPass = () => {
               </Grid>
               <Grid
                 item
-                xs={12}
+                xs={6}
                 sm={3}
                 md={3}
                 lg={3}
                 xl={3}
+                order={{ xs: 2 }}
                 bgcolor={COLORS.warning}
+                borderRadius={{ xs: "0px 0px 10px 0px", sm: "0px 10px 10px 0px" }}
                 sx={{
-                  borderTopRightRadius: 10,
-                  borderEndEndRadius: 10,
                   borderRight: 1,
                   borderTop: 1,
                   borderBottom: 1,
@@ -146,9 +151,9 @@ const BoardingPass = () => {
                   mt={-0.2}
                   position="absolute"
                   ml={-1}
+                  display={{ xs: "none", sm: "block" }}
                   sx={{
-                    borderBottomLeftRadius: 10,
-                    borderBottomRightRadius: 10,
+                    borderRadius: { xs: "0px 0px 10px 0px", sm: "0px 0px 10px 10px" },
                     borderLeft: 1,
                     borderRight: 1,
                     borderColor: "#C5C5C5",
@@ -186,6 +191,7 @@ const BoardingPass = () => {
                   position="absolute"
                   ml={-1}
                   mt={-0.8}
+                  display={{ xs: "none", sm: "block" }}
                   sx={{
                     borderTopLeftRadius: 10,
                     borderTopRightRadius: 10,

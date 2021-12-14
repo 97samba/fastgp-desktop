@@ -37,7 +37,6 @@ const Search = () => {
   });
   const [orderBy, setorderBy] = useState("Date");
   const history = useHistory();
-  const { departureCity, destinationCity, date } = useParams();
 
   const getFlights = async () => {
     !loading && setloading(true);
@@ -107,18 +106,7 @@ const Search = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(`departureCity`, departureCity);
-    console.log(`destinationCity`, destinationCity);
-    console.log(`date`, date);
-  }, [departureCity]);
-  useEffect(() => {
-    if (history.location.state) {
-      displaySearch(history.location.state);
-    } else {
-      startSearch();
-    }
-  }, []);
+  useEffect(() => {}, []);
 
   //filtre par date ou par prix
   useEffect(async () => {

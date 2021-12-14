@@ -133,9 +133,9 @@ const SearchSummaryMobile = ({
             <MdSearch color="white" />
           </IconButton>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography variant="h6">{departure.name}</Typography>
+            <Typography variant="h6">{departure?.name}</Typography>
             <GoDash color={COLORS.warning} />
-            <Typography variant="h6">{destination.name}</Typography>
+            <Typography variant="h6">{destination?.name}</Typography>
           </Stack>
           <IconButton>
             <AiOutlineSwap color="white" onClick={switchDestinations} />
@@ -151,7 +151,8 @@ const SearchSummaryMobile = ({
 
 const DynamicSearchBar = ({ size = "small" }) => {
   const history = useHistory();
-  const { departureCity, destinationCity, date } = useParams();
+  const { departureCity, departureCountry, destinationCity, destinationCountry, date } =
+    useParams();
   const { getSomeFlights } = useContext(SearchPageContext);
   const [departure, setdeparture] = useState({ name: "", country: "" });
   const [destination, setdestination] = useState({ name: "", country: "" });
@@ -163,11 +164,16 @@ const DynamicSearchBar = ({ size = "small" }) => {
 
   const switchDestinations = () => {
     var newDep = departure;
-    history.replace(`/search/${destination.name}/${departure.name}/${departureDate.toJSON()}`, {
-      departure: destination,
-      destination: departure,
-      date: departureDate,
-    });
+    history.replace(
+      `/search/${destination.name}/${destination.country}/${departure.name}/${
+        departure.country
+      }/${departureDate.toJSON()}`,
+      {
+        departure: destination,
+        destination: departure,
+        date: departureDate,
+      }
+    );
     setdestination(newDep);
     setdeparture(destination);
   };
@@ -192,17 +198,34 @@ const DynamicSearchBar = ({ size = "small" }) => {
         destinationError && setdestinationError(false);
         getSomeFlights(departure, destination, departureDate.toJSON());
         displaySearchingBar();
+        history.replace({
+          pathname: `/search/${departure.name}/${departure.country}/${destination.name}/${
+            destination.country
+          }/${departureDate.toJSON()}`,
+        });
       }
     }
   };
   function displaySearchingBar() {
     setSearching(!searching);
   }
+  function getCity(cityName, country) {
+    var result = data
+      .filter((value) => value.name == country)[0]
+      .states.filter((city) => city.name === cityName)[0];
+    return { ...result, country };
+  }
   useEffect(() => {
+    console.log(`number of params`);
     if (departureCity) {
-      setdeparture({ ...departure, name: departureCity });
-      setdestination({ ...destination, name: destinationCity });
-      setDepartureDate(date);
+      setdeparture(getCity(departureCity, departureCountry));
+      setdestination(getCity(destinationCity, destinationCountry));
+      setDepartureDate(new Date(date));
+      getSomeFlights(
+        getCity(departureCity, departureCountry),
+        getCity(destinationCity, destinationCountry),
+        date
+      );
     } else {
       setSearching(true);
     }
@@ -223,6 +246,7 @@ const DynamicSearchBar = ({ size = "small" }) => {
       }}
     >
       <Box
+        mt={-1}
         sx={{ background: "white" }}
         px={2}
         py={3}
@@ -290,6 +314,7 @@ const DynamicSearchBar = ({ size = "small" }) => {
         </Container>
       </Box>
       <Box
+        mt={-2}
         display={{
           xs: searching ? "none" : "block",
           sm: searching ? "none" : "block",

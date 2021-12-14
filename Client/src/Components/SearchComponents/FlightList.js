@@ -14,13 +14,15 @@ import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import Flight from "../Flight";
 import FlightSkeleton from "../FlightSkeleton";
-import { FaArrowDown, FaRegCalendarTimes } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaArrowDown, FaRegCalendarTimes } from "react-icons/fa";
 import { MdAirplanemodeInactive } from "react-icons/md";
 import moment from "moment";
 
 import FilterBar from "../SearchComponents/FilterBar";
 import PubBar from "./PubBar";
 import { SearchPageContext } from "../Pages/Search";
+import Carousel from "react-elastic-carousel";
+import COLORS from "../../colors";
 
 const Paginator = ({ datas }) => {
   const getCount = () => {
@@ -56,6 +58,12 @@ const FlightList = () => {
       label: "Le mieux noté",
       flight: superlatives.nearest,
     },
+  ];
+  const breakPoints = [
+    { width: 1, itemsToShow: 2 },
+    { width: 550, itemsToShow: 4 },
+    { width: 768, itemsToShow: 4 },
+    { width: 1200, itemsToShow: 4 },
   ];
 
   const Middle = () => {
@@ -95,34 +103,34 @@ const FlightList = () => {
         return <MdAirplanemodeInactive color="gray" size={15} />;
       };
       return (
-        <Grid item xs={6} sm={6} md={3} xl={3} lg={3}>
-          <Paper
-            elevation={0}
-            sx={{
-              border: 1,
-              borderColor: bestItemLabel === label ? "#494aa2" : "#E3E3E3",
-              background: bestItemLabel === label ? "#E1E1EF" : "white",
-            }}
-          >
-            <ButtonBase sx={{ width: "100%" }} onClick={() => handleClick(data)}>
-              <Stack direction="row" spacing={1} p={1}>
-                <Stack direction="row" spacing={0.5}>
-                  <Typography fontSize={10}> $</Typography>
+        // <Grid item xs={6} sm={6} md={3} xl={3} lg={3}>
+        <Paper
+          elevation={0}
+          sx={{
+            border: 1,
+            borderColor: bestItemLabel === label ? "#494aa2" : "#E3E3E3",
+            background: bestItemLabel === label ? "#E1E1EF" : "white",
+          }}
+        >
+          <ButtonBase sx={{ width: "100%" }} onClick={() => handleClick(data)}>
+            <Stack direction="row" spacing={1} p={1}>
+              <Stack direction="row" spacing={0.5}>
+                <Typography fontSize={10}> $</Typography>
 
-                  <Typography color="#494aa2" variant="h6" fontWeight="bold">
-                    {loading ? null : getPrice()}
-                  </Typography>
-                </Stack>
-                <Box>
-                  <Typography color="#494aa2" fontSize={11} fontWeight="bold">
-                    {label}
-                  </Typography>
-                  <Typography fontSize={12}> {loading ? <Skeleton /> : getDate()}</Typography>
-                </Box>
+                <Typography color="#494aa2" variant="h6" fontWeight="bold">
+                  {loading ? null : getPrice()}
+                </Typography>
               </Stack>
-            </ButtonBase>
-          </Paper>
-        </Grid>
+              <Box>
+                <Typography color="#494aa2" fontSize={11} fontWeight="bold">
+                  {label}
+                </Typography>
+                <Typography fontSize={12}> {loading ? <Skeleton /> : getDate()}</Typography>
+              </Box>
+            </Stack>
+          </ButtonBase>
+        </Paper>
+        // </Grid>
       );
     };
 
@@ -157,12 +165,31 @@ const FlightList = () => {
     };
 
     return (
-      <Box>
-        <Grid container spacing={2}>
+      <Box mt={1}>
+        {/* <Grid container spacing={2}> */}
+        <Carousel
+          showArrows={true}
+          pagination={false}
+          disableArrowsOnEnd={true}
+          breakPoints={breakPoints}
+          renderArrow={(props) =>
+            props.type === "NEXT" ? (
+              <Stack height="100%" justifyContent="center">
+                {" "}
+                <FaAngleRight {...props} color={COLORS.primary} />
+              </Stack>
+            ) : (
+              <Stack height="100%" justifyContent="center">
+                <FaAngleLeft {...props} color={COLORS.primary} />
+              </Stack>
+            )
+          }
+        >
           {bests.map((best, index) => (
             <BestPrice data={best.flight} label={best.label} key={index} />
           ))}
-        </Grid>
+        </Carousel>
+        {/* </Grid> */}
         {bestItemViewerOpened && !loading ? <BestItemViewer /> : null}
         {loading || initializing ? (
           <Box pt={2}>

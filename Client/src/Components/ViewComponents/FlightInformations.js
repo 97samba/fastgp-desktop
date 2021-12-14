@@ -2,26 +2,24 @@ import { Divider, Grid, IconButton, Paper, Stack, Typography } from "@mui/materi
 import { Box } from "@mui/system";
 import moment from "moment";
 import React from "react";
-import {
-  FaBox,
-  FaBoxOpen,
-  FaCalendarAlt,
-  FaCalendarCheck,
-  FaCoins,
-  FaSuitcase,
-} from "react-icons/fa";
+import { BsCalendar2X, BsCalendarWeek } from "react-icons/bs";
+import { RiSuitcase2Line } from "react-icons/ri";
+import { FaCoins } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
 
-import { IoAirplaneSharp } from "react-icons/io5";
+import { IoAirplaneSharp, IoPricetagOutline, IoPricetagsOutline } from "react-icons/io5";
 import COLORS from "../../colors";
 
 const FlightInformations = ({ state }) => {
   return (
-    <Paper sx={{ p: 3 }} variant="outlined">
+    <Paper sx={{ py: 2, px: 3 }} variant="outlined">
       <Grid container my={1} rowSpacing={3} columnSpacing={6}>
         <Grid item xs={5} sm={4} md={4} xl={4} mb={4} textAlign="start">
           <Typography variant="h4" color="primary">
             {state.departure.name}
+          </Typography>
+          <Typography variant="body2" color="GrayText">
+            {state.departure.country}
           </Typography>
         </Grid>
         <Grid item xs={2} sm={4} md={4} xl={4} textAlign="center">
@@ -31,11 +29,14 @@ const FlightInformations = ({ state }) => {
           <Typography variant="h4" color="primary">
             {state.destination.name}
           </Typography>
+          <Typography variant="body2" color="GrayText">
+            {state.destination.country}
+          </Typography>
         </Grid>
-        <Grid item xs={6} md={6} lg={6} xl={6}>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Stack direction="row" spacing={2} alignItems="center">
             <IconButton>
-              <FaCalendarAlt color="#494aa2" />
+              <BsCalendarWeek color="#494aa2" />
             </IconButton>
             <Box flex={1}>
               <Typography gutterBottom color="primary" fontWeight="bold">
@@ -48,10 +49,10 @@ const FlightInformations = ({ state }) => {
             </Box>
           </Stack>
         </Grid>
-        <Grid item md={6} lg={6} xl={6}>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Stack direction="row" spacing={2} alignItems="center">
             <IconButton>
-              <FaCalendarCheck color={COLORS.primary} />
+              <BsCalendar2X color={COLORS.primary} />
             </IconButton>
             <Box flex={1}>
               <Typography gutterBottom color="primary" fontWeight="bold">
@@ -64,7 +65,7 @@ const FlightInformations = ({ state }) => {
             </Box>
           </Stack>
         </Grid>
-        <Grid item md={6} lg={6} xl={6}>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Stack direction="row" spacing={2} alignItems="center">
             <IconButton>
               <GoPackage color={COLORS.primary} />
@@ -84,7 +85,7 @@ const FlightInformations = ({ state }) => {
             </Box>
           </Stack>
         </Grid>
-        <Grid item md={6} lg={6} xl={6}>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Stack direction="row" spacing={2} alignItems="center">
             <IconButton>
               <GoPackage color={COLORS.primary} />
@@ -104,10 +105,10 @@ const FlightInformations = ({ state }) => {
             </Box>
           </Stack>
         </Grid>
-        <Grid item md={6} lg={6} xl={6}>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Stack direction="row" spacing={2} alignItems="center">
             <IconButton>
-              <FaSuitcase color={COLORS.primary} />
+              <RiSuitcase2Line color={COLORS.primary} />
             </IconButton>
             <Box flex={1}>
               <Typography gutterBottom color="primary" fontWeight="bold">
@@ -123,10 +124,10 @@ const FlightInformations = ({ state }) => {
             </Box>
           </Stack>
         </Grid>
-        <Grid item md={6} lg={6} xl={6}>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Stack direction="row" spacing={2} alignItems="center">
             <IconButton>
-              <FaCoins size={20} color={COLORS.primary} />
+              <IoPricetagsOutline size={20} color={COLORS.primary} />
             </IconButton>
             <Box flex={1}>
               <Typography gutterBottom color="primary" fontWeight="bold">

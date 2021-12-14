@@ -105,11 +105,7 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
   const [dateOpen, setdateOpen] = useState(false);
   const switchDestinations = () => {
     var newDep = departure;
-    history.replace(`/search/${destination.name}/${departure.name}/${departureDate.toJSON()}`, {
-      departure: destination,
-      destination: departure,
-      date: departureDate,
-    });
+
     setdestination(newDep);
     setdeparture(destination);
   };
@@ -128,22 +124,12 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
       setdestinationError(true);
       return;
     }
-    if (!gotoPage) {
-      console.log(`flights`, flights.length);
-      if (departure != null && destination != null) {
-        if (departure.name != "" && destination.name != "") {
-          departureError && setdepartureError(false);
-          destinationError && setdestinationError(false);
-          getSomeFlights(departure, destination, departureDate.toJSON());
-          return;
-        }
-      }
-    } else {
-      history.push({
-        pathname: `/search/${departure.name}/${destination.name}/${departureDate.toJSON()}`,
-        state: { departure: departure, destination: destination, date: departureDate },
-      });
-    }
+
+    history.push({
+      pathname: `/search/${departure.name}/${departure.country}/${destination.name}/${
+        destination.country
+      }/${departureDate.toJSON()}`,
+    });
   };
   useEffect(() => {
     if (history.location.state) {
