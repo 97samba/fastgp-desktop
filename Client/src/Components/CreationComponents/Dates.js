@@ -7,7 +7,6 @@ import {
   FormControl,
   RadioGroup,
   FormControlLabel,
-  FormLabel,
   Radio,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
@@ -31,24 +30,6 @@ const Dates = () => {
 
   const [dateOpenDeparture, setdateOpenDeparture] = useState(false);
   const [dateOpenDestination, setdateOpenDestination] = useState(false);
-
-  const DatePick = ({ date, setDate, label }) => {
-    const [dateOpen, setdateOpen] = useState(false);
-    return (
-      <DesktopDatePicker
-        type="date"
-        value={date}
-        label="Date de départ"
-        renderInput={(params) => (
-          <TextField {...params} fullWidth size="small" onClick={() => setdateOpen(true)} />
-        )}
-        onChange={(value) => setDate(value)}
-        open={dateOpen}
-        onOpen={() => setdateOpen(true)}
-        onClose={() => setdateOpen(false)}
-      />
-    );
-  };
 
   return (
     <Stack
@@ -128,7 +109,7 @@ const Dates = () => {
           </FormControl>
         </Grid>
         <Grid item md={6} lg={6} xs={12}>
-          {acceptJJ == "oui" ? (
+          {acceptJJ === "oui" ? (
             <TimePicker
               type="date"
               value={lastDepot}

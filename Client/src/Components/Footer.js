@@ -1,4 +1,4 @@
-import { colors, Divider, Grid, Stack, Typography } from "@mui/material";
+import { Divider, Grid, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { FaFacebook, FaInstagram, FaPlaneDeparture, FaTwitter, FaYoutube } from "react-icons/fa";

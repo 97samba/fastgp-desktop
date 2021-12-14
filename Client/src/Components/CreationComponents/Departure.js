@@ -21,7 +21,7 @@ const Departure = () => {
     setdepotAddress({ ...depotAddress, city: value?.name });
   };
   const getLabel = (option) => {
-    if (option.name != "") {
+    if (option.name !== "") {
       return `${option.name}, ${option.country}`;
     }
     return "";

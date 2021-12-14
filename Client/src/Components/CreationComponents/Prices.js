@@ -20,10 +20,10 @@ const Prices = () => {
   const { paymentMethod, setpaymentMethod, prices, setprices, state, setstate } =
     useContext(CreationContext);
 
-  const changePrice = (type, newPrice) => {
+  const changePrice = (type, newPrice_) => {
     var newPrice = prices.map((price) => {
       if (price.type === type) {
-        return { ...price, price: Number(newPrice) };
+        return { ...price, price: Number(newPrice_) };
       }
       return price;
     });

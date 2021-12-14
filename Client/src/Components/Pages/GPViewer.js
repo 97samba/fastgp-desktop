@@ -25,17 +25,10 @@ import {
   FaUserPlus,
   FaYoutube,
 } from "react-icons/fa";
-import {
-  IoBusinessOutline,
-  IoBusinessSharp,
-  IoCallOutline,
-  IoLogoFacebook,
-  IoLogoInstagram,
-  IoLogoWhatsapp,
-} from "react-icons/io5";
+import { IoBusinessSharp, IoLogoFacebook, IoLogoInstagram, IoLogoWhatsapp } from "react-icons/io5";
 import { useHistory, useParams } from "react-router";
 import COLORS from "../../colors";
-import { currentUser, useAuth } from "../../firebase/auth";
+import { useAuth } from "../../firebase/auth";
 import { FollowGP, getUserFlights, UnFollowGP, userDetails } from "../../firebase/db";
 import ProfilPic from "../../Images/profile.svg";
 import Flight from "../Flight";
@@ -307,7 +300,7 @@ const Reviews = () => {
   );
 };
 const MyFlights = () => {
-  const { user, state, userFlights } = useContext(GPViewerContext);
+  const { state, userFlights } = useContext(GPViewerContext);
   return (
     <Paper sx={{ p: 2, mb: 2, background: "#F6F6F9" }} variant="outlined">
       <Box>
@@ -478,14 +471,17 @@ const GPViewer = () => {
     }
   };
 
-  useEffect(async () => {
-    if (id) {
-      var result = await userDetails(id);
-      var flights = await getUserFlights(id);
-      setuser(result);
-      setuserFlights(flights);
-      setstate({ ...state, loading: false, loadingFlights: false });
-    } else history.push("/login");
+  useEffect(() => {
+    async function fetchDatas() {
+      if (id) {
+        var result = await userDetails(id);
+        var flights = await getUserFlights(id);
+        setuser(result);
+        setuserFlights(flights);
+        setstate({ ...state, loading: false, loadingFlights: false });
+      } else history.push("/login");
+    }
+    fetchDatas();
   }, [id]);
 
   useEffect(() => {

@@ -2,17 +2,14 @@ import {
   Button,
   CircularProgress,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Divider,
-  FormControlLabel,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
-  ListItemText,
   Paper,
   Stack,
   Switch,
@@ -20,15 +17,14 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import moment from "moment";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { FaAngleLeft, FaEdit, FaPlane } from "react-icons/fa";
 import { IoCreateOutline, IoFolderOpenOutline } from "react-icons/io5";
 import COLORS from "../../colors";
 import { CreationContext } from "../Pages/Creation";
 
 const StartingDialog = () => {
-  const { state, setstate, currentUser, history, user, setuser, uploadNewConfiguration } =
-    useContext(CreationContext);
+  const { state, setstate, uploadNewConfiguration } = useContext(CreationContext);
 
   function handleNewPublication() {
     setstate({ ...state, openDialog: false });

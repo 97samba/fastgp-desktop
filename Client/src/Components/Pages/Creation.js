@@ -235,23 +235,26 @@ const Creation = () => {
     );
   };
 
-  useEffect(async () => {
-    if (currentUser === null) {
-      history.push("/");
-    } else {
-      if (currentUser?.uid) {
-        var flights = await getUserFlights(currentUser.uid);
-        var user = await userDetails(currentUser.uid);
-        setstate({ ...state, dialogLoading: false, flights: flights, user: user });
-        var whatshappNumber = user.whatsapp2 === "oui" ? user.phone2 : user.phone;
-        setpublisher({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          phone: user.phone,
-          whatsapp: whatshappNumber,
-        });
+  useEffect(() => {
+    async function fetchDatas() {
+      if (currentUser === null) {
+        history.push("/");
+      } else {
+        if (currentUser?.uid) {
+          var flights = await getUserFlights(currentUser.uid);
+          var user = await userDetails(currentUser.uid);
+          setstate({ ...state, dialogLoading: false, flights: flights, user: user });
+          var whatshappNumber = user.whatsapp2 === "oui" ? user.phone2 : user.phone;
+          setpublisher({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phone: user.phone,
+            whatsapp: whatshappNumber,
+          });
+        }
       }
     }
+    fetchDatas();
   }, [currentUser]);
 
   return (

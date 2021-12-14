@@ -2,59 +2,42 @@ import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {
   Button,
-  Container,
   Divider,
-  Fade,
   FormControlLabel,
   FormHelperText,
   FormLabel,
   Grid,
   Input,
-  Link,
   ListItemIcon,
   MenuItem,
-  Paper,
   Radio,
   RadioGroup,
-  Select,
   Slide,
   Stack,
   TextField,
   Typography,
   Zoom,
 } from "@mui/material";
-import { Box, display } from "@mui/system";
+import { Box } from "@mui/system";
 import React, { useContext, useState } from "react";
 import {
   FaAngleRight,
-  FaApple,
   FaCloudUploadAlt,
-  FaFacebookSquare,
   FaIdCard,
   FaLock,
   FaPassport,
-  FaPhoneAlt,
   FaRegIdBadge,
   FaRegIdCard,
   FaRegPaperPlane,
   FaUpload,
 } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import {
-  IoMailSharp,
-  IoPerson,
-  IoPersonAdd,
-  IoPersonOutline,
-  IoReload,
-  IoReloadCircle,
-  IoReloadCircleOutline,
-} from "react-icons/io5";
-import { MdAdd, MdPhoneAndroid } from "react-icons/md";
+import { IoMailSharp, IoPerson, IoPersonOutline } from "react-icons/io5";
+import { MdPhoneAndroid } from "react-icons/md";
 // import loginImage from "../Images/undraw_login_re_4vu2.svg";
 import data from "../../data/test.json";
 import { registerGP, verifyIfUserExists } from "../../firebase/auth";
 import { storeImage } from "../../firebase/Storage";
-import { ValidateBirthday, ValidatePassword } from "../../Middleware/RegisterMiddleware";
+import { ValidateBirthday } from "../../Middleware/RegisterMiddleware";
 
 import { RegisterContext } from "../Pages/Register";
 const FirstForm = ({ handleNext }) => {
@@ -67,7 +50,6 @@ const FirstForm = ({ handleNext }) => {
     setdisplayError,
     errors,
     seterrors,
-    RegisterGP,
     verifyUserInput,
   } = useContext(RegisterContext);
   const handleFirstStep = async () => {

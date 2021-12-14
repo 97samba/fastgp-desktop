@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch, useLocation } from "react-router-dom";
-import NavBar from "./Components/NavBar";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import DateAdaptater from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { createTheme } from "@mui/material/styles";

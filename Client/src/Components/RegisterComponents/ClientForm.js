@@ -1,19 +1,5 @@
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import {
-  Button,
-  Container,
-  Divider,
-  Fade,
-  Grid,
-  Link,
-  MenuItem,
-  Paper,
-  Select,
-  Stack,
-  TextField,
-  Typography,
-  Zoom,
-} from "@mui/material";
+import { Button, Divider, Grid, MenuItem, Stack, TextField, Typography, Zoom } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext } from "react";
 import { FaApple, FaFacebookSquare, FaLock, FaPhoneAlt } from "react-icons/fa";
@@ -22,7 +8,7 @@ import { IoMailSharp, IoPerson, IoPersonOutline } from "react-icons/io5";
 import { MdPhoneAndroid } from "react-icons/md";
 // import loginImage from "../Images/undraw_login_re_4vu2.svg";
 import data from "../../data/test.json";
-import { ValidateBirthday, ValidatePassword } from "../../Middleware/RegisterMiddleware";
+import { ValidateBirthday } from "../../Middleware/RegisterMiddleware";
 
 import { RegisterContext } from "../Pages/Register";
 
@@ -33,10 +19,8 @@ export const ClientForm = () => {
     dateOpen,
     displayError,
     setdateOpen,
-    setdisplayError,
     errors,
     seterrors,
-    RegisterClient,
     verifyUserInput,
   } = useContext(RegisterContext);
 

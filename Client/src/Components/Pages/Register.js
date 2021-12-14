@@ -6,7 +6,7 @@ import { FaSuitcase } from "react-icons/fa";
 // import loginImage from "../Images/undraw_login_re_4vu2.svg";
 import loginImage from "../../Images/register.svg";
 import { ValidateBirthday, ValidatePassword } from "../../Middleware/RegisterMiddleware";
-import { currentUser, register, useAuth } from "../../firebase/auth";
+import { register, useAuth } from "../../firebase/auth";
 import { GoPackage } from "react-icons/go";
 import GPForm from "../RegisterComponents/GPForm";
 import { ClientForm } from "../RegisterComponents/ClientForm";
@@ -129,7 +129,7 @@ const Register = () => {
     });
     if (
       ValidatePassword(state.password1, state.password2) === "" &&
-      ValidateBirthday(state.birthday) == "" &&
+      ValidateBirthday(state.birthday) === "" &&
       errors.emailError === ""
     ) {
       setdisplayError(false);

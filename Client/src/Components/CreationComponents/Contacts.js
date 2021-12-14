@@ -2,20 +2,10 @@ import {
   Box,
   Typography,
   Grid,
-  Container,
   TextField,
   Paper,
   Stack,
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  FormLabel,
-  Radio,
   Button,
-  FormGroup,
-  Checkbox,
-  Autocomplete,
-  MenuItem,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -23,30 +13,9 @@ import {
   DialogActions,
   Select,
 } from "@mui/material";
-import React, { createContext, useContext, useEffect, useState } from "react";
-import {
-  FaCheckCircle,
-  FaCoins,
-  FaFacebook,
-  FaMoneyBill,
-  FaPhone,
-  FaPlaneArrival,
-  FaPlaneDeparture,
-  FaRegCircle,
-  FaSuitcase,
-  FaSuitcaseRolling,
-  FaTrashAlt,
-  FaUserCircle,
-  FaWhatsapp,
-} from "react-icons/fa";
-import { IoAddCircle, IoLocationSharp, IoPersonAddSharp } from "react-icons/io5";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import TimePicker from "@mui/lab/TimePicker";
-
-import data from "../../data/test.json";
-import { verifyNewPost } from "../../Middleware/CreationMiddleware";
-import { useAuth } from "../../firebase/auth";
-import moment from "moment";
+import React, { useContext, useState } from "react";
+import { FaFacebook, FaPhone, FaTrashAlt, FaUserCircle, FaWhatsapp } from "react-icons/fa";
+import { IoPersonAddSharp } from "react-icons/io5";
 import { CreationContext } from "../Pages/Creation";
 
 const Contacts = () => {

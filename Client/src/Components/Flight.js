@@ -8,11 +8,10 @@ import {
   Stack,
   Typography,
   Link,
-  ListItem,
   MenuItem,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext } from "react";
+import React from "react";
 import {
   FaCoins,
   FaCreditCard,

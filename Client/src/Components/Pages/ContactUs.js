@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import { FaCheck, FaMailBulk, FaPhone, FaUser } from "react-icons/fa";
+import { FaCheck, FaPhone, FaUser } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import { MdMail, MdSubject } from "react-icons/md";
 import { useHistory } from "react-router";

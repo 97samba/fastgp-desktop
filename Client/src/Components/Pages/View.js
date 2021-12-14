@@ -36,16 +36,19 @@ const View = () => {
     }
   };
 
-  useEffect(async () => {
-    if (!id) history.push("/");
-    if (id && history.location.state === undefined) {
-      var flight = await getAFlight(id);
-      setstate(flight);
-      setLoading(false);
-    } else {
-      console.log(`state?.ownerId`, state?.ownerId);
-      setLoading(false);
+  useEffect(() => {
+    async function fetchDatas() {
+      if (!id) history.push("/");
+      if (id && history.location.state === undefined) {
+        var flight = await getAFlight(id);
+        setstate(flight);
+        setLoading(false);
+      } else {
+        console.log(`state?.ownerId`, state?.ownerId);
+        setLoading(false);
+      }
     }
+    fetchDatas();
   }, []);
   useEffect(() => {
     currentUser?.email &&
@@ -79,10 +82,15 @@ const View = () => {
               <ProfilDescriptor state={state} />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+              <Typography
+                color="GrayText"
+                gutterBottom
+                variant="captions"
+                display={{ sx: "block", sm: "block", md: "none" }}
+              >
+                Vos deux premières livraisons sont gratuites*
+              </Typography>{" "}
               <Stack direction="column" spacing={2}>
-                <Typography color="GrayText" variant="captions">
-                  Vos deux premières livraisons sont gratuites*
-                </Typography>
                 <FlightInformations state={state} />
                 <Reservation />
                 <ContactInfo state={state} adViewed={adViewed} setadViewed={setadViewed} />

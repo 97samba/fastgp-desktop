@@ -1,5 +1,5 @@
 import { Box, Typography, Grid, Stack, FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { CreationContext } from "../Pages/Creation";
 
 const Contribution = () => {

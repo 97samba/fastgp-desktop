@@ -27,13 +27,13 @@ const ProfilDescriptor = ({ state }) => {
                 {state.publisher.firstName + " " + state.publisher.lastName}
               </Typography>
             </Stack>
-            <Stack direction="row" spacing={1} justifyContent="center">
+            <Stack direction="row" spacing={0.5} justifyContent="center">
               <FaStar color="goldenrod" />
               <FaStar color="goldenrod" />
               <FaStar color="goldenrod" />
               <FaStar color="goldenrod" />
               <FaStarHalfAlt color="goldenrod" />
-              <Typography variant="body2">( 12 )</Typography>
+              <Typography variant="body2">(12)</Typography>
             </Stack>
           </Box>
           <Box flex={{ xs: 3, sm: 1 }}>

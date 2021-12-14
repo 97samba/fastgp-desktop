@@ -184,16 +184,16 @@ const DynamicSearchBar = ({ size = "small" }) => {
   };
 
   const handleSearch = () => {
-    if (departure == null || departure.name == "") {
+    if (departure === null || departure.name === "") {
       setdepartureError(true);
       return;
     }
-    if (destination == null || destination.name == "") {
+    if (destination === null || destination.name === "") {
       setdestinationError(true);
       return;
     }
-    if (departure != null && destination != null) {
-      if (departure.name != "" && destination.name != "") {
+    if (departure !== null && destination !== null) {
+      if (departure.name !== "" && destination.name !== "") {
         departureError && setdepartureError(false);
         destinationError && setdestinationError(false);
         getSomeFlights(departure, destination, departureDate.toJSON());
@@ -211,7 +211,7 @@ const DynamicSearchBar = ({ size = "small" }) => {
   }
   function getCity(cityName, country) {
     var result = data
-      .filter((value) => value.name == country)[0]
+      .filter((value) => value.name === country)[0]
       .states.filter((city) => city.name === cityName)[0];
     return { ...result, country };
   }

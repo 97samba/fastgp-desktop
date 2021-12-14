@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -129,10 +129,6 @@ export default function NavBar() {
     },
   ];
 
-  const BecomeGp = () => {
-    history.push("/create");
-  };
-
   return (
     <Box sx={{ flexGrow: 1, width: "100%" }} mb={7}>
       <AppBar position="fixed" elevation={0} sx={{ height: barHeight }}>
@@ -142,7 +138,7 @@ export default function NavBar() {
           </IconButton>
           <Stack direction="row" flexGrow={1}>
             <Button
-              onClick={() => history.location.pathname != "/" && history.push("/")}
+              onClick={() => history.location.pathname !== "/" && history.push("/")}
               endIcon={<FaShippingFast color="white" size={25} />}
             >
               <Typography variant="h6" color="white">

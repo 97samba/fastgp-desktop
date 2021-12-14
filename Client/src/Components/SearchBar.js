@@ -1,9 +1,8 @@
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import { Autocomplete, Button, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Button, Grid, TextField, Typography } from "@mui/material";
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
 import data from "../data/test.json";
-import { SearchPageContext } from "./Pages/Search";
 import { useHistory } from "react-router-dom";
 
 const SearchContext = createContext();
@@ -23,7 +22,7 @@ const Departure = ({ size }) => {
     handleError();
   };
   const getLabel = (option) => {
-    if (option.name != "") {
+    if (option.name !== "") {
       return `${option.name}, ${option.country}`;
     }
     return "";
@@ -66,7 +65,7 @@ const Destination = ({ size }) => {
     handleError();
   };
   const getLabel = (option) => {
-    if (option.name != "") {
+    if (option.name !== "") {
       return `${option.name}, ${option.country}`;
     }
     return "";
@@ -96,7 +95,6 @@ const Destination = ({ size }) => {
 
 const SearchBar = ({ size = "medium", gotoPage = true }) => {
   const history = useHistory();
-  const { flights, getFlights, getSomeFlights } = useContext(SearchPageContext);
   const [departure, setdeparture] = useState({ name: "", country: "" });
   const [destination, setdestination] = useState({ name: "", country: "" });
   const [departureDate, setDepartureDate] = useState(new Date());
@@ -111,16 +109,16 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
   };
 
   const handleError = () => {
-    setdepartureError(departure == null);
-    setdestinationError(destination == null);
+    setdepartureError(departure === null);
+    setdestinationError(destination === null);
   };
 
   const handleSearch = () => {
-    if (departure == null || departure.name == "") {
+    if (departure == null || departure.name === "") {
       setdepartureError(true);
       return;
     }
-    if (destination == null || destination.name == "") {
+    if (destination == null || destination.name === "") {
       setdestinationError(true);
       return;
     }

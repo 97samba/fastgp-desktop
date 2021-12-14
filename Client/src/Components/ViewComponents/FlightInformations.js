@@ -4,10 +4,9 @@ import moment from "moment";
 import React from "react";
 import { BsCalendar2X, BsCalendarWeek } from "react-icons/bs";
 import { RiSuitcase2Line } from "react-icons/ri";
-import { FaCoins } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
 
-import { IoAirplaneSharp, IoPricetagOutline, IoPricetagsOutline } from "react-icons/io5";
+import { IoAirplaneSharp, IoPricetagsOutline } from "react-icons/io5";
 import COLORS from "../../colors";
 
 const FlightInformations = ({ state }) => {

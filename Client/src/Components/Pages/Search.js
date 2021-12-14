@@ -4,7 +4,7 @@ import { Container } from "@mui/material";
 import SignUpDialog from "../SignUpDialog";
 import moment from "moment";
 
-import { useHistory, useParams } from "react-router";
+import { useHistory } from "react-router";
 import FlightList from "../SearchComponents/FlightList";
 import { GetAllFlights, QueryFlights } from "../../firebase/db";
 import DynamicSearchBar from "../SearchComponents/DynamicSearchBar";
@@ -36,17 +36,7 @@ const Search = () => {
     filtered: false,
   });
   const [orderBy, setorderBy] = useState("Date");
-  const history = useHistory();
-
-  const getFlights = async () => {
-    !loading && setloading(true);
-    !initializing && setinitializing(true);
-    var all = await GetAllFlights();
-    setflights(all);
-    setfilteredFlight(all);
-    setloading(false);
-    setinitializing(false);
-  };
+  // const history = useHistory();
 
   const getSomeFlights = async (departure, destination, date) => {
     !initializing && setinitializing(true);
@@ -59,13 +49,6 @@ const Search = () => {
     getTheMinAndMaxPrice(results?.exact);
     setloading(false);
     setinitializing(false);
-  };
-
-  const displaySearch = (state) => {
-    getSomeFlights(state.departure, state.destination, state.date.toJSON());
-  };
-  const startSearch = () => {
-    getFlights();
   };
 
   const getSuperlatives = (datas) => {
@@ -106,15 +89,16 @@ const Search = () => {
     }
   };
 
-  useEffect(() => {}, []);
-
   //filtre par date ou par prix
-  useEffect(async () => {
-    setloading(true);
-    console.log("ordering by", orderBy);
-    !initializing && (await new Promise((res) => setTimeout(res, 500)));
-    setfilteredFlight(ChangeOrder(filteredFlight));
-    setloading(false);
+  useEffect(() => {
+    async function reorder() {
+      setloading(true);
+      console.log("ordering by", orderBy);
+      !initializing && (await new Promise((res) => setTimeout(res, 500)));
+      setfilteredFlight(ChangeOrder(filteredFlight));
+      setloading(false);
+    }
+    reorder();
   }, [orderBy]);
 
   const ChangeOrder = (datas) => {
@@ -126,38 +110,41 @@ const Search = () => {
   };
 
   //adapte les filtres
-  useEffect(async () => {
-    if (!initializing) {
-      setloading(true);
-      console.log("filtering");
+  useEffect(() => {
+    async function reFilter() {
+      if (!initializing) {
+        setloading(true);
+        console.log("filtering");
 
-      var newState = flights;
-      //prix
-      newState = newState.filter((state) => state.prices.pricePerKG <= filters.price);
+        var newState = flights;
+        //prix
+        newState = newState.filter((state) => state.prices.pricePerKG <= filters.price);
 
-      //paiements
-      if (filters.money) {
-        newState = newState.filter((flight) => flight.paymentMethod[0].supported === true);
-      }
+        //paiements
+        if (filters.money) {
+          newState = newState.filter((flight) => flight.paymentMethod[0].supported === true);
+        }
 
-      if (filters.paypal) {
-        newState = newState.filter((flight) => flight.paymentMethod[1].supported === true);
-      }
-      if (filters.card) {
-        newState = newState.filter((flight) => flight.paymentMethod[2].supported === true);
-      }
-      if (filters.wave) {
-        newState = newState.filter((flight) => flight.paymentMethod[3].supported === true);
-      }
+        if (filters.paypal) {
+          newState = newState.filter((flight) => flight.paymentMethod[1].supported === true);
+        }
+        if (filters.card) {
+          newState = newState.filter((flight) => flight.paymentMethod[2].supported === true);
+        }
+        if (filters.wave) {
+          newState = newState.filter((flight) => flight.paymentMethod[3].supported === true);
+        }
 
-      //shipping
-      if (filters.FreeshippingOnly) {
-        newState = newState.filter((flight) => flight.canShip === true);
+        //shipping
+        if (filters.FreeshippingOnly) {
+          newState = newState.filter((flight) => flight.canShip === true);
+        }
+        !initializing && (await new Promise((res) => setTimeout(res, 500)));
+        setfilteredFlight(ChangeOrder(newState));
+        setloading(false);
       }
-      !initializing && (await new Promise((res) => setTimeout(res, 500)));
-      setfilteredFlight(ChangeOrder(newState));
-      setloading(false);
     }
+    reFilter();
   }, [filters]);
 
   return (
@@ -168,7 +155,6 @@ const Search = () => {
           setflights,
           loading,
           setloading,
-          getFlights,
           getSomeFlights,
           nearFlights,
           filters,
@@ -184,7 +170,7 @@ const Search = () => {
         }}
       >
         <DynamicSearchBar />
-        <Container style={{ minWidth: "90%" }}>
+        <Container style={{ minWidth: "95%" }}>
           <FlightList />
           <SignUpDialog />
         </Container>
