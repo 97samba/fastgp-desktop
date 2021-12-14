@@ -7,12 +7,13 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { IoLogOut, IoPersonSharp, IoSettings } from "react-icons/io5";
-import { AuthContext } from "../Providers/AuthProvider";
 import { useHistory } from "react-router-dom";
-import { Avatar, Divider, ListItemIcon, Menu, MenuItem } from "@mui/material";
-import { FaShippingFast } from "react-icons/fa";
+import { Avatar, Divider, Link, ListItemIcon, Menu, MenuItem, Stack } from "@mui/material";
+import { FaPlaneDeparture, FaShippingFast, FaShoppingBasket } from "react-icons/fa";
 import { logout, useAuth } from "../firebase/auth";
-import { AiOutlineFieldTime } from "react-icons/ai";
+import { IoMdHome } from "react-icons/io";
+import { GoPackage } from "react-icons/go";
+import COLORS from "../colors";
 
 const UserMenu = ({ history, currentUser }) => {
   const [anchorEl, setanchorEl] = useState(null);
@@ -77,6 +78,28 @@ const UserMenu = ({ history, currentUser }) => {
 export default function NavBar() {
   const currentUser = useAuth();
   const history = useHistory();
+  const navLinks = [
+    {
+      label: "Acceuil",
+      path: "/",
+      icon: <IoMdHome color={COLORS.warning} size={18} />,
+    },
+    {
+      label: "Shop",
+      path: "/shop",
+      icon: <FaShoppingBasket color={COLORS.warning} size={18} />,
+    },
+    {
+      label: "Envoyer",
+      path: "/search",
+      icon: <GoPackage color={COLORS.warning} size={18} />,
+    },
+    {
+      label: "Transporter",
+      path: "/create",
+      icon: <FaPlaneDeparture color={COLORS.warning} size={18} />,
+    },
+  ];
 
   const BecomeGp = () => {
     history.push("/create");
@@ -89,7 +112,7 @@ export default function NavBar() {
           <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
-          <Box flexGrow={1}>
+          <Stack direction="row" flexGrow={1}>
             <Button
               onClick={() => history.location.pathname != "/" && history.push("/")}
               endIcon={<FaShippingFast color="white" size={25} />}
@@ -98,21 +121,25 @@ export default function NavBar() {
                 Fast GP
               </Typography>
             </Button>
-          </Box>
-
-          <Button color="inherit" style={{ textTransform: "none" }}>
-            Shop
-          </Button>
-          <Button
-            color="inherit"
-            style={{ textTransform: "none" }}
-            onClick={() => history.push("/search")}
-          >
-            Envoyer un colis
-          </Button>
-          <Button color="inherit" style={{ textTransform: "none" }} onClick={BecomeGp}>
-            Transporter des colis
-          </Button>
+            <Stack
+              direction="row"
+              flex={1}
+              justifyContent="center"
+              spacing={2}
+              display={{ xs: "none", sm: "none", md: "flex" }}
+            >
+              {navLinks.map((link, index) => (
+                <Link href={link.path} key={index} underline="none">
+                  <MenuItem sx={{ height: 60 }} href="/create">
+                    <Typography mr={1} color="white">
+                      {link.label}
+                    </Typography>
+                    {link.icon}
+                  </MenuItem>
+                </Link>
+              ))}
+            </Stack>
+          </Stack>
           {currentUser ? (
             <UserMenu history={history} currentUser={currentUser} />
           ) : (

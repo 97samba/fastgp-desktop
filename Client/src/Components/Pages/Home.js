@@ -20,23 +20,21 @@ import { SearchPageContext } from "./Search";
 
 const SearchPaper = () => {
   return (
-    <Box>
-      <Paper
-        sx={{
-          p: 3,
-          my: 2,
-          border: 0.1,
-          borderColor: "#E5E5E5",
-          boxShadow: "1px 1px 3px 1px #494aa225",
-          marginTop: -5,
-          width: "80%",
-          marginX: "auto",
-        }}
-        elevation={0}
-      >
-        <SearchBar gotoPage={true} />
-      </Paper>
-    </Box>
+    <Paper
+      sx={{
+        p: 3,
+        my: 2,
+        border: 0.1,
+        borderColor: "#E5E5E5",
+        boxShadow: "1px 1px 3px 1px #494aa225",
+        marginTop: -5,
+        width: "80%",
+        marginX: "auto",
+      }}
+      elevation={0}
+    >
+      <SearchBar gotoPage={true} />
+    </Paper>
   );
 };
 const PopularDestinations = () => {
@@ -189,7 +187,7 @@ const Home = () => {
     <SearchPageContext.Provider value={{ flights, setflights }}>
       <Box>
         <Container>
-          <Grid container>
+          <Grid container display={{ xs: "none", sm: "none", md: "flex", lg: "flex", xl: "flex" }}>
             <Grid item md={6} lg={6} xl={6} p={5}>
               <Stack justifyContent="center" py={4} spacing={2}>
                 <Typography variant="h4" fontWeight={500}>
@@ -221,11 +219,16 @@ const Home = () => {
               <img src={PresentationImage} alt="presentation" width="60%" />
             </Grid>
           </Grid>
+          <Box mb={10} display={{ xs: "block", sm: "block", md: "none" }}>
+            <Typography variant="h4" fontWeight={500}>
+              Envoyer vos colis partout dans le
+            </Typography>
+          </Box>
         </Container>
         <Box bgcolor="#F5F5F5">
           <Container>
             <Grid container>
-              <Grid item md={12} lg={12} xl={12} minHeight={300} mt={5}>
+              <Grid item md={12} lg={12} xl={12} minHeight={300}>
                 <SearchPaper />
                 <PopularDestinations />
               </Grid>

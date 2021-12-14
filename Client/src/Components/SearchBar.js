@@ -44,7 +44,6 @@ const Departure = ({ size }) => {
           label="Départ"
           fullWidth
           error={departureError}
-          helperText={departureError ? "Veuillez renseigner le départ" : ""}
         />
       )}
       onBlur={handleError}
@@ -87,7 +86,6 @@ const Destination = ({ size }) => {
           variant="outlined"
           label="Destination"
           error={destinationError}
-          helperText={destinationError ? "Veuillez rensigner la destination" : ""}
         />
       )}
       onBlur={handleError}
@@ -169,12 +167,12 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
       }}
     >
       <Grid container spacing={2}>
-        <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
+        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
           <Departure size={size} />
         </Grid>
         <Grid
           item
-          xs={1}
+          xs={12}
           sm={1}
           md={1}
           lg={1}
@@ -182,7 +180,8 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
           sx={{ display: { sm: "none", xs: "none", md: "block" } }}
         >
           <Button
-            fullWidth
+            // fullWidth
+
             variant="outlined"
             sx={{ height: "100%", color: "gray" }}
             onClick={switchDestinations}
@@ -190,7 +189,7 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
             <AiOutlineSwap size={20} />
           </Button>
         </Grid>
-        <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
+        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
           <Destination size={size} />
         </Grid>
         <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
