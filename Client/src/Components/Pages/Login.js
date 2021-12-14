@@ -1,25 +1,12 @@
-import {
-  Button,
-  Container,
-  Divider,
-  Grid,
-  Link,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Container, Divider, Grid, Link, Paper, Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaApple, FaFacebookSquare, FaLock, FaPhoneAlt } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { IoMailSharp } from "react-icons/io5";
-import { ENV } from "../../Env";
 // import loginImage from "../Images/undraw_login_re_4vu2.svg";
 import loginImage from "../../Images/undraw_stranded_traveler_pdbw.svg";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { AuthContext } from "../../Providers/AuthProvider";
 import { useHistory } from "react-router";
 import { login, useAuth } from "../../firebase/auth";
 
@@ -164,6 +151,7 @@ const Login = () => {
   const currentUser = useAuth();
 
   const history = useHistory();
+
   useEffect(() => {
     if (currentUser?.email) {
       history.push("/");
