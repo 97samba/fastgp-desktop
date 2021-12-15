@@ -5,37 +5,42 @@ import {
   CardMedia,
   Container,
   Grid,
+  IconButton,
   Paper,
   Stack,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import PresentationImage from "../../Images/HomeImage.svg";
 import paris from "../../Images/paris.jpg";
-import { GiAirplaneDeparture } from "react-icons/gi";
+import { GiAirplaneDeparture, GiTakeMyMoney } from "react-icons/gi";
 import { FaAward, FaCoins, FaSuitcase, FaUserAlt } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import { SearchPageContext } from "./Search";
 import COLORS from "../../colors";
+import { MdOutlineDeliveryDining, MdSecurity } from "react-icons/md";
 
+const PresentationImage =
+  "https://firebasestorage.googleapis.com/v0/b/fir-c69a6.appspot.com/o/websiteImage%2FHomeImage.svg?alt=media&token=6ed815ca-143a-48bf-a3eb-69d1ed86f2ba";
 const SearchPaper = () => {
   return (
-    <Paper
-      sx={{
-        p: 3,
-        my: 2,
-        border: 0.1,
-        borderColor: "#E5E5E5",
-        boxShadow: "1px 1px 3px 1px #494aa225",
-        marginTop: -5,
-        width: "90%",
-        marginX: "auto",
-      }}
-      elevation={0}
-    >
-      <SearchBar gotoPage={true} />
-    </Paper>
+    <Box mt={-6}>
+      <Paper
+        sx={{
+          p: 3,
+          // my: 2,
+          // border: 0.1,
+          borderColor: "#E5E5E5",
+          boxShadow: "1px 1px 3px 1px #494aa225",
+          marginTop: -5,
+          width: "90%",
+          marginX: "auto",
+        }}
+        elevation={0}
+      >
+        <SearchBar gotoPage={true} />
+      </Paper>
+    </Box>
   );
 };
 const PopularDestinations = () => {
@@ -181,6 +186,43 @@ const PopularDestinations = () => {
     </Box>
   );
 };
+const OurValues = () => {
+  const values = [
+    {
+      label: "Zéro commission",
+      description:
+        "Afin de garantir des prix bas, Fast Gp ne vous prend aucune commission, si vous le souhaitez, vous encaissez la totalité de vos investissements.",
+      icon: <GiTakeMyMoney size={60} color={COLORS.warning} />,
+    },
+    {
+      label: "2 Livraison gratuites",
+      description:
+        "Apres votre inscription, vous gagnez deux livraisons gratuites* et aprés la livraison est égale à 3 euros ou 4 dollard ou 1000 fCFA.",
+      icon: <MdOutlineDeliveryDining size={60} color={COLORS.warning} />,
+    },
+    {
+      label: "Sécurité Garantie",
+      description:
+        "Tous les Gp qui transportent vos colis sont identifiés (Passport, appel téléphonique...), les clients aussi sont identifiés pour protéger les GP.",
+      icon: <MdSecurity size={60} color={COLORS.warning} />,
+    },
+  ];
+  return (
+    <Grid container px={2} py={5} spacing={2}>
+      {values.map((value, index) => (
+        <Grid item xs={12} sm={12} md={4} lg={4} xl={4} textAlign="center">
+          <IconButton size="large">{value.icon}</IconButton>
+          <Typography fontWeight="bold" color="primary">
+            {value.label}
+          </Typography>
+          <Typography variant="body1" color="GrayText">
+            {value.description}
+          </Typography>
+        </Grid>
+      ))}
+    </Grid>
+  );
+};
 
 const Home = () => {
   const [flights, setflights] = useState([]);
@@ -188,52 +230,63 @@ const Home = () => {
     <SearchPageContext.Provider value={{ flights, setflights }}>
       <Box bgcolor="white">
         <Container>
-          <Grid container display={{ xs: "none", sm: "none", md: "flex", lg: "flex", xl: "flex" }}>
-            <Grid item md={5} lg={6} xl={6} p={5}>
-              <Stack justifyContent="center" py={4} spacing={1} color>
-                <Typography variant="h4" fontWeight="bold" color="primary">
-                  Envoyer vos colis
-                </Typography>
-                <Typography gutterBottom variant="h4" fontWeight="bold" color={COLORS.warning}>
-                  partout dans le monde !
-                </Typography>
-                <Typography variant="body1" fontWeight={400} color="GrayText">
-                  Fast Gp est un grand réseau de covaliseurs inscrits et identifiés, plus des
-                  annonces pris partout dans le web.
-                </Typography>
-                <Stack direction="row" spacing={1} mt={2}>
-                  <Button fullWidth variant="contained" endIcon={<FaSuitcase size={15} />}>
-                    Compte GP
-                  </Button>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="warning"
-                    endIcon={<FaUserAlt size={15} />}
-                  >
-                    Compte Client
-                  </Button>
-                </Stack>
+          <Grid container>
+            <Grid item md={5} lg={6} xl={6} p={{ xs: 2, sm: 2, md: 5 }}>
+              <Stack justifyContent="center" spacing={3} flex={1} zIndex={1}>
+                <Box>
+                  <Typography variant="h4" fontWeight="bold" color="primary">
+                    Envoyer vos colis
+                  </Typography>
+                  <Typography variant="h4" fontWeight="bold" color={COLORS.warning}>
+                    partout dans le monde !
+                  </Typography>
+                </Box>
+                <Box display={{ xs: "none", sm: "none", md: "block" }}>
+                  <Typography variant="body1" fontWeight={400} color="GrayText">
+                    Fast Gp est un grand réseau de covaliseurs inscrits et identifiés, plus des
+                    annonces pris partout dans le web.
+                  </Typography>
+                  <Stack direction="row" spacing={1} mt={3}>
+                    <Button fullWidth variant="contained" endIcon={<FaSuitcase size={15} />}>
+                      Compte GP
+                    </Button>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      color="warning"
+                      endIcon={<FaUserAlt size={15} />}
+                    >
+                      Compte Client
+                    </Button>
+                  </Stack>
+                </Box>
               </Stack>
             </Grid>
-            <Grid item md={7} lg={6} xl={6} mb={5}>
+            <Grid
+              item
+              mt={{ xs: -2, sm: -2, md: 0 }}
+              overflow="hidden"
+              md={7}
+              lg={6}
+              xl={6}
+              mb={5}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
               <img src={PresentationImage} alt="presentation" width="100%" />
             </Grid>
           </Grid>
-          <Box mb={10} display={{ xs: "block", sm: "block", md: "none" }}>
-            <Typography variant="h4" fontWeight={500}>
-              Envoyer vos colis partout dans le
-            </Typography>
-          </Box>
         </Container>
-        <Box bgcolor="#F5F5F5">
+        <Box bgcolor="#F5F5F5" p={2}>
           <Container>
-            <Grid container>
-              <Grid item md={12} lg={12} xl={12} minHeight={300}>
-                <SearchPaper />
-                <PopularDestinations />
-              </Grid>
-            </Grid>
+            <SearchPaper />
+            <OurValues />
+          </Container>
+        </Box>
+        <Box bgcolor="white">
+          <Container>
+            <PopularDestinations />
           </Container>
         </Box>
       </Box>
