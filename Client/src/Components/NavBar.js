@@ -133,7 +133,13 @@ export default function NavBar() {
     <Box sx={{ flexGrow: 1, width: "100%" }} mb={7}>
       <AppBar position="fixed" elevation={0} sx={{ height: barHeight }}>
         <Toolbar>
-          <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2, display: { xs: "block", sm: "block", md: "none" } }}
+          >
             <MenuIcon />
           </IconButton>
           <Stack direction="row" flexGrow={1}>

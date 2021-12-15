@@ -11,12 +11,13 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import PresentationImage from "../../Images/undraw_airport_re_oqk1.svg";
+import PresentationImage from "../../Images/HomeImage.svg";
 import paris from "../../Images/paris.jpg";
 import { GiAirplaneDeparture } from "react-icons/gi";
 import { FaAward, FaCoins, FaSuitcase, FaUserAlt } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import { SearchPageContext } from "./Search";
+import COLORS from "../../colors";
 
 const SearchPaper = () => {
   return (
@@ -28,7 +29,7 @@ const SearchPaper = () => {
         borderColor: "#E5E5E5",
         boxShadow: "1px 1px 3px 1px #494aa225",
         marginTop: -5,
-        width: "80%",
+        width: "90%",
         marginX: "auto",
       }}
       elevation={0}
@@ -185,22 +186,22 @@ const Home = () => {
   const [flights, setflights] = useState([]);
   return (
     <SearchPageContext.Provider value={{ flights, setflights }}>
-      <Box>
+      <Box bgcolor="white">
         <Container>
           <Grid container display={{ xs: "none", sm: "none", md: "flex", lg: "flex", xl: "flex" }}>
-            <Grid item md={6} lg={6} xl={6} p={5}>
-              <Stack justifyContent="center" py={4} spacing={2}>
-                <Typography variant="h4" fontWeight={500}>
+            <Grid item md={5} lg={6} xl={6} p={5}>
+              <Stack justifyContent="center" py={4} spacing={1} color>
+                <Typography variant="h4" fontWeight="bold" color="primary">
                   Envoyer vos colis
                 </Typography>
-                <Typography gutterBottom variant="h4" fontWeight={500}>
+                <Typography gutterBottom variant="h4" fontWeight="bold" color={COLORS.warning}>
                   partout dans le monde !
                 </Typography>
                 <Typography variant="body1" fontWeight={400} color="GrayText">
                   Fast Gp est un grand réseau de covaliseurs inscrits et identifiés, plus des
                   annonces pris partout dans le web.
                 </Typography>
-                <Stack direction="row" spacing={4}>
+                <Stack direction="row" spacing={1} mt={2}>
                   <Button fullWidth variant="contained" endIcon={<FaSuitcase size={15} />}>
                     Compte GP
                   </Button>
@@ -215,8 +216,8 @@ const Home = () => {
                 </Stack>
               </Stack>
             </Grid>
-            <Grid item md={6} lg={6} xl={6} mb={5}>
-              <img src={PresentationImage} alt="presentation" width="60%" />
+            <Grid item md={7} lg={6} xl={6} mb={5}>
+              <img src={PresentationImage} alt="presentation" width="100%" />
             </Grid>
           </Grid>
           <Box mb={10} display={{ xs: "block", sm: "block", md: "none" }}>

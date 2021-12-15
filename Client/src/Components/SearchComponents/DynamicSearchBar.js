@@ -151,8 +151,13 @@ const SearchSummaryMobile = ({
 
 const DynamicSearchBar = ({ size = "small" }) => {
   const history = useHistory();
-  const { departureCity, departureCountry, destinationCity, destinationCountry, date } =
-    useParams();
+  const {
+    departureCity,
+    departureCountry,
+    destinationCity,
+    destinationCountry,
+    date,
+  } = useParams();
   const { getSomeFlights } = useContext(SearchPageContext);
   const [departure, setdeparture] = useState({ name: "", country: "" });
   const [destination, setdestination] = useState({ name: "", country: "" });
@@ -162,7 +167,7 @@ const DynamicSearchBar = ({ size = "small" }) => {
   const [dateOpen, setdateOpen] = useState(false);
   const [searching, setSearching] = useState(false);
 
-  const switchDestinations = () => {
+  const switchDestinations = async () => {
     var newDep = departure;
     history.replace(
       `/search/${destination.name}/${destination.country}/${departure.name}/${
@@ -174,6 +179,7 @@ const DynamicSearchBar = ({ size = "small" }) => {
         date: departureDate,
       }
     );
+    await getSomeFlights(destination, departure, departureDate.toJSON());
     setdestination(newDep);
     setdeparture(destination);
   };
@@ -216,19 +222,21 @@ const DynamicSearchBar = ({ size = "small" }) => {
     return { ...result, country };
   }
   useEffect(() => {
-    console.log(`number of params`);
-    if (departureCity) {
-      setdeparture(getCity(departureCity, departureCountry));
-      setdestination(getCity(destinationCity, destinationCountry));
-      setDepartureDate(new Date(date));
-      getSomeFlights(
-        getCity(departureCity, departureCountry),
-        getCity(destinationCity, destinationCountry),
-        date
-      );
-    } else {
-      setSearching(true);
+    async function fetchDatas() {
+      if (departureCity) {
+        setdeparture(getCity(departureCity, departureCountry));
+        setdestination(getCity(destinationCity, destinationCountry));
+        setDepartureDate(new Date(date));
+        await getSomeFlights(
+          getCity(departureCity, departureCountry),
+          getCity(destinationCity, destinationCountry),
+          date
+        );
+      } else {
+        setSearching(true);
+      }
     }
+    fetchDatas();
   }, []);
 
   return (

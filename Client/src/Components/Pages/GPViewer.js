@@ -363,7 +363,7 @@ const Presentation = () => {
             {!state.loading && <FaCertificate size={12} color={COLORS.primary} />}
           </Stack>
           <Typography color="GrayText" variant="body1">
-            {state.loading ? <Skeleton width="50%" /> : user?.country}
+            {state.loading ? <Skeleton width="50%" /> : user.country}
           </Typography>
           <Stack direction="row" spacing={2} my={2} color="GrayText">
             {socials.map((social, index) => (

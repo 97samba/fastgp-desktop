@@ -164,8 +164,7 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
           sx={{ display: { sm: "none", xs: "none", md: "block" } }}
         >
           <Button
-            // fullWidth
-
+            fullWidth
             variant="outlined"
             sx={{ height: "100%", color: "gray" }}
             onClick={switchDestinations}
