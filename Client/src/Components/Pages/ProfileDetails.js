@@ -1,7 +1,4 @@
 import {
-  Avatar,
-  Button,
-  ButtonBase,
   Container,
   Grid,
   ListItemIcon,
@@ -9,21 +6,25 @@ import {
   MenuItem,
   MenuList,
   Paper,
-  Stack,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { FaUserAlt, FaUsers } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoLocationSharp } from "react-icons/io5";
 import { MdPayment } from "react-icons/md";
-import { RiMedal2Line } from "react-icons/ri";
 import COLORS from "../../colors";
 import Profile from "../ProfileDetailsComponents/Profile";
+import { useHistory, useParams } from "react-router-dom";
+import { userDetails } from "../../firebase/db";
+import PaymentMethod from "../ProfileDetailsComponents/PaymentMethod";
+import Location from "../ProfileDetailsComponents/Location";
 
 const Left = () => {
+  const { profilState, goToPage } = useContext(ProfileDetailsContext);
+
   const boardTab = [
     {
       label: "Mon profil",
@@ -36,7 +37,7 @@ const Left = () => {
       key: "location",
     },
     {
-      label: "Méthodes de paiement",
+      label: "Mode de paiement",
       icon: <MdPayment size={17} />,
       key: "payments",
     },
@@ -69,7 +70,12 @@ const Left = () => {
             {boardTab.map((tab) => (
               <MenuItem
                 key={tab.key}
-                sx={{ "&:hover": { borderLeft: "4px solid " + COLORS.warning } }}
+                sx={{
+                  "&:hover": { borderLeft: "4px solid " + COLORS.warning },
+                  borderLeft:
+                    profilState.label === tab.label ? "4px solid " + COLORS.warning : "none",
+                }}
+                onClick={() => goToPage(tab.label, tab.key, tab.icon)}
               >
                 <ListItemIcon>{tab.icon}</ListItemIcon>
                 <ListItemText>{tab.label}</ListItemText>
@@ -98,18 +104,65 @@ const Left = () => {
   );
 };
 const Right = () => {
-  return <Profile />;
+  const { profilState } = useContext(ProfileDetailsContext);
+
+  const renders = [
+    {
+      key: "payments",
+      item: <PaymentMethod />,
+    },
+    {
+      key: "myProfile",
+      item: <Profile />,
+    },
+    {
+      key: "location",
+      item: <Location />,
+    },
+  ];
+  function getItem() {
+    return renders.map((render) => {
+      if (render.key === profilState.key) {
+        return render.item;
+      }
+    });
+  }
+  return <Box>{getItem()}</Box>;
 };
 
 export const ProfileDetailsContext = createContext();
 
 const ProfileDetails = () => {
+  const { id, subpage, subID } = useParams();
+  const history = useHistory();
   const [profilState, setprofilState] = useState({
     icon: <FaUserAlt color={COLORS.warning} />,
     label: "Mon profil",
+    key: "myProfile",
+    loading: true,
   });
+
+  const [user, setuser] = useState();
+  function goToPage(label, key, icon) {
+    setprofilState({ ...profilState, label, key, icon });
+    history.push("/profilDetails/" + id + "/" + key);
+  }
+
+  async function getUser() {
+    if (id) {
+      var result = await userDetails(id);
+      setuser(result);
+      setprofilState({ ...profilState, loading: false });
+    } else history.push("/login");
+  }
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
-    <ProfileDetailsContext.Provider value={{ profilState, setprofilState }}>
+    <ProfileDetailsContext.Provider
+      value={{ profilState, setprofilState, user, setuser, goToPage }}
+    >
       <Container>
         <Grid container spacing={4} py={4}>
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>

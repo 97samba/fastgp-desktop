@@ -5,12 +5,13 @@ import {
   ButtonBase,
   Grid,
   Paper,
+  Skeleton,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { IoMdSave } from "react-icons/io";
 
@@ -19,12 +20,26 @@ import COLORS from "../../colors";
 import { ProfileDetailsContext } from "../Pages/ProfileDetails";
 
 const ModifyProfile = ({ setediting }) => {
+  const { user } = useContext(ProfileDetailsContext);
+  const [state, setstate] = useState({ firstName: "", address: "", lastName: "", phone: "" });
   function handleSave() {
     setediting(false);
   }
   function handleReturn() {
     setediting(false);
   }
+  useEffect(() => {
+    if (user?.userId) {
+      setstate({
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        phone: user?.phone,
+        address: user?.address,
+        email: user?.email,
+        birthday: user?.birthday,
+      });
+    }
+  }, [user]);
   return (
     <Box>
       <Stack direction="row" spacing={2} alignItems="center" mb={2}>
@@ -41,22 +56,30 @@ const ModifyProfile = ({ setediting }) => {
           <Avatar sx={{ width: 60, height: 60 }}>S</Avatar>
           <Grid container spacing={3} my={2}>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              <TextField fullWidth label="Prénom" size="small" />
+              <TextField value={state.firstName} fullWidth label="Prénom" size="small" />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              <TextField fullWidth label="Nom" size="small" />
+              <TextField value={state.lastName} fullWidth label="Nom" size="small" />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              <TextField fullWidth label="Email" type="email" size="small" />
+              <TextField
+                value={state.email}
+                disabled
+                fullWidth
+                label="Email"
+                type="email"
+                size="small"
+              />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              <TextField fullWidth label="Téléphone" type="tel" size="small" />
+              <TextField value={state.phone} fullWidth label="Téléphone" type="tel" size="small" />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
               <DesktopDatePicker
                 type="date"
                 label="Date de naissance"
                 renderInput={(params) => <TextField {...params} fullWidth size="small" />}
+                value={state.birthday}
               />
             </Grid>
           </Grid>
@@ -69,7 +92,8 @@ const ModifyProfile = ({ setediting }) => {
   );
 };
 const Profile = () => {
-  const { profilState, setprofilState } = useContext(ProfileDetailsContext);
+  const { profilState, user } = useContext(ProfileDetailsContext);
+
   const [HeaderInformations, setHeaderInformations] = useState([
     {
       label: "Mes Colis",
@@ -92,7 +116,7 @@ const Profile = () => {
       key: "shop",
     },
   ]);
-  const [editing, setediting] = useState(true);
+  const [editing, setediting] = useState(false);
 
   return (
     <Box>
@@ -123,15 +147,15 @@ const Profile = () => {
                   >
                     <Box>
                       <Typography variant="h6" color="#2B3445" fontWeight={500}>
-                        Samba NDIAYE
+                        {profilState.loading ? <Skeleton /> : user.firstName + " " + user.lastName}
                       </Typography>
                       <Typography variant="body2" color="primary">
-                        Sénégal
+                        {profilState.loading ? <Skeleton /> : user.country}
                       </Typography>
                     </Box>
                     <Box display="flex" alignItems="center">
                       <Typography color="GrayText" letterSpacing={1} fontWeight={300}>
-                        GP DEBUTANT{" "}
+                        GP DEBUTANT
                       </Typography>
                       <RiMedal2Line size={18} color="goldenrod" />
                     </Box>
@@ -165,7 +189,7 @@ const Profile = () => {
                     Prénom
                   </Typography>
                   <Typography variant="body2" color={COLORS.black}>
-                    Samba
+                    {profilState.loading ? <Skeleton /> : user.firstName}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
@@ -173,7 +197,7 @@ const Profile = () => {
                     Nom
                   </Typography>
                   <Typography variant="body2" color={COLORS.black}>
-                    NDIAYE
+                    {profilState.loading ? <Skeleton /> : user.lastName}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
@@ -181,7 +205,7 @@ const Profile = () => {
                     Email
                   </Typography>
                   <Typography variant="body2" color={COLORS.black}>
-                    Samba.ndiaye@gmail.com
+                    {profilState.loading ? <Skeleton /> : user.email}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
@@ -189,7 +213,9 @@ const Profile = () => {
                     Téléphone
                   </Typography>
                   <Typography variant="body2" color={COLORS.black}>
-                    <ButtonBase onClick={() => console.log("object")}>062278****</ButtonBase>
+                    <ButtonBase onClick={() => console.log("object")}>
+                      {profilState.loading ? <Skeleton /> : user.phone}
+                    </ButtonBase>
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>

@@ -138,3 +138,15 @@ const getNearResults = async (departureCity, destinationCity, departureCountry, 
 
   return nearResults;
 };
+
+/*
+  user details
+*/
+
+export const UpdateUserDetails = async (firstName, lastName, email, address) => {
+  const docRef = doc(db, "users/" + email);
+
+  await updateDoc(docRef, { firstName, lastName, address }).catch((error) =>
+    console.log(`error`, error)
+  );
+};
