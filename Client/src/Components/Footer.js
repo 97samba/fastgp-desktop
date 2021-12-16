@@ -12,15 +12,15 @@ const Footer = () => {
     { icon: <FaTwitter size={20} />, link: "http://www.twitter.fr" },
   ];
   return (
-    <Box minHeight="200px" bgcolor={COLORS.primary} mt={5}>
-      <Box mx={10} color="white">
+    <Box bgcolor={COLORS.primary}>
+      <Box mx={{ xs: 5, sm: 5, md: 10, xl: 10, lg: 10 }} color="white">
         <Grid container pt={5}>
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
             <Typography gutterBottom variant="h5">
               Fast GP
             </Typography>
             <Typography variant="body2">
-              Fast GP est un site professionnel de livraison internatinal qui recense toutes les
+              Fast GP est un site professionnel de livraison international qui recense toutes les
               annonces de covalisage du net.
             </Typography>
             <Stack direction="row" spacing={2} my={2}>
@@ -31,15 +31,21 @@ const Footer = () => {
           </Grid>
           <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
             <Typography fontWeight={500}>Liens utiles</Typography>
-            <Divider sx={{ my: 2, background: "orange", width: "70%" }} />
+            <Divider
+              sx={{ my: 2, background: "orange", width: { xs: "100%", sm: "100%", md: "70%" } }}
+            />
           </Grid>
           <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
             <Typography fontWeight={500}>Professionel</Typography>
-            <Divider sx={{ my: 2, background: "orange", width: "70%" }} />
+            <Divider
+              sx={{ my: 2, background: "orange", width: { xs: "100%", sm: "100%", md: "70%" } }}
+            />
           </Grid>
           <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
             <Typography fontWeight={500}>Professionel</Typography>
-            <Divider sx={{ my: 2, background: "orange", width: "70%" }} />
+            <Divider
+              sx={{ my: 2, background: "orange", width: { xs: "100%", sm: "100%", md: "70%" } }}
+            />
           </Grid>
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
             <Typography fontWeight={500}>Télecharger sur mobile</Typography>
@@ -47,13 +53,13 @@ const Footer = () => {
         </Grid>
         <Divider sx={{ my: 5, background: "white" }} />
         <Stack direction="row" pb={5} justifyContent="space-between">
-          <Typography variant="body2">© 2021 Sangomar, Fast GP. Tous droits réservés</Typography>
+          <Typography variant="caption">© 2021 Sangomar, Fast GP. Tous droits réservés</Typography>
           <Stack direction="row" pb={5} justifyContent="space-between" spacing={1}>
-            <Typography variant="body2" fontWeight={600}>
+            <Typography variant="caption" fontWeight={600}>
               12 000
             </Typography>
-            <Typography variant="body2">annonces publiées</Typography>
-            <FaPlaneDeparture color="goldenrod" />
+            <Typography variant="caption">annonces publiées</Typography>
+            <FaPlaneDeparture color={COLORS.warning} />
           </Stack>
         </Stack>
       </Box>

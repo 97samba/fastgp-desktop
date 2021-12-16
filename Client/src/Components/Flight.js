@@ -203,7 +203,7 @@ const Flight = ({ data }) => {
           direction="row"
           alignItems="center"
           height="10%"
-          borderBottom={0.2}
+          borderBottom={0.1}
           borderColor="#e2e2e2"
         >
           <Stack direction="row" alignItems="center" flex={1} spacing={1}>
@@ -248,7 +248,7 @@ const Flight = ({ data }) => {
           </Stack>
         </Stack>
         <Box display={{ xs: "block", sm: "block", md: "none", lg: "none", xl: "none" }}>
-          <MenuItem onClick={() => viewFlight(data)}>
+          <MenuItem disableGutters onClick={() => viewFlight(data)}>
             <Grid p={2} container flex={1} alignItems="center">
               <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
                 <Left />
@@ -282,10 +282,13 @@ const Flight = ({ data }) => {
   return (
     <Paper
       sx={{
-        // boxShadow: "1px 1px 3px 1px #e2e2e2",
-        border: 1,
-        borderColor: "#E2E2E2",
+        border: { sx: "0px", sm: "0px", md: "0.1px solid #E5E5E5" },
         marginBottom: 3,
+        boxShadow: {
+          xs: "0px 2px 3px rgba(4, 0, 71, 0.1)",
+          sm: "1px 1px 4px 1px #E5E5E5",
+          md: "none",
+        },
         "&:hover": { boxShadow: "1px 1px 4px 1px #E5E5E5", border: 0 },
       }}
       elevation={0}

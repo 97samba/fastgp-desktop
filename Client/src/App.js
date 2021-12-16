@@ -138,7 +138,9 @@ const App = () => {
                   <Route path="/account" component={Account} />
                   <Route path="/GPprofile/:id" component={GPViewer} />
                   <Route path="/GPprofile" component={GPViewer} />
-                  <Route path="/profilDetails/:id" component={ProfileDetails} />
+                  <Route path="/profilDetails/:id/:subpage" component={ProfileDetails} />
+                  <Route path="/profilDetails/:id/:subpage/:subID" component={ProfileDetails} />
+                  <Route path="/profilDetails" component={ProfileDetails} />
                   <Route path="/login" component={Login} />
                   <Route path="/register" component={Register} />
                   <Route path="/contactUs" component={ContactUs} />

@@ -11,7 +11,7 @@ import COLORS from "../../colors";
 
 const FlightInformations = ({ state }) => {
   return (
-    <Paper sx={{ py: 2, px: 3 }} variant="outlined">
+    <Paper sx={{ py: 2, px: 3, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
       <Grid container my={1} rowSpacing={3} columnSpacing={6}>
         <Grid item xs={5} sm={4} md={4} xl={4} mb={4} textAlign="start">
           <Typography variant="h4" color="primary">

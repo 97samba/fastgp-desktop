@@ -27,7 +27,8 @@ const UserMenu = ({ history, currentUser }) => {
     setanchorEl(e.currentTarget);
   };
   const visitProfil = () => {
-    history.push(`/GPprofile/${currentUser?.uid}`);
+    // history.push(`/GPprofile/${currentUser?.uid}`);
+    history.push(`/profilDetails/${currentUser?.uid}/myProfile`);
     handleClose();
   };
   function handleLogOut() {

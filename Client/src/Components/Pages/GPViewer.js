@@ -492,6 +492,7 @@ const GPViewer = () => {
     <Container>
       <GPViewerContext.Provider value={{ user, state, userFlights, currentUser, follow, unFollow }}>
         <Grid container spacing={2}>
+          <Right userFlights={userFlights} />
           <Grid item sm={12} md={9} xl={9} lg={9}>
             <Stack direction="column" spacing={4}>
               <Presentation />
@@ -499,7 +500,6 @@ const GPViewer = () => {
               <Reviews />
             </Stack>
           </Grid>
-          <Right userFlights={userFlights} />
         </Grid>
       </GPViewerContext.Provider>
     </Container>

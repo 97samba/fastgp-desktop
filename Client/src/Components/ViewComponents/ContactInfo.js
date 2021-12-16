@@ -39,7 +39,7 @@ const ContactInfo = ({ state, adViewed, setadViewed }) => {
   }, [adViewed]);
 
   return (
-    <Paper sx={{ p: 3 }} variant="outlined">
+    <Paper sx={{ p: 3, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
       <Typography variant="h5" color="GrayText">
         Contact
       </Typography>

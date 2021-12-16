@@ -151,13 +151,8 @@ const SearchSummaryMobile = ({
 
 const DynamicSearchBar = ({ size = "small" }) => {
   const history = useHistory();
-  const {
-    departureCity,
-    departureCountry,
-    destinationCity,
-    destinationCountry,
-    date,
-  } = useParams();
+  const { departureCity, departureCountry, destinationCity, destinationCountry, date } =
+    useParams();
   const { getSomeFlights } = useContext(SearchPageContext);
   const [departure, setdeparture] = useState({ name: "", country: "" });
   const [destination, setdestination] = useState({ name: "", country: "" });
@@ -296,6 +291,7 @@ const DynamicSearchBar = ({ size = "small" }) => {
               <DesktopDatePicker
                 type="date"
                 value={departureDate}
+                minDate={moment()}
                 label="Date de départ"
                 renderInput={(params) => (
                   <TextField {...params} fullWidth size={size} onClick={() => setdateOpen(true)} />

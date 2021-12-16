@@ -9,7 +9,7 @@ import { ViewContext } from "../Pages/View";
 const ProfilDescriptor = ({ state }) => {
   const { visitProfil } = useContext(ViewContext);
   return (
-    <Paper sx={{ p: 3 }}>
+    <Paper sx={{ p: 3, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
       <Box>
         <Typography>Covaliseur:</Typography>
         <Divider sx={{ my: 1 }} />

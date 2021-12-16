@@ -4,6 +4,7 @@ import React, { useState, useEffect, createContext, useContext } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
 import data from "../data/test.json";
 import { useHistory } from "react-router-dom";
+import moment from "moment";
 
 const SearchContext = createContext();
 
@@ -180,6 +181,7 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
             type="date"
             value={departureDate}
             label="Date de départ"
+            minDate={moment()}
             renderInput={(params) => (
               <TextField {...params} fullWidth size={size} onClick={() => setdateOpen(true)} />
             )}

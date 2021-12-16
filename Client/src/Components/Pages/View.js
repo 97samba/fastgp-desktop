@@ -8,6 +8,7 @@ import ContactInfo from "../ViewComponents/ContactInfo";
 import FlightInformations from "../ViewComponents/FlightInformations";
 import { getAFlight } from "../../firebase/db";
 import { useAuth } from "../../firebase/auth";
+import COLORS from "../../colors";
 
 const Summary = () => {
   return (
@@ -73,7 +74,7 @@ const View = () => {
         currentUser,
       }}
     >
-      <Container sx={{ minWidth: "90%", mt: 5 }}>
+      <Container sx={{ minWidth: "90%", mt: 5, backgroundColor: COLORS.background }}>
         {loading ? (
           <Typography>loading</Typography>
         ) : (

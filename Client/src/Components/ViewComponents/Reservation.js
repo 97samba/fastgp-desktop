@@ -55,7 +55,7 @@ const Reservation = () => {
     { label: "Alimentaire", value: "food", icon: <IoFastFoodOutline /> },
   ];
   return (
-    <Paper sx={{ p: 3 }} variant="outlined">
+    <Paper sx={{ p: 3, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
       <BoardingPass />
       <Box>
         <Typography variant="body2" color="GrayText" flexGrow={1}></Typography>

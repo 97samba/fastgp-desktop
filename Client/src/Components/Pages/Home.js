@@ -208,7 +208,7 @@ const OurValues = () => {
     },
   ];
   return (
-    <Grid container px={2} py={5} spacing={2}>
+    <Grid container px={2} py={7} spacing={2}>
       {values.map((value, index) => (
         <Grid item xs={12} sm={12} md={4} lg={4} xl={4} textAlign="center">
           <IconButton size="large">{value.icon}</IconButton>
@@ -232,7 +232,7 @@ const Home = () => {
         <Container>
           <Grid container>
             <Grid item md={5} lg={6} xl={6} p={{ xs: 2, sm: 2, md: 5 }}>
-              <Stack justifyContent="center" spacing={3} flex={1} zIndex={1}>
+              <Stack justifyContent="center" spacing={3} flex={1} height="100%">
                 <Box>
                   <Typography variant="h4" fontWeight="bold" color="primary">
                     Envoyer vos colis
@@ -274,7 +274,7 @@ const Home = () => {
               alignItems="center"
               justifyContent="center"
             >
-              <img src={PresentationImage} alt="presentation" width="100%" />
+              <img src={PresentationImage} alt="presentation" width="90%" />
             </Grid>
           </Grid>
         </Container>
