@@ -150,3 +150,20 @@ export const UpdateUserDetails = async (firstName, lastName, email, address) => 
     console.log(`error`, error)
   );
 };
+
+/**
+ * Reservations
+ */
+
+export const getUserReservations = async (id) => {
+  const q = query(collection(db, "reservations"), where("owner", "==", id));
+  var reservations = [];
+  await getDocs(q)
+    .then((datas) => {
+      if (datas.size > 0) {
+        datas.forEach((data) => reservations.push(data.data()));
+      }
+    })
+    .catch((error) => console.log(`error while retrieving reservations`, error));
+  return reservations;
+};

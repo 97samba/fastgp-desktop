@@ -25,15 +25,15 @@ const View = () => {
   const history = useHistory();
   const { id } = useParams();
   const currentUser = useAuth();
-  const [state, setstate] = useState(history.location.state);
+  const [flightState, setflightState] = useState(history.location.state);
   const [sender, setsender] = useState({ firstName: "", lastName: "", phoneNumber: "" });
   const [receiver, setreceiver] = useState({ firstName: "", lastName: "", phoneNumber: "" });
   const [adViewed, setadViewed] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const visitProfil = () => {
-    if (state.ownerId) {
-      history.push(`/GPprofile/${state.ownerId}`);
+    if (flightState.ownerId) {
+      history.push(`/GPprofile/${flightState.ownerId}`);
     }
   };
 
@@ -42,10 +42,9 @@ const View = () => {
       if (!id) history.push("/");
       if (id && history.location.state === undefined) {
         var flight = await getAFlight(id);
-        setstate(flight);
+        setflightState(flight);
         setLoading(false);
       } else {
-        console.log(`state?.ownerId`, state?.ownerId);
         setLoading(false);
       }
     }
@@ -63,7 +62,6 @@ const View = () => {
   return (
     <ViewContext.Provider
       value={{
-        state,
         sender,
         setsender,
         receiver,
@@ -72,6 +70,7 @@ const View = () => {
         setadViewed,
         visitProfil,
         currentUser,
+        flightState,
       }}
     >
       <Container sx={{ minWidth: "90%", mt: 5, backgroundColor: COLORS.background }}>
@@ -80,7 +79,7 @@ const View = () => {
         ) : (
           <Grid container minHeight={300} spacing={2}>
             <Grid item xs={12} sm={12} md={3} lg={3} xl={3} order={{ xs: 1, sm: 1, md: 0 }}>
-              <ProfilDescriptor state={state} />
+              <ProfilDescriptor state={flightState} />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
               <Typography
@@ -92,9 +91,9 @@ const View = () => {
                 Vos deux premières livraisons sont gratuites*
               </Typography>{" "}
               <Stack direction="column" spacing={2}>
-                <FlightInformations state={state} />
+                <FlightInformations state={flightState} />
                 <Reservation />
-                <ContactInfo state={state} adViewed={adViewed} setadViewed={setadViewed} />
+                <ContactInfo state={flightState} adViewed={adViewed} setadViewed={setadViewed} />
               </Stack>
             </Grid>
             <Grid

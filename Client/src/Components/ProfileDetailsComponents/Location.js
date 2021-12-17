@@ -115,7 +115,7 @@ const Address = ({ data }) => {
 };
 
 const Location = () => {
-  const { profilState, user } = useContext(ProfileDetailsContext);
+  const { profilState, user, loading } = useContext(ProfileDetailsContext);
 
   const [editing, setediting] = useState(false);
 
@@ -157,10 +157,10 @@ const Location = () => {
                 <Stack direction="row" alignItems="center" justifyContent="space-between" flex={1}>
                   <Box>
                     <Typography variant="h6" color="#2B3445" fontWeight={500}>
-                      {profilState.loading ? <Skeleton /> : user.firstName + " " + user.lastName}
+                      {loading ? <Skeleton /> : user.firstName + " " + user.lastName}
                     </Typography>
                     <Typography variant="body2" color="primary">
-                      {profilState.loading ? <Skeleton /> : user.country}
+                      {loading ? <Skeleton /> : user.country}
                     </Typography>
                   </Box>
                   <Box display="flex" alignItems="center">

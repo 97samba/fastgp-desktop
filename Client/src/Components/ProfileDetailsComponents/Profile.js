@@ -92,7 +92,7 @@ const ModifyProfile = ({ setediting }) => {
   );
 };
 const Profile = () => {
-  const { profilState, user } = useContext(ProfileDetailsContext);
+  const { profilState, user, loading } = useContext(ProfileDetailsContext);
 
   const [HeaderInformations, setHeaderInformations] = useState([
     {
@@ -148,10 +148,10 @@ const Profile = () => {
                   >
                     <Box>
                       <Typography variant="h6" color="#2B3445" fontWeight={500}>
-                        {profilState.loading ? <Skeleton /> : user.firstName + " " + user.lastName}
+                        {loading ? <Skeleton width={100} /> : user.firstName + " " + user.lastName}
                       </Typography>
                       <Typography variant="body2" color="primary">
-                        {profilState.loading ? <Skeleton /> : user.country}
+                        {loading ? <Skeleton width={100} /> : user.country}
                       </Typography>
                     </Box>
                     <Box display="flex" alignItems="center">
@@ -171,7 +171,11 @@ const Profile = () => {
                   <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
                     <Box p={2} textAlign="center">
                       <Typography variant="h6" color={COLORS.warning}>
-                        {data.number >= 10 ? data.number : "0" + data.number}
+                        {loading ? (
+                          <Skeleton width="100%" />
+                        ) : (
+                          <>{data.number >= 10 ? data.number : "0" + data.number}</>
+                        )}
                       </Typography>
                       <Typography variant="body2" color="GrayText">
                         {data.label}
@@ -190,7 +194,7 @@ const Profile = () => {
                     Prénom
                   </Typography>
                   <Typography variant="body2" color={COLORS.black}>
-                    {profilState.loading ? <Skeleton /> : user.firstName}
+                    {loading ? <Skeleton /> : user.firstName}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
@@ -198,7 +202,7 @@ const Profile = () => {
                     Nom
                   </Typography>
                   <Typography variant="body2" color={COLORS.black}>
-                    {profilState.loading ? <Skeleton /> : user.lastName}
+                    {loading ? <Skeleton /> : user.lastName}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
@@ -206,21 +210,25 @@ const Profile = () => {
                     Email
                   </Typography>
                   <Typography variant="body2" color={COLORS.black}>
-                    {profilState.loading ? <Skeleton /> : user.email}
+                    {loading ? <Skeleton /> : user.email}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
-                  <Typography variant="caption" color="GrayText">
+                  <Typography variant="body2" color="GrayText">
                     Téléphone
                   </Typography>
-                  <Typography variant="body2" color={COLORS.black}>
+                  {loading ? (
+                    <Skeleton width="100%" />
+                  ) : (
                     <ButtonBase onClick={() => console.log("object")}>
-                      {profilState.loading ? <Skeleton /> : user.phone}
+                      <Typography variant="body2" color={COLORS.black}>
+                        {user.phone}
+                      </Typography>
                     </ButtonBase>
-                  </Typography>
+                  )}
                 </Grid>
                 <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
-                  <Typography variant="caption" color="GrayText">
+                  <Typography variant="body2" color="GrayText">
                     Adresse
                   </Typography>
                   <Typography variant="body2" color={COLORS.black}>

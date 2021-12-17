@@ -15,10 +15,8 @@ import { app } from "./config";
 
 export const auth = getAuth(app);
 
-export const login = async (email, password) => {
-  await signInWithEmailAndPassword(auth, email, password).catch((error) =>
-    console.log(`error`, error)
-  );
+export const login = async (email, password, setError) => {
+  await signInWithEmailAndPassword(auth, email, password).catch((error) => setError(true));
 };
 
 export const register = async (state) => {

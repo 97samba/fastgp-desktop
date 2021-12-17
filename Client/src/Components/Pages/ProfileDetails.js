@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { FaUserAlt, FaUsers } from "react-icons/fa";
+import { FaPlaneDeparture, FaUserAlt, FaUsers } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
-import { IoMdHeartEmpty } from "react-icons/io";
+import { IoMdHeartEmpty, IoMdPricetags } from "react-icons/io";
 import { IoLocationSharp } from "react-icons/io5";
 import { MdPayment } from "react-icons/md";
 import COLORS from "../../colors";
@@ -21,51 +21,56 @@ import { useHistory, useParams } from "react-router-dom";
 import { userDetails } from "../../firebase/db";
 import PaymentMethod from "../ProfileDetailsComponents/PaymentMethod";
 import Location from "../ProfileDetailsComponents/Location";
+import Packages from "../ProfileDetailsComponents/Packages";
+import { useAuth } from "../../firebase/auth";
 
+export const boardTab = [
+  {
+    label: "Mon profil",
+    icon: <FaUserAlt color="GrayText" />,
+    key: "myProfile",
+  },
+  {
+    label: "Adresses",
+    icon: <IoLocationSharp size={17} color="GrayText" />,
+    key: "location",
+  },
+  {
+    label: "Mode de paiement",
+    icon: <MdPayment size={17} color="GrayText" />,
+    key: "payments",
+  },
+];
+export const dashTab = [
+  {
+    label: "Mes colis",
+    icon: <GoPackage />,
+    key: "packages",
+  },
+  {
+    label: "Mes GP",
+    icon: <FaUsers size={17} />,
+    key: "gps",
+  },
+  {
+    label: "Mes Vols",
+    icon: <FaPlaneDeparture size={15} />,
+    key: "flights",
+  },
+  {
+    label: "Favoris",
+    icon: <IoMdHeartEmpty size={17} />,
+    key: "favorites",
+  },
+  {
+    label: "Reservations",
+    icon: <IoMdPricetags size={17} />,
+    key: "reservations",
+  },
+];
 const Left = () => {
   const { profilState, goToPage } = useContext(ProfileDetailsContext);
 
-  const boardTab = [
-    {
-      label: "Mon profil",
-      icon: <FaUserAlt color={profilState.key === "myProfile" ? COLORS.warning : "GrayText"} />,
-      key: "myProfile",
-    },
-    {
-      label: "Adresses",
-      icon: (
-        <IoLocationSharp
-          size={17}
-          color={profilState.key === "location" ? COLORS.warning : "GrayText"}
-        />
-      ),
-      key: "location",
-    },
-    {
-      label: "Mode de paiement",
-      icon: (
-        <MdPayment size={17} color={profilState.key === "payments" ? COLORS.warning : "GrayText"} />
-      ),
-      key: "payments",
-    },
-  ];
-  const dashTab = [
-    {
-      label: "Mes colis",
-      icon: <GoPackage />,
-      key: "packages",
-    },
-    {
-      label: "Mes GP",
-      icon: <FaUsers size={17} />,
-      key: "gps",
-    },
-    {
-      label: "Favoris",
-      icon: <IoMdHeartEmpty size={17} />,
-      key: "favorites",
-    },
-  ];
   return (
     <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
       <Box>
@@ -98,7 +103,12 @@ const Left = () => {
             {dashTab.map((dash) => (
               <MenuItem
                 key={dash.key}
-                sx={{ "&:hover": { borderLeft: "4px solid " + COLORS.warning } }}
+                sx={{
+                  "&:hover": { borderLeft: "4px solid " + COLORS.warning },
+                  borderLeft:
+                    profilState.label === dash.label ? "4px solid " + COLORS.warning : "none",
+                }}
+                onClick={() => goToPage(dash.label, dash.key, dash.icon)}
               >
                 <ListItemIcon>{dash.icon}</ListItemIcon>
                 <ListItemText>{dash.label}</ListItemText>
@@ -126,6 +136,22 @@ const Right = () => {
       key: "location",
       item: <Location />,
     },
+    {
+      key: "packages",
+      item: <Packages />,
+    },
+    {
+      key: "gps",
+      item: <Location />,
+    },
+    {
+      key: "flights",
+      item: <Location />,
+    },
+    {
+      key: "favorites",
+      item: <Location />,
+    },
   ];
   function getItem() {
     return renders.map((render) => {
@@ -141,15 +167,28 @@ export const ProfileDetailsContext = createContext();
 
 const ProfileDetails = () => {
   const { id, subpage, subID } = useParams();
+  const currentUser = useAuth();
   const history = useHistory();
   const [profilState, setprofilState] = useState({
-    icon: <FaUserAlt color={COLORS.warning} />,
-    label: "Mon profil",
-    key: "myProfile",
     loading: true,
   });
 
+  const [loading, setloading] = useState(true);
   const [user, setuser] = useState();
+
+  async function getPage() {
+    var pageInfo = dashTab.filter((tab) => tab.key === subpage);
+    if (pageInfo.length === 0) {
+      pageInfo = boardTab.filter((tab) => tab.key === subpage);
+    }
+    if (pageInfo.length === 0) {
+      setprofilState({ ...profilState, ...boardTab[0] });
+      history.replace("/profilDetails/" + id + "/" + boardTab[0].key);
+    } else {
+      setprofilState({ ...profilState, ...pageInfo[0] });
+    }
+  }
+
   function goToPage(label, key, icon) {
     setprofilState({ ...profilState, label, key, icon });
     history.push("/profilDetails/" + id + "/" + key);
@@ -157,10 +196,13 @@ const ProfileDetails = () => {
 
   async function getUser() {
     if (id) {
+      await getPage();
       var result = await userDetails(id);
       setuser(result);
-      setprofilState({ ...profilState, loading: false });
-    } else history.push("/login");
+      setloading(false);
+    } else {
+      history.push("/login");
+    }
   }
   useEffect(() => {
     getUser();
@@ -168,7 +210,7 @@ const ProfileDetails = () => {
 
   return (
     <ProfileDetailsContext.Provider
-      value={{ profilState, setprofilState, user, setuser, goToPage }}
+      value={{ profilState, setprofilState, user, setuser, goToPage, loading }}
     >
       <Container>
         <Grid container spacing={4} py={4}>

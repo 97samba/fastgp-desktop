@@ -1,18 +1,15 @@
 import { Divider, Grid, Paper, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext } from "react";
+import React from "react";
 import { FaPlane, FaPlaneDeparture } from "react-icons/fa";
-import { ViewContext } from "../Pages/View";
 import Qrcode from "react-qr-code";
 
 import COLORS from "../../colors";
 
-const BoardingPass = () => {
-  const { sender, receiver, state } = useContext(ViewContext);
-
+const BoardingPass = ({ sender, receiver, state }) => {
   const QrCodePass = () => {
     function getQRCodeValue() {
-      return state.id + ", " + sender.firstName + ", " + sender.lastName;
+      return state.id + ", " + sender?.firstName + ", " + sender?.lastName;
     }
     return (
       <Stack direction="row" justifyContent="center">
@@ -23,8 +20,6 @@ const BoardingPass = () => {
 
   return (
     <Box>
-      <Typography gutterBottom>Votre réservation</Typography>
-      <Divider />
       <Box my={2}>
         <Paper elevation={0}>
           <Box my={2}>
@@ -175,7 +170,7 @@ const BoardingPass = () => {
                     <Stack direction="row" my={1} justifyContent="space-between">
                       <Box>
                         <Typography variant="caption">Prix :</Typography>
-                        <Typography>{state.prices.pricePerKG} €</Typography>
+                        <Typography>{state?.prices ? state.prices.pricePerKG : "N/A"} €</Typography>
                       </Box>
                       <Box>
                         <Typography variant="caption">Payé :</Typography>

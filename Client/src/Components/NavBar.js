@@ -8,15 +8,28 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { IoLogOut, IoPersonSharp, IoSettings } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
-import { Avatar, Divider, Link, ListItemIcon, Menu, MenuItem, Stack } from "@mui/material";
-import { FaPlaneDeparture, FaShippingFast, FaShoppingBasket } from "react-icons/fa";
+import {
+  Avatar,
+  Divider,
+  Drawer,
+  Link,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Stack,
+} from "@mui/material";
+import { FaPlaneDeparture, FaShippingFast, FaShoppingBasket, FaUserAlt } from "react-icons/fa";
 import { logout, useAuth } from "../firebase/auth";
 import { IoMdHome } from "react-icons/io";
 import { GoPackage } from "react-icons/go";
 import COLORS from "../colors";
-import { MdOutlineInsertPhoto } from "react-icons/md";
+import { MdLogout, MdOutlineInsertPhoto } from "react-icons/md";
 
 const barHeight = "60 px";
+const drawerWidth = "250px";
 const UserMenu = ({ history, currentUser }) => {
   const [anchorEl, setanchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -26,11 +39,7 @@ const UserMenu = ({ history, currentUser }) => {
   const handleOpen = (e) => {
     setanchorEl(e.currentTarget);
   };
-  const visitProfil = () => {
-    // history.push(`/GPprofile/${currentUser?.uid}`);
-    history.push(`/profilDetails/${currentUser?.uid}/myProfile`);
-    handleClose();
-  };
+
   function handleLogOut() {
     logout();
     history.replace("/");
@@ -41,6 +50,10 @@ const UserMenu = ({ history, currentUser }) => {
     if (currentUser) {
       return currentUser.displayName.charAt(0);
     }
+  }
+  function gotoPage(page) {
+    history.push(`/profilDetails/${currentUser?.uid}/${page}`);
+    handleClose();
   }
 
   return (
@@ -73,19 +86,19 @@ const UserMenu = ({ history, currentUser }) => {
         <Box px={1}>
           <Divider />
         </Box>
-        <MenuItem onClick={visitProfil}>
+        <MenuItem onClick={() => gotoPage("myProfile")}>
           <ListItemIcon>
             <IoPersonSharp />
           </ListItemIcon>
           Mon profil
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={() => gotoPage("packages")}>
           <ListItemIcon>
             <FaShippingFast />
           </ListItemIcon>
           Mes colis
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={() => gotoPage("myProfile")}>
           <ListItemIcon>
             <IoSettings />
           </ListItemIcon>
@@ -129,6 +142,23 @@ export default function NavBar() {
       icon: <FaPlaneDeparture color={COLORS.warning} size={18} />,
     },
   ];
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  function closeDrawer() {
+    setDrawerOpen(false);
+  }
+  function openDrawer() {
+    setDrawerOpen(true);
+  }
+  function goToPage(page) {
+    closeDrawer();
+    history.push(page);
+  }
+  function handleLogOut() {
+    closeDrawer();
+    logout();
+    history.replace("/");
+    history.push("/");
+  }
 
   return (
     <Box sx={{ flexGrow: 1, width: "100%" }} mb={7}>
@@ -140,6 +170,7 @@ export default function NavBar() {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2, display: { xs: "block", sm: "block", md: "none" } }}
+            onClick={openDrawer}
           >
             <MenuIcon />
           </IconButton>
@@ -160,14 +191,19 @@ export default function NavBar() {
               display={{ xs: "none", sm: "none", md: "flex" }}
             >
               {navLinks.map((link, index) => (
-                <Link href={link.path} key={index} underline="none">
-                  <MenuItem sx={{ height: 60 }} href="/create">
-                    <Typography mr={1} color="white">
-                      {link.label}
-                    </Typography>
-                    {link.icon}
-                  </MenuItem>
-                </Link>
+                // <Link href={link.path} key={index} underline="none">
+                <MenuItem
+                  sx={{ height: 60 }}
+                  href="/create"
+                  key={index}
+                  onClick={() => history.push(link.path)}
+                >
+                  <Typography mr={1} color="white">
+                    {link.label}
+                  </Typography>
+                  {link.icon}
+                </MenuItem>
+                // </Link>
               ))}
             </Stack>
           </Stack>
@@ -184,6 +220,76 @@ export default function NavBar() {
           )}
         </Toolbar>
       </AppBar>
+      <Drawer variant="temporary" open={drawerOpen} onClose={closeDrawer}>
+        <Box p={2} width={drawerWidth} bgcolor={COLORS.primary} height="100%">
+          <Button startIcon={<FaShippingFast size={25} color="white" />}>
+            <Typography variant="h6" color="white">
+              Fast GP
+            </Typography>
+          </Button>
+          {currentUser?.uid ? (
+            <MenuItem
+              disableGutters
+              onClick={() => goToPage("/profilDetails/" + currentUser.uid + "/myProfile")}
+            >
+              <Stack direction="row" spacing={1} my={1} mt={2}>
+                <Avatar sx={{ width: 40, height: 40 }}>S</Avatar>
+                <Box>
+                  <Typography color="white" variant="body2" noWrap>
+                    {currentUser.displayName}
+                  </Typography>
+                  <Typography color="white" variant="caption" noWrap>
+                    {currentUser.email}
+                  </Typography>
+                </Box>
+              </Stack>
+            </MenuItem>
+          ) : null}
+
+          <List>
+            {navLinks.map((link, index) => (
+              <ListItem
+                sx={{ height: 40, backgroundColor: "white", borderRadius: 1, mt: 2 }}
+                href="/create"
+                key={index}
+                onClick={() => goToPage(link.path)}
+              >
+                <ListItemText>
+                  <Typography mr={1} color="primary">
+                    {link.label}
+                  </Typography>
+                </ListItemText>
+                {link.icon}
+              </ListItem>
+            ))}
+          </List>
+          {currentUser?.uid ? (
+            <Box pt={3}>
+              <Button
+                color="warning"
+                endIcon={<MdLogout />}
+                fullWidth
+                sx={{ backgroundColor: "transparent" }}
+                onClick={handleLogOut}
+              >
+                Se déconnecter
+              </Button>
+            </Box>
+          ) : (
+            <Box pt={3}>
+              <Button
+                color="warning"
+                endIcon={<FaUserAlt size={13} />}
+                fullWidth
+                sx={{ backgroundColor: "transparent" }}
+                onClick={() => goToPage("/login")}
+              >
+                Se connecter
+              </Button>
+            </Box>
+          )}
+        </Box>
+      </Drawer>
     </Box>
   );
 }

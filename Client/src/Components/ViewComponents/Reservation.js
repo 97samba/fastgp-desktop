@@ -3,6 +3,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
+  Divider,
   FormControlLabel,
   FormLabel,
   Grid,
@@ -34,7 +35,8 @@ import { ViewContext } from "../Pages/View";
 import { GiHeartNecklace } from "react-icons/gi";
 
 const Reservation = () => {
-  const { sender, setsender, receiver, setreceiver, currentUser } = useContext(ViewContext);
+  const { sender, setsender, receiver, setreceiver, currentUser, flightState } =
+    useContext(ViewContext);
   const [isReceiver, setisReceiver] = useState("yes");
   const [state, setstate] = useState({ itemType: "thing", itemDescription: "" });
 
@@ -56,7 +58,19 @@ const Reservation = () => {
   ];
   return (
     <Paper sx={{ p: 3, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
-      <BoardingPass />
+      <Typography gutterBottom>Votre réservation</Typography>
+      <Divider />
+      <BoardingPass
+        sender={sender}
+        state={{
+          id: flightState.id,
+          publisher: flightState.publisher,
+          departure: flightState?.departure,
+          destination: flightState?.destination,
+          prices: flightState.prices,
+        }}
+        receiver={receiver}
+      />
       <Box>
         <Typography variant="body2" color="GrayText" flexGrow={1}></Typography>
         <Accordion variant="outlined">

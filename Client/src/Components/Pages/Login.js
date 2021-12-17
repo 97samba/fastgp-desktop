@@ -14,16 +14,17 @@ const Middle = ({ currentUser }) => {
   const [state, setstate] = useState({ email: "", password: "", loading: false });
   const [displayErrors, setdisplayErrors] = useState(false);
   const logIn = async () => {
+    setdisplayErrors(false);
     setstate({ ...state, loading: true });
-    await login(state.email, state.password);
+    await login(state.email, state.password, setdisplayErrors);
     setstate({ ...state, loading: false });
   };
 
   return (
-    <Paper>
+    <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
       <Box px={5} pt={1}>
         <Stack direction="row" justifyContent="center" m={1} alignItems="center">
-          <img src={loginImage} alt="login" width="50%" />
+          <img src={loginImage} alt="login" width="70%" />
         </Stack>
         <Typography gutterBottom variant="h4" fontWeight="bold" color="primary">
           Connexion
@@ -160,13 +161,22 @@ const Login = () => {
   return (
     <Container>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={12} md={3} lg={3} xl={3} p={5}></Grid>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={3}
+          lg={3}
+          xl={3}
+          p={5}
+          display={{ xs: "none", sm: "none", md: "block" }}
+        ></Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Middle currentUser={currentUser} />
         </Grid>
-        <Grid item xs={12} sm={12} md={3} lg={3} xl={3} p={5}>
-          <Paper variant="outlined">
-            <Box p={5}>
+        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+          <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
+            <Box p={2}>
               <Typography>
                 Pas de compte ? <Link href="/register">Rejoigner-nous </Link>
               </Typography>

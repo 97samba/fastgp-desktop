@@ -131,7 +131,7 @@ const Payment = ({ data }) => {
 };
 
 const PaymentMethod = () => {
-  const { profilState, user } = useContext(ProfileDetailsContext);
+  const { profilState, user, loading } = useContext(ProfileDetailsContext);
   const [editing, setediting] = useState(false);
 
   const methods = [
