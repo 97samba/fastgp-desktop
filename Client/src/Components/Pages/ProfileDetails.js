@@ -28,17 +28,24 @@ const Left = () => {
   const boardTab = [
     {
       label: "Mon profil",
-      icon: <FaUserAlt />,
+      icon: <FaUserAlt color={profilState.key === "myProfile" ? COLORS.warning : "GrayText"} />,
       key: "myProfile",
     },
     {
-      label: "Localisation",
-      icon: <IoLocationSharp size={17} />,
+      label: "Adresses",
+      icon: (
+        <IoLocationSharp
+          size={17}
+          color={profilState.key === "location" ? COLORS.warning : "GrayText"}
+        />
+      ),
       key: "location",
     },
     {
       label: "Mode de paiement",
-      icon: <MdPayment size={17} />,
+      icon: (
+        <MdPayment size={17} color={profilState.key === "payments" ? COLORS.warning : "GrayText"} />
+      ),
       key: "payments",
     },
   ];

@@ -131,12 +131,13 @@ const Profile = () => {
               Modifier
             </Button>
           </Stack>
-          <Stack flex={1} direction="row" alignItems="flex-start">
-            <Box flex={1} mr={2}>
-              <Paper
-                elevation={0}
-                sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)", height: "100%" }}
-              >
+          <Stack
+            flex={1}
+            direction={{ xs: "column", sm: "column", md: "row", lg: "row", xl: "row" }}
+            rowGap={2}
+          >
+            <Box flex={1} mr={{ xs: 0, sm: 0, md: 2 }}>
+              <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
                 <Stack p={3} direction="row" spacing={2} flex={1}>
                   <Avatar sx={{ width: 50, height: 50 }}>S</Avatar>
                   <Stack
@@ -166,7 +167,7 @@ const Profile = () => {
 
             <Grid container spacing={2} flex={1}>
               {HeaderInformations.map((data) => (
-                <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={data.key}>
+                <Grid item xs={6} sm={6} md={3} lg={3} xl={3} key={data.key}>
                   <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
                     <Box p={2} textAlign="center">
                       <Typography variant="h6" color={COLORS.warning}>
