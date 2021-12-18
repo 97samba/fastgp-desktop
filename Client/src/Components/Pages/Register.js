@@ -1,4 +1,13 @@
-import { Button, Container, Grid, Link, Paper, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  FormHelperText,
+  Grid,
+  Link,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { FaSuitcase } from "react-icons/fa";
@@ -10,14 +19,15 @@ import { register, useAuth } from "../../firebase/auth";
 import { GoPackage } from "react-icons/go";
 import GPForm from "../RegisterComponents/GPForm";
 import { ClientForm } from "../RegisterComponents/ClientForm";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
+import BecomeGp from "../RegisterComponents/BecomeGp";
 
 const Middle = () => {
   const { PageState, setPageState } = useContext(RegisterContext);
 
   const ChoiceScreen = () => {
     return (
-      <Stack direction="row" spacing={2} p={5}>
+      <Stack direction="row" spacing={2} p={2}>
         <Box flex={1}>
           <Button
             variant="contained"
@@ -29,25 +39,27 @@ const Middle = () => {
             Client
           </Button>
         </Box>
-        <Box flex={1}>
+        <Box flex={1} textAlign="center">
           <Button
             variant="contained"
             fullWidth
+            color="warning"
             size="large"
             endIcon={<FaSuitcase />}
             onClick={() => setPageState({ ...PageState, userType: "gp" })}
           >
-            Covaliseur (GP)
+            Covaliseur
           </Button>
+          <FormHelperText sx={{ textAlign: "center" }}>GP (transporteur)</FormHelperText>
         </Box>
       </Stack>
     );
   };
   return (
     <Paper>
-      <Box px={5} pt={1}>
+      <Box p={{ xs: 3, sm: 3, md: 5, lg: 5, xl: 5 }} pt={1}>
         <Stack direction="row" justifyContent="center" m={1} alignItems="center">
-          <img src={loginImage} alt="login" width="40%" />
+          <img src={loginImage} alt="login" width="60%" />
         </Stack>
         <Typography gutterBottom variant="h4" fontWeight="bold" color="primary">
           Inscription
@@ -60,6 +72,8 @@ const Middle = () => {
         <ClientForm />
       ) : PageState.userType === "gp" ? (
         <GPForm />
+      ) : PageState.userType === "becomeGP" ? (
+        <BecomeGp />
       ) : (
         <ChoiceScreen />
       )}
@@ -76,6 +90,7 @@ export const RegisterContext = createContext();
 
 const Register = () => {
   const history = useHistory();
+  const { choice } = useParams();
   const currentUser = useAuth();
   const [PageState, setPageState] = useState({ loading: false, userType: null });
   const [state, setstate] = useState({
@@ -105,22 +120,10 @@ const Register = () => {
     birthdayError: "",
   });
 
-  const registerUser = () => {
-    register(state);
-    // axios
-    //   .post(`${ENV.proxy}register`, state)
-    //   .then((res) => {
-    //     if (res.data.token != "") {
-    //       localStorage.setItem("AuthToken", `${res.data.token}`);
-    //       history.push("/");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     seterrors({ ...errors, emailError: error.response.data });
-    //     setdisplayError(true);
-    //     return Promise.reject(error.response.data);
-    //   });
-  };
+  async function registerUser() {
+    var result = await register(state);
+    result ? history.push("/") : setdisplayError(true);
+  }
   const verifyUserInput = () => {
     seterrors({
       ...errors,
@@ -158,32 +161,37 @@ const Register = () => {
     seterrors,
     RegisterClient,
     RegisterGP,
-    verifyUserInput,
     history,
     currentUser,
+    verifyUserInput,
   };
   useEffect(() => {
     if (currentUser) {
-      history.push("/");
+      if (choice === "client" || choice === "gp" || choice === "becomGp") {
+        setPageState({ ...PageState, userType: choice });
+      } else {
+        history.replace("/register/start");
+      }
     }
   }, [currentUser]);
   return (
     <RegisterContext.Provider value={exported}>
       <Container>
-        <Grid container spacing={2} my={1}>
-          <Grid item xs={12} sm={12} md={3} lg={3} xl={3} p={5}></Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12} md={3} lg={3} xl={3}></Grid>
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
             <Middle />
           </Grid>
-          <Grid item xs={12} sm={12} md={3} lg={3} xl={3} p={5}>
+          <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
             <Paper variant="outlined">
               <Box p={2}>
                 <Typography>
-                  Vous avez déja un compte ? <Link href="/login">Connectez vous </Link>
+                  Vous avez déja un compte ?{" "}
+                  <Button onClick={() => history.push("/login")}>Connectez vous </Button>
                 </Typography>
               </Box>
-              <Box p={2}>
-                <Typography>Devenir covaliseur (GP) ?</Typography>
+              <Box p={2} display="flex" justifyContent="space-between" alignItems="center">
+                <Typography variant="body2">Devenir covaliseur (GP) ?</Typography>
                 <Button>Devenir GP</Button>
               </Box>
             </Paper>

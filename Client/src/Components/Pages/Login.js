@@ -1,4 +1,14 @@
-import { Container, Divider, Grid, Link, Paper, Stack, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Link,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { FaApple, FaFacebookSquare, FaLock, FaPhoneAlt } from "react-icons/fa";
@@ -46,6 +56,7 @@ const Middle = ({ currentUser }) => {
               fullWidth
               size="small"
               type="email"
+              error={displayErrors}
               value={state.email}
               InputProps={{ endAdornment: <IoMailSharp size={18} color="gray" /> }}
               onChange={(e) => setstate({ ...state, email: e.target.value })}
@@ -57,6 +68,7 @@ const Middle = ({ currentUser }) => {
               fullWidth
               size="small"
               type="password"
+              error={displayErrors}
               value={state.password}
               InputProps={{ endAdornment: <FaLock size={16} color="gray" /> }}
               onChange={(e) => setstate({ ...state, password: e.target.value })}
@@ -123,18 +135,20 @@ const Middle = ({ currentUser }) => {
             </Stack>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Stack
-              direction="row"
-              border={1}
-              justifyContent="center"
-              p={0.5}
-              borderRadius={1}
-              borderColor="#C5C5C5"
-              spacing={1}
-            >
-              <FaApple size={20} />
-              <Typography>Apple</Typography>
-            </Stack>
+            <Box>
+              <Stack
+                direction="row"
+                border={1}
+                justifyContent="center"
+                p={0.5}
+                borderRadius={1}
+                borderColor="#C5C5C5"
+                spacing={1}
+              >
+                <FaApple size={20} />
+                <Typography>Apple</Typography>
+              </Stack>
+            </Box>
           </Grid>
         </Grid>
         <Box mt={1}>
@@ -178,7 +192,8 @@ const Login = () => {
           <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
             <Box p={2}>
               <Typography>
-                Pas de compte ? <Link href="/register">Rejoigner-nous </Link>
+                Pas de compte ?{" "}
+                <Button onClick={() => history.push("/register")}>Rejoigner-nous </Button>
               </Typography>
             </Box>
           </Paper>

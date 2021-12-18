@@ -30,7 +30,7 @@ import colors from "../colors";
 import { useHistory } from "react-router";
 import COLORS from "../colors";
 
-const Flight = ({ data }) => {
+const Flight = ({ data, size = "100%" }) => {
   const history = useHistory();
   const viewFlight = (flight) => {
     history.push(`/view/${flight.id}`, flight);
@@ -284,6 +284,7 @@ const Flight = ({ data }) => {
       sx={{
         border: { sx: "0px", sm: "0px", md: "0.1px solid #E5E5E5" },
         marginBottom: 3,
+        width: size,
         boxShadow: {
           xs: "0px 2px 3px rgba(4, 0, 71, 0.1)",
           sm: "1px 1px 4px 1px #E5E5E5",

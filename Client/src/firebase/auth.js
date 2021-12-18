@@ -59,6 +59,7 @@ export const register = async (state) => {
   };
 
   setDoc(doc(db, "users", state.email), credentials).then((data) => console.log(`data`, data));
+  return true;
 };
 
 export const registerGP = async (state, identityUrl) => {
@@ -119,13 +120,8 @@ export async function verifyIfUserExists(email) {
   await fetchSignInMethodsForEmail(auth, email)
     .then((methods) => (exists = methods.length > 0))
     .catch((error) => {
-      throw "erreur lors de la verification";
+      throw ("erreur lors de la verification", error);
     });
-  console.log(
-    `exists
-      `,
-    exists
-  );
 
   return exists;
 }

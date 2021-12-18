@@ -11,14 +11,18 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import paris from "../../Images/paris.jpg";
 import { GiAirplaneDeparture, GiTakeMyMoney } from "react-icons/gi";
-import { FaAward, FaCoins, FaSuitcase, FaUserAlt } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaAward, FaCoins, FaSuitcase, FaUserAlt } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import { SearchPageContext } from "./Search";
 import COLORS from "../../colors";
 import { MdOutlineDeliveryDining, MdSecurity } from "react-icons/md";
+import { getFeaturedFlight } from "../../firebase/db";
+import Flight from "../Flight";
+import FlightSkeleton from "../FlightSkeleton";
+import Carousel from "react-elastic-carousel";
 
 const PresentationImage =
   "https://firebasestorage.googleapis.com/v0/b/fir-c69a6.appspot.com/o/websiteImage%2FHomeImage.svg?alt=media&token=6ed815ca-143a-48bf-a3eb-69d1ed86f2ba";
@@ -223,6 +227,37 @@ const OurValues = () => {
     </Grid>
   );
 };
+const FeaturedFlight = () => {
+  const [topFlights, settopFlights] = useState([]);
+  const [loading, setloading] = useState(true);
+
+  async function getTopFlights() {
+    settopFlights(await getFeaturedFlight());
+    setloading(false);
+  }
+  useEffect(() => {
+    getTopFlights();
+  }, []);
+  return (
+    <Box my={3}>
+      <Typography fontWeight="bold" variant="h5" color={COLORS.black}>
+        Dernieres publications
+      </Typography>
+      <Box my={2} mx={{ xs: 0, sm: 0, md: 10, lg: 10, xl: 10 }}>
+        {loading ? (
+          <FlightSkeleton />
+        ) : (
+          <>
+            <Carousel showArrows={false} pagination={true} itemPadding={[2]} itemsToShow={1}>
+              {topFlights.length > 0 &&
+                topFlights.map((top, index) => <Flight data={top} key={index} />)}
+            </Carousel>
+          </>
+        )}
+      </Box>
+    </Box>
+  );
+};
 
 const Home = () => {
   const [flights, setflights] = useState([]);
@@ -286,7 +321,8 @@ const Home = () => {
         </Box>
         <Box bgcolor="white">
           <Container>
-            <PopularDestinations />
+            <FeaturedFlight />
+            {/* <PopularDestinations /> */}
           </Container>
         </Box>
       </Box>

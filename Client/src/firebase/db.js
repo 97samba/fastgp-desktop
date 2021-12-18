@@ -167,3 +167,13 @@ export const getUserReservations = async (id) => {
     .catch((error) => console.log(`error while retrieving reservations`, error));
   return reservations;
 };
+
+/**
+ * flights
+ */
+export const getFeaturedFlight = async () => {
+  const q = query(collection(db, "flights"), orderBy("createdAt"), limit(5));
+  var results = [];
+  await getDocs(q).then((datas) => datas.forEach((data) => results.push(data.data())));
+  return results;
+};

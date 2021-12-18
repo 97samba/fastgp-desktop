@@ -156,7 +156,7 @@ const Profile = () => {
                     </Box>
                     <Box display="flex" alignItems="center">
                       <Typography color="GrayText" letterSpacing={1} fontWeight={300}>
-                        GP DEBUTANT
+                        {user?.role === "GP" ? "GP DEBUTANT" : "CLIENT"}
                       </Typography>
                       <RiMedal2Line size={18} color="goldenrod" />
                     </Box>
@@ -193,7 +193,7 @@ const Profile = () => {
                   <Typography variant="caption" color="GrayText">
                     Prénom
                   </Typography>
-                  <Typography variant="body2" color={COLORS.black}>
+                  <Typography variant="body2" color={COLORS.black} noWrap>
                     {loading ? <Skeleton /> : user.firstName}
                   </Typography>
                 </Grid>
@@ -201,7 +201,7 @@ const Profile = () => {
                   <Typography variant="caption" color="GrayText">
                     Nom
                   </Typography>
-                  <Typography variant="body2" color={COLORS.black}>
+                  <Typography variant="body2" color={COLORS.black} noWrap>
                     {loading ? <Skeleton /> : user.lastName}
                   </Typography>
                 </Grid>
@@ -209,7 +209,7 @@ const Profile = () => {
                   <Typography variant="caption" color="GrayText">
                     Email
                   </Typography>
-                  <Typography variant="body2" color={COLORS.black}>
+                  <Typography variant="body2" color={COLORS.black} noWrap>
                     {loading ? <Skeleton /> : user.email}
                   </Typography>
                 </Grid>
@@ -231,10 +231,8 @@ const Profile = () => {
                   <Typography variant="body2" color="GrayText">
                     Adresse
                   </Typography>
-                  <Typography variant="body2" color={COLORS.black}>
-                    <ButtonBase onClick={() => console.log("object")}>
-                      171 Rue de la Ville, 75000
-                    </ButtonBase>
+                  <Typography variant="body2" color={COLORS.black} noWrap>
+                    171 Rue de la Ville, 75000
                   </Typography>
                 </Grid>
               </Grid>

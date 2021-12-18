@@ -6,7 +6,6 @@ import { FaApple, FaFacebookSquare, FaLock, FaPhoneAlt } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { IoMailSharp, IoPerson, IoPersonOutline } from "react-icons/io5";
 import { MdPhoneAndroid } from "react-icons/md";
-// import loginImage from "../Images/undraw_login_re_4vu2.svg";
 import data from "../../data/test.json";
 import { ValidateBirthday } from "../../Middleware/RegisterMiddleware";
 
@@ -21,12 +20,12 @@ export const ClientForm = () => {
     setdateOpen,
     errors,
     seterrors,
-    verifyUserInput,
+    RegisterClient,
   } = useContext(RegisterContext);
 
   return (
     <Zoom in={true} timeout={150}>
-      <Box p={5} pt={2}>
+      <Box px={{ xs: 2, sm: 2, md: 5 }}>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={6} md={6} lg={6}>
             <TextField
@@ -174,7 +173,7 @@ export const ClientForm = () => {
             size="medium"
             color="warning"
             variant="contained"
-            onClick={verifyUserInput}
+            onClick={RegisterClient}
           >
             S'inscrire
           </Button>

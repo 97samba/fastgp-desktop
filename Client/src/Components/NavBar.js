@@ -48,7 +48,7 @@ const UserMenu = ({ history, currentUser }) => {
   }
   function getAvatar() {
     if (currentUser) {
-      return currentUser.displayName.charAt(0);
+      return currentUser?.displayName?.charAt(0);
     }
   }
   function gotoPage(page) {
