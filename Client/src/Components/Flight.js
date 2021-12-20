@@ -207,13 +207,15 @@ const Flight = ({ data, size = "100%" }) => {
           borderColor="#e2e2e2"
         >
           <Stack direction="row" alignItems="center" flex={1} spacing={1}>
-            <Link underline="none" href={`/GPprofile/${data.ownerId}`}>
+            {/* <Link underline="none" href={`/GPprofile/${data.ownerId}`}> */}
+            <Link underline="none" href={`/profilDetails/${data.ownerId}/myProfile`}>
               <Avatar sx={{ width: 24, height: 24 }}>
                 <Typography fontSize={11}>{data.publisher.firstName[0].toUpperCase()}</Typography>
               </Avatar>
             </Link>
             <Box>
-              <Link underline="hover" href={`/GPprofile/${data.ownerId}`}>
+              {/* <Link underline="hover" href={`/GPprofile/${data.ownerId}`}> */}
+              <Link underline="none" href={`/profilDetails/${data.ownerId}/myProfile`}>
                 <Typography fontSize={12}>{data.publisher.firstName}</Typography>
               </Link>
               <Stack direction="row" alignItems="center" spacing={0.3}>
@@ -250,13 +252,13 @@ const Flight = ({ data, size = "100%" }) => {
         <Box display={{ xs: "block", sm: "block", md: "none", lg: "none", xl: "none" }}>
           <MenuItem disableGutters onClick={() => viewFlight(data)}>
             <Grid p={2} container flex={1} alignItems="center">
-              <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
+              <Grid item xs={4} sm={4} md={4} lg={3} xl={3}>
                 <Left />
               </Grid>
-              <Grid item xs={4} md={6} sm={4} lg={6} xl={6}>
+              <Grid item xs={4} sm={4} md={4} lg={6} xl={6}>
                 <Middle />
               </Grid>
-              <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
+              <Grid item xs={4} sm={4} md={4} lg={3} xl={3}>
                 <Right />
               </Grid>
             </Grid>
@@ -264,13 +266,13 @@ const Flight = ({ data, size = "100%" }) => {
         </Box>
         <Box display={{ xs: "none", sm: "none", md: "block", lg: "block", xl: "block" }}>
           <Grid p={2} container flex={1} alignItems="center">
-            <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
+            <Grid item xs={4} md={4} sm={4} lg={4} xl={3}>
               <Left />
             </Grid>
-            <Grid item xs={4} md={6} sm={4} lg={6} xl={6}>
+            <Grid item xs={4} md={4} sm={4} lg={4} xl={6}>
               <Middle />
             </Grid>
-            <Grid item xs={4} md={3} sm={4} lg={3} xl={3}>
+            <Grid item xs={4} md={4} sm={4} lg={4} xl={3}>
               <Right />
             </Grid>
           </Grid>

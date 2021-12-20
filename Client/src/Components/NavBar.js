@@ -168,6 +168,11 @@ export default function NavBar() {
     history.replace("/");
     history.push("/");
   }
+  function getAvatar() {
+    if (currentUser) {
+      return currentUser?.displayName?.charAt(0);
+    }
+  }
 
   return (
     <Box sx={{ flexGrow: 1, width: "100%" }} mb={7}>
@@ -242,7 +247,16 @@ export default function NavBar() {
               onClick={() => goToPage("/profilDetails/" + currentUser.uid + "/myProfile")}
             >
               <Stack direction="row" spacing={1} my={1} mt={2}>
-                <Avatar sx={{ width: 40, height: 40 }}>S</Avatar>
+                {currentUser.photoURL ? (
+                  <Avatar
+                    sx={{ width: 60, height: 60 }}
+                    alt={currentUser.photoURL}
+                    src={currentUser.photoURL}
+                  />
+                ) : (
+                  <Avatar sx={{ width: 60, height: 60 }}>{getAvatar()}</Avatar>
+                )}
+                {/* <Avatar sx={{ width: 50, height: 50 }}>S</Avatar> */}
                 <Box>
                   <Typography color="white" variant="body2" noWrap>
                     {currentUser.displayName}

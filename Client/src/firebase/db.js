@@ -15,7 +15,9 @@ import {
   updateDoc,
   arrayUnion,
   arrayRemove,
+  Timestamp,
 } from "firebase/firestore";
+import moment from "moment";
 import { app } from "./config";
 
 export const db = getFirestore(app);
@@ -167,7 +169,19 @@ export const getUserReservations = async (id) => {
   await getDocs(q)
     .then((datas) => {
       if (datas.size > 0) {
-        datas.forEach((data) => reservations.push(data.data()));
+        datas.forEach((data) => reservations.push({ ...data.data(), id: data.id }));
+      }
+    })
+    .catch((error) => console.log(`error while retrieving reservations`, error));
+  return reservations;
+};
+export const getGPReservations = async (id) => {
+  const q = query(collection(db, "reservations"), where("gpId", "==", id));
+  var reservations = [];
+  await getDocs(q)
+    .then((datas) => {
+      if (datas.size > 0) {
+        datas.forEach((data) => reservations.push({ ...data.data(), id: data.id }));
       }
     })
     .catch((error) => console.log(`error while retrieving reservations`, error));
@@ -200,6 +214,12 @@ export const postUserReservation = async (sender, reciever, flight, reservationI
   return next;
 };
 
+export const changeReservationStatus = async (id, status) => {
+  const docRef = doc(db, "reservations", id);
+
+  await updateDoc(docRef, { status: status });
+};
+
 /**
  * flights
  */
@@ -208,4 +228,20 @@ export const getFeaturedFlight = async () => {
   var results = [];
   await getDocs(q).then((datas) => datas.forEach((data) => results.push(data.data())));
   return results;
+};
+export const getUserRecentFlights = async (userId) => {
+  let flights = [];
+  const q = query(
+    collection(db, "flights"),
+    // where("departureDate", ">=", Timestamp.fromDate(new Date())),
+    where("ownerId", "==", userId)
+  );
+  await getDocs(q).then((data) => {
+    data.docs.forEach(
+      (doc) =>
+        moment(doc.data().departureDate).isAfter(moment()) &&
+        flights.push({ ...doc.data(), id: doc.id })
+    );
+  });
+  return flights;
 };

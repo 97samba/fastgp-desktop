@@ -91,7 +91,9 @@ const Reservation = () => {
           state,
           currentUser?.uid
         );
-        next ? history.push("/profilDetails") : setstate({ ...state, error: true });
+        next
+          ? history.push("/profilDetails" + currentUser?.uid + "/myProfile")
+          : setstate({ ...state, error: true });
       }
     } else {
       handleOpen();

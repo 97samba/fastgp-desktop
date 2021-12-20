@@ -54,8 +54,8 @@ const View = () => {
     currentUser?.email &&
       setsender({
         ...sender,
-        firstName: currentUser.displayName.split(" ")[0],
-        lastName: currentUser.displayName.split(" ")[1],
+        firstName: currentUser?.displayName?.split(" ")[0],
+        lastName: currentUser?.displayName?.split(" ")[1],
       });
   }, [currentUser]);
 

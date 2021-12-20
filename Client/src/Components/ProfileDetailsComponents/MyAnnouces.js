@@ -166,6 +166,7 @@ const Publication = ({ data, editPublication }) => {
               variant="outlined"
               size="medium"
               color="primary"
+              disabled={moment(data.distributionDate).isSameOrBefore(moment())}
               endIcon={<FaEdit />}
               onClick={() => editPublication(data)}
             >
@@ -272,7 +273,7 @@ const MyAnnouces = () => {
                   }}
                   elevation={0}
                 >
-                  <Typography color="GrayText">Vous n'avez pas de réservations.</Typography>
+                  <Typography color="GrayText">Vous n'avez pas d'annonces.</Typography>
                 </Paper>
               )}
             </>

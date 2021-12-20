@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useEffect, useState } from "react";
-import { FaUserAlt } from "react-icons/fa";
+import { FaPlaneDeparture, FaUserAlt } from "react-icons/fa";
 import { IoMdSave } from "react-icons/io";
 import { MdOutlineInsertPhoto } from "react-icons/md";
 
@@ -23,6 +23,63 @@ import COLORS from "../../colors";
 import { ProfileDetailsContext } from "../Pages/ProfileDetails";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { StoreUserProfilePhoto } from "../../firebase/Storage";
+import FlightSkeleton from "../FlightSkeleton";
+import { useParams } from "react-router-dom";
+import { getUserRecentFlights } from "../../firebase/db";
+import Flight from "../Flight";
+
+const StaticAnnounces = () => {
+  const { id } = useParams();
+  const [flights, setflights] = useState([]);
+  const [loading, setloading] = useState(true);
+
+  async function getRecentFlights() {
+    const results = await getUserRecentFlights(id);
+    setflights(results);
+    setloading(false);
+  }
+
+  useEffect(() => {
+    console.log(`id`, id);
+    const subscribe = getRecentFlights();
+    return subscribe;
+  }, []);
+
+  return (
+    <Box>
+      <Stack direction="row" spacing={2} alignItems="center" my={3}>
+        <FaPlaneDeparture color="grayText" />
+        <Typography fontWeight="bold" variant="h5" color="primary" flexGrow={1}>
+          Dernieres annonces
+        </Typography>
+      </Stack>
+      <Stack spacing={2}>
+        {loading ? (
+          ["1", "2", "3"].map((flight) => <FlightSkeleton key={flight} />)
+        ) : (
+          <Box>
+            {flights.length > 0 ? (
+              flights.map((flight, index) => <Flight data={flight} key={index} />)
+            ) : (
+              <Paper
+                sx={{
+                  flex: 1,
+                  boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+                  p: 2,
+                  my: 2,
+                  textAlign: "center",
+                }}
+                elevation={0}
+              >
+                <Typography color="GrayText">Vous n'avez pas d'annonces.</Typography>
+              </Paper>
+            )}
+          </Box>
+        )}
+      </Stack>
+    </Box>
+  );
+};
 
 const ModifyProfile = ({ setediting }) => {
   const { user, currentUser, getAvatar } = useContext(ProfileDetailsContext);
@@ -45,7 +102,7 @@ const ModifyProfile = ({ setediting }) => {
   }
   async function handleSave() {
     await StoreUserProfilePhoto(currentUser?.uid, currentUser?.displayName, image);
-    // setediting(false);
+    setediting(false);
     window.location.reload(false);
   }
   function handleReturn() {
@@ -185,7 +242,7 @@ const Profile = () => {
             <Box flex={1} mr={{ xs: 0, sm: 0, md: 2 }}>
               <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
                 <Stack p={3} direction="row" spacing={2} flex={1}>
-                  <Avatar alt={currentUser?.photoURL} src={currentUser?.photoURL}>
+                  <Avatar alt={user?.photoUrl} src={user?.photoUrl}>
                     {getAvatar()}
                   </Avatar>
                   <Stack
@@ -290,6 +347,7 @@ const Profile = () => {
               </Grid>
             </Box>
           </Paper>
+          <StaticAnnounces />
         </Box>
       ) : (
         <ModifyProfile setediting={setediting} />
