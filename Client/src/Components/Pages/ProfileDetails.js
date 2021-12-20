@@ -219,13 +219,29 @@ const ProfileDetails = () => {
       history.push("/login");
     }
   }
+  function getAvatar() {
+    if (currentUser) {
+      return currentUser?.displayName?.charAt(0);
+    }
+  }
   useEffect(() => {
+    // console.log(`currentUser`, currentUser);
     getUser();
   }, []);
 
   return (
     <ProfileDetailsContext.Provider
-      value={{ profilState, setprofilState, user, setuser, goToPage, loading, currentUser, id }}
+      value={{
+        profilState,
+        setprofilState,
+        user,
+        setuser,
+        goToPage,
+        loading,
+        currentUser,
+        id,
+        getAvatar,
+      }}
     >
       <Container>
         <Grid container spacing={4} py={4}>

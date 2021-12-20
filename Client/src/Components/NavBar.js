@@ -59,11 +59,20 @@ const UserMenu = ({ history, currentUser }) => {
   return (
     <Box>
       <IconButton onClick={handleOpen}>
-        <Avatar>{getAvatar()}</Avatar>
+        <Avatar alt={currentUser?.photoURL} src={currentUser?.photoURL}>
+          {getAvatar()}
+        </Avatar>
       </IconButton>
       <Menu open={open} onClose={handleClose} anchorEl={anchorEl} sx={{ mt: 1 }} elevation={1}>
         <Stack alignItems="center" py={2} px={4}>
-          <Avatar sx={{ width: 50, height: 50 }}>{getAvatar()}</Avatar>
+          <Avatar
+            alt={currentUser?.photoURL}
+            src={currentUser?.photoURL}
+            sx={{ width: 50, height: 50 }}
+          >
+            {getAvatar()}
+          </Avatar>
+
           <IconButton
             color="primary"
             size="small"
@@ -168,7 +177,6 @@ export default function NavBar() {
             size="large"
             edge="start"
             color="inherit"
-            href="/"
             aria-label="menu"
             sx={{ mr: 2, display: { xs: "block", sm: "block", md: "none" } }}
             onClick={openDrawer}

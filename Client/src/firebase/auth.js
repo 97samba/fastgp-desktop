@@ -6,12 +6,10 @@ import {
   onAuthStateChanged,
   updateProfile,
   fetchSignInMethodsForEmail,
-  updatePhoneNumber,
-  getIdToken,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { getDoc, doc, setDoc } from "firebase/firestore";
-import { db } from "./db";
+import { db, savePhotoUrl } from "./db";
 import { app } from "./config";
 
 export const auth = getAuth(app);
@@ -137,4 +135,14 @@ export function useAuth() {
   }, []);
 
   return currentUser;
+}
+
+/**
+ * functions
+ */
+export async function setPhotoUrl(url) {
+  var user = auth.currentUser;
+  await updateProfile(user, { photoURL: url })
+    .then(() => savePhotoUrl(url, user?.email))
+    .catch((error) => console.log("erreur lors de l'ajout de la photo", error));
 }

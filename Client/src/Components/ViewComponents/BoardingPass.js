@@ -8,8 +8,10 @@ import COLORS from "../../colors";
 
 const BoardingPass = ({ sender, receiver, state }) => {
   const QrCodePass = () => {
+    const url = "https://fir-c69a6.firebaseapp.com/view/";
     function getQRCodeValue() {
-      return state.id + ", " + sender?.firstName + ", " + sender?.lastName;
+      // return url+state.id + ", " + sender?.firstName + ", " + sender?.lastName;
+      return url + state.id;
     }
     return (
       <Stack direction="row" justifyContent="center">

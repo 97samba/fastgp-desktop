@@ -1,4 +1,5 @@
 // Import the functions you need from the SDKs you need
+import { async } from "@firebase/util";
 import { initializeApp } from "firebase/app";
 import {
   getFirestore,
@@ -149,6 +150,12 @@ export const UpdateUserDetails = async (firstName, lastName, email, address) => 
     console.log(`error`, error)
   );
 };
+
+export async function savePhotoUrl(photoUrl, email) {
+  const docRef = doc(db, "users", email);
+
+  await updateDoc(docRef, { photoUrl });
+}
 
 /**
  * Reservations
