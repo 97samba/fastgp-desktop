@@ -7,6 +7,7 @@ import {
   updateProfile,
   fetchSignInMethodsForEmail,
   updatePhoneNumber,
+  getIdToken,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { getDoc, doc, setDoc } from "firebase/firestore";
@@ -109,6 +110,7 @@ export const registerGP = async (state, identityUrl) => {
   };
 
   await setDoc(doc(db, "users", state.email), credentials);
+  return true;
 };
 
 export const logout = () => {

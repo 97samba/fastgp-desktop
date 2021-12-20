@@ -115,7 +115,7 @@ const Flight = ({ data, size = "100%" }) => {
           sx={{ display: { xs: "flex", md: "none", sm: "flex" } }}
         >
           <Typography variant="body1" fontWeight={555} color={COLORS.warning}>
-            {data.prices.pricePerKG} €
+            {data.prices.pricePerKG} {data?.currency ? data.currency : "€"}
           </Typography>
         </Stack>
       </Stack>
@@ -161,7 +161,7 @@ const Flight = ({ data, size = "100%" }) => {
                 {data.prices.pricePerKG}
               </Typography>
               <Typography fontSize={16} fontWeight="555" color="primary">
-                $
+                {data?.currency ? data.currency : "€"}
               </Typography>
               <Typography variant="caption"> /kg</Typography>
             </Stack>

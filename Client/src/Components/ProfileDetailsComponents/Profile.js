@@ -148,10 +148,14 @@ const Profile = () => {
                   >
                     <Box>
                       <Typography variant="h6" color="#2B3445" fontWeight={500}>
-                        {loading ? <Skeleton width={100} /> : user.firstName + " " + user.lastName}
+                        {loading ? (
+                          <Skeleton width={100} />
+                        ) : (
+                          user?.firstName + " " + user?.lastName
+                        )}
                       </Typography>
                       <Typography variant="body2" color="primary">
-                        {loading ? <Skeleton width={100} /> : user.country}
+                        {loading ? <Skeleton width={100} /> : user?.country}
                       </Typography>
                     </Box>
                     <Box display="flex" alignItems="center">

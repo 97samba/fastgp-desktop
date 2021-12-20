@@ -10,6 +10,7 @@ import {
   FormGroup,
   Checkbox,
   MenuItem,
+  FormHelperText,
 } from "@mui/material";
 import { BsCurrencyExchange } from "react-icons/bs";
 import React, { useContext } from "react";
@@ -39,7 +40,13 @@ const Prices = () => {
     });
     setpaymentMethod(newPaymentMethods);
   };
-  const currencies = ["CFA", "€", "$", "£"];
+  const currencies = [
+    { key: "CFA", label: "Franc CFA" },
+    { key: "€", label: "Euro" },
+    { key: "$", label: "Dollar" },
+    { key: "£", label: "Livre sterling" },
+    { key: "DRH", label: "Dirham" },
+  ];
 
   return (
     <Stack
@@ -60,21 +67,30 @@ const Prices = () => {
                 <Typography color="GrayText" flex={4}>
                   Devise
                 </Typography>
-                <TextField
-                  sx={{ flex: 2 }}
-                  placeholder="Prix"
-                  size="small"
-                  type="number"
-                  value={state.currency}
-                  select
-                  onChange={(e) => setstate({ ...state, currency: e.target.value })}
-                >
-                  {currencies.map((currency, index) => (
-                    <MenuItem value={currency} key={index}>
-                      {currency}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                <Box flex={2} mx={1} mt={1}>
+                  <TextField
+                    placeholder="Prix"
+                    size="small"
+                    type="number"
+                    fullWidth
+                    value={state.currency}
+                    select
+                    onChange={(e) => setstate({ ...state, currency: e.target.value })}
+                  >
+                    {currencies.map((currency, index) => (
+                      <MenuItem
+                        value={currency.key}
+                        key={index}
+                        onClick={(e) => setstate({ ...state, currency: e.target.value })}
+                      >
+                        {currency.key}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <FormHelperText>
+                    {currencies.filter((currency) => state.currency === currency.key)[0].label}
+                  </FormHelperText>
+                </Box>
               </Stack>
             </Paper>
             {prices.map((price, index) => (
@@ -93,7 +109,7 @@ const Prices = () => {
                     InputProps={{
                       endAdornment: (
                         <Typography fontSize={12} ml={1}>
-                          €
+                          {state.currency}
                         </Typography>
                       ),
                     }}

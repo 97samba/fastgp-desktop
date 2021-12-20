@@ -7,6 +7,7 @@ import { FcGoogle } from "react-icons/fc";
 import { IoMailSharp, IoPerson, IoPersonOutline } from "react-icons/io5";
 import { MdPhoneAndroid } from "react-icons/md";
 import data from "../../data/test.json";
+import { verifyIfUserExists } from "../../firebase/auth";
 import { ValidateBirthday } from "../../Middleware/RegisterMiddleware";
 
 import { RegisterContext } from "../Pages/Register";
@@ -17,11 +18,26 @@ export const ClientForm = () => {
     setstate,
     dateOpen,
     displayError,
+    setdisplayError,
     setdateOpen,
     errors,
     seterrors,
     RegisterClient,
   } = useContext(RegisterContext);
+
+  async function handleRegister() {
+    const userExists = await verifyIfUserExists(state.email);
+
+    if (userExists) {
+      seterrors({ ...errors, emailError: "Cet utlisateur existe déja" });
+      setdisplayError(true);
+    } else {
+      seterrors({ ...errors, emailError: "" });
+      setdisplayError(false);
+
+      RegisterClient();
+    }
+  }
 
   return (
     <Zoom in={true} timeout={150}>
@@ -173,7 +189,7 @@ export const ClientForm = () => {
             size="medium"
             color="warning"
             variant="contained"
-            onClick={RegisterClient}
+            onClick={handleRegister}
           >
             S'inscrire
           </Button>

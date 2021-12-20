@@ -19,7 +19,8 @@ export const verifyNewPost = (
   contacts,
   facebookLink,
   suitcases,
-  paymentMethod
+  paymentMethod,
+  state
 ) => {
   VerifyCountries(departure, destination);
   verifyContacts(publisher) &&
@@ -46,6 +47,9 @@ export const verifyNewPost = (
         suitcases,
         paymentMethod,
         canShip: canShip(destination),
+        currency: state.currency,
+        contribution: state.contribution,
+        contributionPaymentMethod: state.contributionPaymentMethod,
         createdAt: new Date().toJSON(),
       },
       email

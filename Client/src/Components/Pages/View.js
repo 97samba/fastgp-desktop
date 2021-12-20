@@ -71,6 +71,7 @@ const View = () => {
         visitProfil,
         currentUser,
         flightState,
+        history,
       }}
     >
       <Container sx={{ minWidth: "90%", mt: 5, backgroundColor: COLORS.background }}>

@@ -168,6 +168,7 @@ export default function NavBar() {
             size="large"
             edge="start"
             color="inherit"
+            href="/"
             aria-label="menu"
             sx={{ mr: 2, display: { xs: "block", sm: "block", md: "none" } }}
             onClick={openDrawer}

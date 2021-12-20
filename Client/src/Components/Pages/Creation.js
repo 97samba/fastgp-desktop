@@ -142,7 +142,8 @@ const Creation = () => {
       contacts,
       facebookLink,
       suitcases,
-      paymentMethod
+      paymentMethod,
+      state
     );
   };
   function uploadNewConfiguration(id) {
@@ -168,7 +169,13 @@ const Creation = () => {
       return weight;
     };
     return (
-      <Paper sx={{ p: 2, position: "fixed", width: "20%" }}>
+      <Paper
+        sx={{
+          p: 2,
+          position: { xs: "inherit", sm: "inherit", md: "fixed" },
+          width: { md: "20%" },
+        }}
+      >
         <Typography variant="subtitle1">Résumé</Typography>
         <Stack spacing={1}>
           <Paper elevation={0} sx={{ border: 1, borderColor: "#D5D5D5" }}>
@@ -238,7 +245,7 @@ const Creation = () => {
   useEffect(() => {
     async function fetchDatas() {
       if (currentUser === null) {
-        history.push("/");
+        history.push("/login");
       } else {
         if (currentUser?.uid) {
           var flights = await getUserFlights(currentUser.uid);
@@ -300,9 +307,9 @@ const Creation = () => {
         uploadNewConfiguration,
       }}
     >
-      <Container sx={{ minWidth: "80%" }}>
-        <Grid container p={2} spacing={2}>
-          <Grid item md={9} lg={9}>
+      <Container sx={{ minWidth: "90%" }}>
+        <Grid container p={{ xs: 0, sm: 0, md: 2 }} spacing={2}>
+          <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
             <Paper sx={{ p: 3 }}>
               <Departure />
               <Destination />
@@ -314,7 +321,7 @@ const Creation = () => {
               <StartingDialog />
             </Paper>
           </Grid>
-          <Grid item md={3} lg={3} sx={{ display: { xs: "none", md: "block" } }}>
+          <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
             <Summary />
           </Grid>
         </Grid>

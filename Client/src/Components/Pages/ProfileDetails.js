@@ -23,22 +23,26 @@ import PaymentMethod from "../ProfileDetailsComponents/PaymentMethod";
 import Location from "../ProfileDetailsComponents/Location";
 import Packages from "../ProfileDetailsComponents/Packages";
 import { useAuth } from "../../firebase/auth";
+import MyAnnouces from "../ProfileDetailsComponents/MyAnnouces";
 
 export const boardTab = [
   {
-    label: "Mon profil",
+    label: "Profil",
     icon: <FaUserAlt color="GrayText" />,
     key: "myProfile",
+    secured: false,
   },
   {
     label: "Adresses",
     icon: <IoLocationSharp size={17} color="GrayText" />,
     key: "location",
+    secured: true,
   },
   {
     label: "Mode de paiement",
     icon: <MdPayment size={17} color="GrayText" />,
     key: "payments",
+    secured: true,
   },
 ];
 export const dashTab = [
@@ -46,30 +50,35 @@ export const dashTab = [
     label: "Mes colis",
     icon: <GoPackage />,
     key: "packages",
+    secured: true,
   },
   {
     label: "Mes GP",
     icon: <FaUsers size={17} />,
     key: "gps",
+    secured: true,
   },
   {
-    label: "Mes Vols",
+    label: "Annonces",
     icon: <FaPlaneDeparture size={15} />,
     key: "flights",
+    secured: false,
   },
   {
     label: "Favoris",
     icon: <IoMdHeartEmpty size={17} />,
     key: "favorites",
+    secured: true,
   },
   {
     label: "Reservations",
     icon: <IoMdPricetags size={17} />,
     key: "reservations",
+    secured: true,
   },
 ];
 const Left = () => {
-  const { profilState, goToPage } = useContext(ProfileDetailsContext);
+  const { profilState, goToPage, currentUser, id } = useContext(ProfileDetailsContext);
 
   return (
     <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
@@ -79,20 +88,23 @@ const Left = () => {
         </Typography>
         <Box>
           <MenuList>
-            {boardTab.map((tab) => (
-              <MenuItem
-                key={tab.key}
-                sx={{
-                  "&:hover": { borderLeft: "4px solid " + COLORS.warning },
-                  borderLeft:
-                    profilState.label === tab.label ? "4px solid " + COLORS.warning : "none",
-                }}
-                onClick={() => goToPage(tab.label, tab.key, tab.icon)}
-              >
-                <ListItemIcon>{tab.icon}</ListItemIcon>
-                <ListItemText>{tab.label}</ListItemText>
-              </MenuItem>
-            ))}
+            {boardTab.map(
+              (tab) =>
+                (!tab.secured || currentUser?.uid === id) && (
+                  <MenuItem
+                    key={tab.key}
+                    sx={{
+                      "&:hover": { borderLeft: "4px solid " + COLORS.warning },
+                      borderLeft:
+                        profilState.label === tab.label ? "4px solid " + COLORS.warning : "none",
+                    }}
+                    onClick={() => goToPage(tab.label, tab.key, tab.icon)}
+                  >
+                    <ListItemIcon>{tab.icon}</ListItemIcon>
+                    <ListItemText>{tab.label}</ListItemText>
+                  </MenuItem>
+                )
+            )}
           </MenuList>
         </Box>
         <Typography variant="body2" color="GrayText" px={2} pt={2}>
@@ -100,20 +112,23 @@ const Left = () => {
         </Typography>
         <Box pb={1}>
           <MenuList>
-            {dashTab.map((dash) => (
-              <MenuItem
-                key={dash.key}
-                sx={{
-                  "&:hover": { borderLeft: "4px solid " + COLORS.warning },
-                  borderLeft:
-                    profilState.label === dash.label ? "4px solid " + COLORS.warning : "none",
-                }}
-                onClick={() => goToPage(dash.label, dash.key, dash.icon)}
-              >
-                <ListItemIcon>{dash.icon}</ListItemIcon>
-                <ListItemText>{dash.label}</ListItemText>
-              </MenuItem>
-            ))}
+            {dashTab.map(
+              (dash) =>
+                (!dash.secured || currentUser?.uid === id) && (
+                  <MenuItem
+                    key={dash.key}
+                    sx={{
+                      "&:hover": { borderLeft: "4px solid " + COLORS.warning },
+                      borderLeft:
+                        profilState.label === dash.label ? "4px solid " + COLORS.warning : "none",
+                    }}
+                    onClick={() => goToPage(dash.label, dash.key, dash.icon)}
+                  >
+                    <ListItemIcon>{dash.icon}</ListItemIcon>
+                    <ListItemText>{dash.label}</ListItemText>
+                  </MenuItem>
+                )
+            )}
           </MenuList>
         </Box>
       </Box>
@@ -146,7 +161,7 @@ const Right = () => {
     },
     {
       key: "flights",
-      item: <Location />,
+      item: <MyAnnouces />,
     },
     {
       key: "favorites",
@@ -210,7 +225,7 @@ const ProfileDetails = () => {
 
   return (
     <ProfileDetailsContext.Provider
-      value={{ profilState, setprofilState, user, setuser, goToPage, loading }}
+      value={{ profilState, setprofilState, user, setuser, goToPage, loading, currentUser, id }}
     >
       <Container>
         <Grid container spacing={4} py={4}>

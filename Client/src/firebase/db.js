@@ -28,7 +28,6 @@ export const getAFlight = async (id) => {
 export const postAflight = async (flight, email) => {
   addDoc(collection(db, "flights"), flight)
     .then(async (data) => {
-      console.log(`data`, data.id);
       await updateDoc(doc(db, "users", email), { flights: arrayUnion(data.id) }).catch((error) =>
         console.log("erreur lors de l'ajout de l'id du vol", error)
       );
@@ -166,6 +165,32 @@ export const getUserReservations = async (id) => {
     })
     .catch((error) => console.log(`error while retrieving reservations`, error));
   return reservations;
+};
+
+export const postUserReservation = async (sender, reciever, flight, reservationInfo, owner) => {
+  const docRef = collection(db, "reservations");
+  const reservation = {
+    sender,
+    reciever,
+    flightId: flight.id,
+    gpId: flight.ownerId,
+    itemDescription: reservationInfo.itemDescription,
+    payer: reservationInfo.payer,
+    itemType: reservationInfo.itemType,
+    owner,
+    departure: flight.departure,
+    destination: flight.destination,
+    publisher: flight.publisher,
+    distributionDate: flight.distributionDate,
+    status: "pending",
+    reservationDate: new Date().toJSON(),
+    shipping: flight.destination.name === "Dakar" ? true : false,
+  };
+  var next = false;
+  await addDoc(docRef, reservation)
+    .then(() => (next = true))
+    .catch(() => console.log("Erreur lors de la reservation"));
+  return next;
 };
 
 /**

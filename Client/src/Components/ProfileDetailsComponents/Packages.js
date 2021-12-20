@@ -1,11 +1,9 @@
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Avatar,
   Button,
-  ButtonBase,
   Grid,
   Paper,
   Skeleton,
@@ -133,6 +131,7 @@ const Package = ({ data }) => {
         sx={{ px: 1, py: 0.5, backgroundColor: "lightgray", borderRadius: 5 }}
         textAlign="center"
         variant="caption"
+        noWrap
       >
         {text}
       </Typography>
@@ -169,6 +168,10 @@ const Package = ({ data }) => {
         </AccordionSummary>
         <AccordionDetails>
           <Stack spacing={1}>
+            <Stack direction="row" spacing={1} color="GrayText">
+              <Typography fontWeight="bold">Réception : </Typography>
+              <Typography>{moment(data?.distributionDate).format("dddd D MMM Y")}</Typography>
+            </Stack>
             <Stack direction="row" spacing={1} color="GrayText">
               <Typography fontWeight="bold">Type de colis : </Typography>
               <Typography>{data.itemType}</Typography>

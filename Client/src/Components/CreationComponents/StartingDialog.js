@@ -79,26 +79,31 @@ const StartingDialog = () => {
                   <List>
                     {state.flights &&
                       state.flights.map((flight, index) => (
-                        <ListItem key={index} onClick={() => uploadNewConfiguration(index)}>
-                          <ListItemButton>
+                        <ListItem
+                          key={index}
+                          onClick={() => uploadNewConfiguration(index)}
+                          disableGutters
+                        >
+                          <ListItemButton disableGutters>
                             <ListItemIcon>
                               <FaEdit />
                             </ListItemIcon>
-                            <Box flexGrow={1} mr={4}>
+                            <Box flexGrow={1} mr={{ xs: 1, sm: 1, md: 4, lg: 4 }}>
                               <Stack
                                 direction="row"
                                 alignItems="center"
                                 color="GrayText"
                                 justifyContent="space-between"
-                                spacing={2}
+                                spacing={{ xs: 1, sm: 1, md: 2 }}
+                                width={{ md: "80%" }}
                               >
-                                <Typography>{flight.departure.name}</Typography>
-                                <FaPlane />
-                                <Typography>{flight.destination.name}</Typography>
+                                <Typography variant="body2">{flight.departure.name}</Typography>
+                                <FaPlane color={COLORS.warning} />
+                                <Typography variant="body2">{flight.destination.name}</Typography>
                               </Stack>
                             </Box>
-                            <Typography color="GrayText" variant="body1">
-                              {moment(flight.departureDate).calendar()}
+                            <Typography color="GrayText" variant="body2">
+                              {moment(flight.departureDate).format("D/MMM/Y")}
                             </Typography>
                           </ListItemButton>
                         </ListItem>

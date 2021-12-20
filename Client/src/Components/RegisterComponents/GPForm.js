@@ -40,6 +40,7 @@ import { storeImage } from "../../firebase/Storage";
 import { ValidateBirthday } from "../../Middleware/RegisterMiddleware";
 
 import { RegisterContext } from "../Pages/Register";
+
 const FirstForm = ({ handleNext }) => {
   const {
     state,
@@ -235,7 +236,7 @@ const FirstForm = ({ handleNext }) => {
   );
 };
 const SecondForm = () => {
-  const { state, setstate, displayError, setdisplayError } = useContext(RegisterContext);
+  const { state, setstate, displayError, setdisplayError, history } = useContext(RegisterContext);
 
   const handleRegister = async () => {
     if (state.phone === "" || state.identityNumber === "" || !image.name) {
@@ -243,9 +244,11 @@ const SecondForm = () => {
       return;
     } else {
       var imgUrl = await storeImage(image, "identities");
-      await registerGP(state, imgUrl);
+      const result = await registerGP(state, imgUrl);
 
       console.log("registerdone");
+
+      result ? history.push("/") : setdisplayError(true);
     }
   };
   const handleRegisterWithoutDocument = () => {};

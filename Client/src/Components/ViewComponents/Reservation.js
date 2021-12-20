@@ -33,18 +33,69 @@ import BoardingPass from "../ViewComponents/BoardingPass";
 import { ViewContext } from "../Pages/View";
 
 import { GiHeartNecklace } from "react-icons/gi";
+import { AuthContext } from "../../Providers/AuthProvider";
+import { postUserReservation } from "../../firebase/db";
 
 const Reservation = () => {
-  const { sender, setsender, receiver, setreceiver, currentUser, flightState } =
+  const { sender, setsender, receiver, setreceiver, currentUser, flightState, history } =
     useContext(ViewContext);
+  const { handleOpen } = useContext(AuthContext);
+
   const [isReceiver, setisReceiver] = useState("yes");
-  const [state, setstate] = useState({ itemType: "thing", itemDescription: "" });
+  const [state, setstate] = useState({
+    itemType: "thing",
+    itemDescription: "",
+    error: false,
+    payer: "Envoyeur",
+  });
 
   function handleBagageTypeChange(e) {
     setstate({ ...state, itemType: e.target.value });
   }
+
   function handleItemDescriptionChange(e) {
     setstate({ ...state, itemDescription: e.target.value });
+  }
+  function verifyReservationEntries() {
+    if (
+      state.itemDescription === "" ||
+      sender.firstName === "" ||
+      sender.lastName === "" ||
+      sender.phoneNumber === ""
+    ) {
+      setstate({ ...state, error: true });
+      return false;
+    } else {
+      if (
+        state.payer === "" ||
+        receiver.firstName === "" ||
+        receiver.lastName === "" ||
+        receiver.phoneNumber === ""
+      ) {
+        setstate({ ...state, error: true });
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+
+  async function handleReservation() {
+    if (currentUser?.uid) {
+      setstate({ ...state, error: false });
+      if (verifyReservationEntries()) {
+        var next = await postUserReservation(
+          sender,
+          receiver,
+          flightState,
+          state,
+          currentUser?.uid
+        );
+        next ? history.push("/profilDetails") : setstate({ ...state, error: true });
+      }
+    } else {
+      handleOpen();
+    }
   }
 
   const bagageType = [
@@ -82,16 +133,16 @@ const Reservation = () => {
             <Typography>Remplissez votre ticket</Typography>
           </AccordionSummary>
           <AccordionDetails>
+            <Typography gutterBottom mb={2} fontWeight="bold" color="GrayText" variant="body2">
+              Envoyeur
+            </Typography>
             <Grid container mb={1} rowSpacing={2} columnSpacing={4}>
-              <Grid item xs={12} sm={12} md={12} xl={12} lg={12}>
-                <Typography fontWeight="bold" color="GrayText" variant="body2">
-                  Envoyeur
-                </Typography>
-              </Grid>
               <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                 <TextField
                   label="Prenom"
                   size="small"
+                  error={state.error && sender.firstName === ""}
+                  helperText={state.error && sender.firstName === "" && "Champs obligatoire"}
                   disabled={currentUser?.uid}
                   value={sender.firstName}
                   fullWidth
@@ -103,7 +154,10 @@ const Reservation = () => {
                 <TextField
                   label="Nom"
                   size="small"
+                  error={state.error}
+                  helperText={state.error && sender.lastName === "" && "Champs obligatoire"}
                   value={sender.lastName}
+                  error={state.error && sender.lastName === ""}
                   disabled={currentUser?.uid}
                   fullWidth
                   InputProps={{ endAdornment: <FaUserCircle color="gray" /> }}
@@ -114,8 +168,11 @@ const Reservation = () => {
                 <TextField
                   label="Télephone"
                   size="small"
+                  error={state.error}
+                  helperText={state.error && sender.phoneNumber === "" && "Champs obligatoire"}
                   type="tel"
                   value={sender.phoneNumber}
+                  error={state.error && sender.phoneNumber === ""}
                   fullWidth
                   InputProps={{ endAdornment: <FaPhoneAlt color="gray" /> }}
                   onChange={(e) => setsender({ ...sender, phoneNumber: e.target.value })}
@@ -128,6 +185,7 @@ const Reservation = () => {
                   fullWidth
                   size="small"
                   value={state.itemType}
+                  error={state.error && state.itemType === ""}
                   onChange={handleBagageTypeChange}
                 >
                   {bagageType.map((type, index) => (
@@ -142,6 +200,10 @@ const Reservation = () => {
                 <TextField
                   label="Description du contenu"
                   minRows={3}
+                  error={state.error && state.itemDescription === ""}
+                  helperText={
+                    state.error && state.itemDescription === "" && "Description obligatoire"
+                  }
                   placeholder="Ex : description du colis, modéle téléphone, modéle ordinateur, document, nombre d'article ...etc "
                   multiline
                   fullWidth
@@ -151,7 +213,7 @@ const Reservation = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Stack direction="row" alignItems="center" spacing={3}>
+                <Stack direction={{ xs: "column", md: "row" }} alignItems="center" spacing={3}>
                   <FormLabel>Etes-vous le receveur ?</FormLabel>
 
                   <RadioGroup
@@ -176,6 +238,13 @@ const Reservation = () => {
                   <TextField
                     label="Prenom"
                     size="small"
+                    error={state.error && isReceiver === "no" && receiver.firstName === ""}
+                    helperText={
+                      state.error &&
+                      isReceiver === "no" &&
+                      receiver.firstName === "" &&
+                      "Champs obligatoire"
+                    }
                     value={receiver.firstName}
                     fullWidth
                     InputProps={{ endAdornment: <FaUserCircle color="gray" /> }}
@@ -186,6 +255,13 @@ const Reservation = () => {
                   <TextField
                     label="Nom"
                     size="small"
+                    error={state.error && isReceiver === "no" && receiver.lastName === ""}
+                    helperText={
+                      state.error &&
+                      isReceiver === "no" &&
+                      receiver.lastName === "" &&
+                      "Champs obligatoire"
+                    }
                     value={receiver.lastName}
                     fullWidth
                     InputProps={{ endAdornment: <FaUserCircle color="gray" /> }}
@@ -196,6 +272,13 @@ const Reservation = () => {
                   <TextField
                     label="Télephone"
                     size="small"
+                    error={state.error && isReceiver === "no" && receiver.phoneNumber === ""}
+                    helperText={
+                      state.error &&
+                      isReceiver === "no" &&
+                      receiver.phoneNumber === "" &&
+                      "Champs obligatoire"
+                    }
                     type="tel"
                     value={receiver.phoneNumber}
                     helperText="Avec whatsapp de préférence"
@@ -204,10 +287,32 @@ const Reservation = () => {
                     onChange={(e) => setreceiver({ ...receiver, phoneNumber: e.target.value })}
                   />
                 </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                  <TextField
+                    select
+                    label="Qui paye ?"
+                    fullWidth
+                    size="small"
+                    value={state.payer}
+                    onChange={(e) => setstate({ ...state, payer: e.target.value })}
+                  >
+                    {["Envoyeur", "Receveur"].map((type, index) => (
+                      <MenuItem value={type} key={index}>
+                        {type}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
               </Grid>
             ) : null}
 
-            <Button variant="contained" size="small" fullWidth endIcon={<FaBoxTissue />}>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={handleReservation}
+              fullWidth
+              endIcon={<FaBoxTissue />}
+            >
               Réserver
             </Button>
           </AccordionDetails>

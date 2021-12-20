@@ -11,16 +11,19 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useContext } from "react";
 import { FaApple, FaFacebookSquare, FaLock, FaPhoneAlt } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { IoMailSharp } from "react-icons/io5";
 // import loginImage from "../Images/undraw_login_re_4vu2.svg";
 import loginImage from "../Images/undraw_stranded_traveler_pdbw.svg";
+import { AuthContext } from "../Providers/AuthProvider";
 
 const SignUpDialog = () => {
+  const { openConnectionDialog, handleClose } = useContext(AuthContext);
+
   return (
-    <Dialog open={false} maxWidth="xs">
+    <Dialog open={openConnectionDialog} maxWidth="xs" onClose={handleClose}>
       <DialogTitle>Connectez-vous ou créer un compte</DialogTitle>
       <DialogContent sx={{ padding: 3 }}>
         <Stack direction="row" justifyContent="center" width="100%" mb={1}>
