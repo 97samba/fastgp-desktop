@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 
-import { Container } from "@mui/material";
+import { Container, Paper } from "@mui/material";
 import SignUpDialog from "../SignUpDialog";
 import moment from "moment";
 
@@ -161,7 +161,6 @@ const Search = () => {
           setfilters,
           orderBy,
           setorderBy,
-
           filteredFlight,
           setfilteredFlight,
           superlatives,

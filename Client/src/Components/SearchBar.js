@@ -122,8 +122,8 @@ const Destination = ({ size }) => {
 
 const SearchBar = ({ size = "medium", gotoPage = true }) => {
   const history = useHistory();
-  const [departure, setdeparture] = useState({ name: "", country: "" });
-  const [destination, setdestination] = useState({ name: "", country: "" });
+  const [departure, setdeparture] = useState({ name: "Paris", country: "France" });
+  const [destination, setdestination] = useState({ name: "Dakar", country: "Sénégal" });
   const [departureDate, setDepartureDate] = useState(new Date());
   const [departureError, setdepartureError] = useState(false);
   const [destinationError, setdestinationError] = useState(false);
@@ -156,12 +156,14 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
       }/${departureDate.toJSON()}`,
     });
   };
+
   useEffect(() => {
     if (history.location.state) {
       setdeparture(history.location.state.departure);
       setdestination(history.location.state.destination);
     }
   }, []);
+
   const MobileMenu = () => {
     return (
       <Paper

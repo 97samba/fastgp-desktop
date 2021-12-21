@@ -3,6 +3,7 @@ import {
   Autocomplete,
   Button,
   Container,
+  Divider,
   Grid,
   IconButton,
   Paper,
@@ -20,6 +21,7 @@ import COLORS from "../../colors";
 import { MdSearch } from "react-icons/md";
 import { GoDash } from "react-icons/go";
 import moment from "moment";
+import { IoSwapVerticalOutline } from "react-icons/io5";
 
 const SearchContext = createContext();
 
@@ -38,7 +40,7 @@ const Departure = ({ size }) => {
     handleError();
   };
   const getLabel = (option) => {
-    if (option.name != "") {
+    if (option.name !== "") {
       return `${option.name}, ${option.country}`;
     }
     return "";
@@ -54,11 +56,20 @@ const Departure = ({ size }) => {
       renderInput={(params) => (
         <TextField
           {...params}
+          margin="none"
           size={size}
-          variant="outlined"
+          variant="standard"
           label="Départ"
           fullWidth
           error={departureError}
+          inputProps={{
+            ...params.inputProps,
+            style: { ...params.inputProps.style, fontWeight: 600, color: COLORS.black },
+          }}
+          InputProps={{
+            disableUnderline: true,
+            ...params.InputProps,
+          }}
         />
       )}
       onBlur={handleError}
@@ -81,7 +92,7 @@ const Destination = ({ size }) => {
     handleError();
   };
   const getLabel = (option) => {
-    if (option.name != "") {
+    if (option.name !== "") {
       return `${option.name}, ${option.country}`;
     }
     return "";
@@ -98,9 +109,14 @@ const Destination = ({ size }) => {
         <TextField
           {...params}
           size={size}
-          variant="outlined"
+          variant="standard"
           label="Destination"
           error={destinationError}
+          InputProps={{ disableUnderline: true, ...params.InputProps }}
+          inputProps={{
+            ...params.inputProps,
+            style: { ...params.inputProps.style, fontWeight: 600, color: COLORS.black },
+          }}
         />
       )}
       onBlur={handleError}
@@ -109,6 +125,7 @@ const Destination = ({ size }) => {
   );
 };
 const SearchSummaryMobile = ({
+  searching,
   displaySearchingBar,
   departure,
   destination,
@@ -116,36 +133,47 @@ const SearchSummaryMobile = ({
   switchDestinations,
 }) => {
   return (
-    <Paper elevation={0}>
-      <Stack
-        px={3}
-        bgcolor={COLORS.primary}
-        sx={{ borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}
-      >
+    <Box
+      mt={-2}
+      display={{
+        xs: searching ? "none" : "block",
+        sm: searching ? "none" : "block",
+        md: "none",
+        lg: "none",
+        xl: "none",
+      }}
+    >
+      <Paper elevation={0}>
         <Stack
-          direction="row"
-          flex={1}
-          alignItems="center"
-          color="white"
-          justifyContent="space-between"
+          px={3}
+          bgcolor={COLORS.primary}
+          sx={{ borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}
         >
-          <IconButton onClick={displaySearchingBar}>
-            <MdSearch color="white" />
-          </IconButton>
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography variant="h6">{departure?.name}</Typography>
-            <GoDash color={COLORS.warning} />
-            <Typography variant="h6">{destination?.name}</Typography>
+          <Stack
+            direction="row"
+            flex={1}
+            alignItems="center"
+            color="white"
+            justifyContent="space-between"
+          >
+            <IconButton onClick={displaySearchingBar}>
+              <MdSearch color="white" />
+            </IconButton>
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Typography variant="h6">{departure?.name}</Typography>
+              <GoDash color={COLORS.warning} />
+              <Typography variant="h6">{destination?.name}</Typography>
+            </Stack>
+            <IconButton>
+              <AiOutlineSwap color="white" onClick={switchDestinations} />
+            </IconButton>
           </Stack>
-          <IconButton>
-            <AiOutlineSwap color="white" onClick={switchDestinations} />
-          </IconButton>
+          <Box flex={1} textAlign="center" color="whitesmoke" pb={1}>
+            <Typography variant="body2">{moment(departureDate).format("dddd, D MMMM")}</Typography>
+          </Box>
         </Stack>
-        <Box flex={1} textAlign="center" color="whitesmoke" pb={1}>
-          <Typography variant="body2">{moment(departureDate).format("dddd, D MMMM")}</Typography>
-        </Box>
-      </Stack>
-    </Paper>
+      </Paper>
+    </Box>
   );
 };
 
@@ -154,8 +182,8 @@ const DynamicSearchBar = ({ size = "small" }) => {
   const { departureCity, departureCountry, destinationCity, destinationCountry, date } =
     useParams();
   const { getSomeFlights } = useContext(SearchPageContext);
-  const [departure, setdeparture] = useState({ name: "", country: "" });
-  const [destination, setdestination] = useState({ name: "", country: "" });
+  const [departure, setdeparture] = useState({ name: "Paris", country: "France" });
+  const [destination, setdestination] = useState({ name: "Dakar", country: "Sénégal" });
   const [departureDate, setDepartureDate] = useState(new Date());
   const [departureError, setdepartureError] = useState(false);
   const [destinationError, setdestinationError] = useState(false);
@@ -233,7 +261,72 @@ const DynamicSearchBar = ({ size = "small" }) => {
     }
     fetchDatas();
   }, []);
-
+  const MobileMenu = () => {
+    return (
+      <Paper
+        elevation={0}
+        sx={{
+          borderRadius: 2,
+          border: { xs: "1px solid #E5E5E5", sm: 0, md: 0 },
+          boxShadow: {
+            xs: "1px 1px 3px 1px #494aa225",
+            sm: "1px 1px 3px 1px #494aa225",
+            md: "none",
+          },
+        }}
+      >
+        <Grid container rowGap={2} columnSpacing={2} p={{ xs: 2, sm: 3, md: 0 }}>
+          <Grid item xs={12} sm={12} md={5} lg={5} xl={5} mb={{ xs: 0.5 }}>
+            <Departure size={size} />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={1}
+            md={2}
+            lg={2}
+            xl={2}
+            sx={{ display: { sm: "none", xs: "none", md: "block" } }}
+          >
+            <Button
+              fullWidth
+              // variant="outlined"
+              sx={{ height: "100%", color: "gray" }}
+              onClick={switchDestinations}
+            >
+              <AiOutlineSwap size={20} />
+            </Button>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={1}
+            lg={1}
+            xl={1}
+            sx={{ display: { sm: "block", xs: "block", md: "none" } }}
+          >
+            <Stack direction="row" alignItems="center" position="relative">
+              <Divider variant="fullWidth" sx={{ borderStyle: "dashed", flex: 1, flexFlow: 1 }} />
+              <Box position="absolute" right={0} bgcolor="white">
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  sx={{ height: "100%", color: "gray", backgroundColor: "white" }}
+                  onClick={switchDestinations}
+                >
+                  <IoSwapVerticalOutline size={20} />
+                </Button>
+              </Box>
+            </Stack>
+          </Grid>
+          <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
+            <Destination size={size} />
+          </Grid>
+        </Grid>
+      </Paper>
+    );
+  };
   return (
     <SearchContext.Provider
       value={{
@@ -252,7 +345,7 @@ const DynamicSearchBar = ({ size = "small" }) => {
         mt={-1}
         sx={{ background: "white" }}
         px={2}
-        py={3}
+        py={{ xs: 1, sm: 1, md: 2 }}
         display={{
           xs: searching ? "block" : "none",
           sm: searching ? "block" : "none",
@@ -262,79 +355,87 @@ const DynamicSearchBar = ({ size = "small" }) => {
         }}
       >
         <Container>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-              <Departure size={size} />
+          <Paper
+            sx={{
+              borderColor: "#E5E5E5",
+              boxShadow: { sm: "none", md: "1px 1px 5px 2px #494aa225" },
+              width: { xs: "100%", sm: "100%", md: "100%" },
+              marginX: "auto",
+              backgroundColor: { xs: "inherit", sm: "inherit", md: "white" },
+              px: { xs: 0, sm: 0, md: 2 },
+              py: { xs: 0, sm: 0, md: 1 },
+            }}
+            elevation={0}
+          >
+            <Grid container columnSpacing={2} rowGap={2}>
+              <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
+                <Box>
+                  <MobileMenu />
+                </Box>
+              </Grid>
+              <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
+                <Box
+                  flex={1}
+                  border={{ xs: "1px solid lightGray", md: "none" }}
+                  py={{ xs: 0.5 }}
+                  px={{ xs: 1 }}
+                  borderRadius={{ xs: 1 }}
+                >
+                  <DesktopDatePicker
+                    type="date"
+                    value={departureDate}
+                    label="Date de départ"
+                    minDate={moment()}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        size="small"
+                        variant="standard"
+                        onClick={() => setdateOpen(true)}
+                        InputProps={{ disableUnderline: true, ...params.InputProps }}
+                        inputProps={{
+                          ...params.inputProps,
+                          style: {
+                            ...params.inputProps.style,
+                            fontWeight: 500,
+                            color: COLORS.black,
+                          },
+                        }}
+                      />
+                    )}
+                    onChange={(value) => setDepartureDate(value)}
+                    open={dateOpen}
+                    onOpen={() => setdateOpen(true)}
+                    onClose={() => setdateOpen(false)}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
+                <Button
+                  fullWidth
+                  size="small"
+                  color="primary"
+                  variant="contained"
+                  sx={{ height: "100%" }}
+                  onClick={handleSearch}
+                >
+                  Rechercher
+                </Button>
+              </Grid>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={1}
-              md={1}
-              lg={1}
-              xl={1}
-              sx={{ display: { sm: "none", xs: "none", md: "block" } }}
-            >
-              <Button
-                fullWidth
-                variant="outlined"
-                sx={{ height: "100%", color: "gray" }}
-                onClick={switchDestinations}
-              >
-                <AiOutlineSwap size={20} />
-              </Button>
-            </Grid>
-            <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-              <Destination size={size} />
-            </Grid>
-            <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
-              <DesktopDatePicker
-                type="date"
-                value={departureDate}
-                minDate={moment()}
-                label="Date de départ"
-                renderInput={(params) => (
-                  <TextField {...params} fullWidth size={size} onClick={() => setdateOpen(true)} />
-                )}
-                onChange={(value) => setDepartureDate(value)}
-                open={dateOpen}
-                onOpen={() => setdateOpen(true)}
-                onClose={() => setdateOpen(false)}
-              />
-            </Grid>
-            <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
-              <Button
-                fullWidth
-                size="small"
-                color="primary"
-                variant="contained"
-                sx={{ height: "100%" }}
-                onClick={handleSearch}
-              >
-                Rechercher
-              </Button>
-            </Grid>
-          </Grid>
+          </Paper>
         </Container>
       </Box>
-      <Box
-        mt={-2}
-        display={{
-          xs: searching ? "none" : "block",
-          sm: searching ? "none" : "block",
-          md: "none",
-          lg: "none",
-          xl: "none",
-        }}
-      >
-        <SearchSummaryMobile
-          departure={departure}
-          destination={destination}
-          displaySearchingBar={displaySearchingBar}
-          departureDate={departureDate}
-          switchDestinations={switchDestinations}
-        />
-      </Box>
+
+      <SearchSummaryMobile
+        searching={searching}
+        departure={departure}
+        destination={destination}
+        displaySearchingBar={displaySearchingBar}
+        departureDate={departureDate}
+        switchDestinations={switchDestinations}
+      />
     </SearchContext.Provider>
   );
 };
