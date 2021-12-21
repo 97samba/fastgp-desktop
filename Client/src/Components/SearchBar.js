@@ -259,6 +259,7 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
             py={{ xs: 0.5 }}
             px={{ xs: 1 }}
             borderRadius={{ xs: 1 }}
+            bgcolor="white"
           >
             <DesktopDatePicker
               type="date"

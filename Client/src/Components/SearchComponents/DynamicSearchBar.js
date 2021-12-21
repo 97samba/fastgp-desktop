@@ -202,9 +202,9 @@ const DynamicSearchBar = ({ size = "small" }) => {
         date: departureDate,
       }
     );
-    await getSomeFlights(destination, departure, departureDate.toJSON());
     setdestination(newDep);
     setdeparture(destination);
+    await getSomeFlights(destination, departure, departureDate.toJSON());
   };
 
   const handleError = () => {
@@ -343,7 +343,7 @@ const DynamicSearchBar = ({ size = "small" }) => {
     >
       <Box
         mt={-1}
-        sx={{ background: "white" }}
+        sx={{ background: { xs: "white", md: "#F6F6F9" } }}
         px={2}
         py={{ xs: 1, sm: 1, md: 2 }}
         display={{
@@ -379,6 +379,7 @@ const DynamicSearchBar = ({ size = "small" }) => {
                   border={{ xs: "1px solid lightGray", md: "none" }}
                   py={{ xs: 0.5 }}
                   px={{ xs: 1 }}
+                  bgcolor="white"
                   borderRadius={{ xs: 1 }}
                 >
                   <DesktopDatePicker

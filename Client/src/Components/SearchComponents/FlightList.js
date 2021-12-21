@@ -191,7 +191,8 @@ const FlightList = () => {
         </Carousel>
         {/* </Grid> */}
         {bestItemViewerOpened && !loading ? <BestItemViewer /> : null}
-        {loading || initializing ? (
+
+        {loading ? (
           <Box pt={2}>
             {[1, 2, 3, 4, 5].map((data, index) => (
               <FlightSkeleton index={index} />
