@@ -79,6 +79,7 @@ const Creation = () => {
     lastName: "",
     phone: "",
     whatsapp: "",
+    photoURL: "",
   });
   const [contacts, setcontacts] = useState([
     {
@@ -257,6 +258,7 @@ const Creation = () => {
             lastName: user.lastName,
             phone: user.phone,
             whatsapp: whatshappNumber,
+            photoURL: user?.photoUrl,
           });
         }
       }

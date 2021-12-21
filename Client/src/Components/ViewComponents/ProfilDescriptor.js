@@ -22,7 +22,12 @@ const ProfilDescriptor = ({ state }) => {
               spacing={1}
               my={4}
             >
-              <img width="50%" src={ProfilPic} />
+              <img
+                width="50%"
+                alt={state.publisher?.photoURL ? state.publisher.photoURL : ProfilPic}
+                src={state.publisher?.photoURL ? state.publisher.photoURL : ProfilPic}
+                style={{ borderRadius: 5 }}
+              />
               <Typography variant="body2">
                 {state.publisher.firstName + " " + state.publisher.lastName}
               </Typography>

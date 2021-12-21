@@ -5,7 +5,7 @@ const COLORS = {
   red: "#a74e51",
   yellow: "#ffaf47",
   background: "#F6F6F9",
-  black: "#2B3445",
+  black: "#555659",
 };
 
 export default COLORS;

@@ -14,7 +14,7 @@ import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import paris from "../../Images/paris.jpg";
 import { GiAirplaneDeparture, GiTakeMyMoney } from "react-icons/gi";
-import { FaAngleLeft, FaAngleRight, FaAward, FaCoins, FaSuitcase, FaUserAlt } from "react-icons/fa";
+import { FaAward, FaCoins, FaSuitcase, FaUserAlt } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import { SearchPageContext } from "./Search";
 import COLORS from "../../colors";
@@ -28,17 +28,14 @@ const PresentationImage =
   "https://firebasestorage.googleapis.com/v0/b/fir-c69a6.appspot.com/o/websiteImage%2FHomeImage.svg?alt=media&token=6ed815ca-143a-48bf-a3eb-69d1ed86f2ba";
 const SearchPaper = () => {
   return (
-    <Box mt={-6}>
+    <Box mt={{ xs: -8, sm: -8, md: -6 }}>
       <Paper
         sx={{
-          p: 3,
-          // my: 2,
-          // border: 0.1,
           borderColor: "#E5E5E5",
-          boxShadow: "1px 1px 3px 1px #494aa225",
-          marginTop: -5,
-          width: "90%",
+          boxShadow: { sm: "none", md: "1px 1px 5px 2px #494aa225" },
+          width: { xs: "100%", sm: "100%", md: "90%" },
           marginX: "auto",
+          backgroundColor: { xs: "inherit", sm: "inherit", md: "white" },
         }}
         elevation={0}
       >

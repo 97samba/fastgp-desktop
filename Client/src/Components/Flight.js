@@ -209,7 +209,11 @@ const Flight = ({ data, size = "100%" }) => {
           <Stack direction="row" alignItems="center" flex={1} spacing={1}>
             {/* <Link underline="none" href={`/GPprofile/${data.ownerId}`}> */}
             <Link underline="none" href={`/profilDetails/${data.ownerId}/myProfile`}>
-              <Avatar sx={{ width: 24, height: 24 }}>
+              <Avatar
+                alt={data.publisher?.photoURL}
+                src={data.publisher?.photoURL}
+                sx={{ width: 24, height: 24 }}
+              >
                 <Typography fontSize={11}>{data.publisher.firstName[0].toUpperCase()}</Typography>
               </Avatar>
             </Link>

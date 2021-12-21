@@ -1,10 +1,22 @@
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import { Autocomplete, Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Divider,
+  Grid,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
 import data from "../data/test.json";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
+import { Box } from "@mui/system";
+import { IoSwapVerticalOutline } from "react-icons/io5";
+import COLORS from "../colors";
 
 const SearchContext = createContext();
 
@@ -39,11 +51,20 @@ const Departure = ({ size }) => {
       renderInput={(params) => (
         <TextField
           {...params}
+          margin="none"
           size={size}
-          variant="outlined"
+          variant="standard"
           label="Départ"
           fullWidth
           error={departureError}
+          inputProps={{
+            ...params.inputProps,
+            style: { ...params.inputProps.style, fontWeight: 600, color: COLORS.black },
+          }}
+          InputProps={{
+            disableUnderline: true,
+            ...params.InputProps,
+          }}
         />
       )}
       onBlur={handleError}
@@ -83,9 +104,14 @@ const Destination = ({ size }) => {
         <TextField
           {...params}
           size={size}
-          variant="outlined"
+          variant="standard"
           label="Destination"
           error={destinationError}
+          InputProps={{ disableUnderline: true, ...params.InputProps }}
+          inputProps={{
+            ...params.inputProps,
+            style: { ...params.inputProps.style, fontWeight: 600, color: COLORS.black },
+          }}
         />
       )}
       onBlur={handleError}
@@ -136,6 +162,72 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
       setdestination(history.location.state.destination);
     }
   }, []);
+  const MobileMenu = () => {
+    return (
+      <Paper
+        elevation={0}
+        sx={{
+          borderRadius: 2,
+          border: { xs: "1px solid #E5E5E5", sm: 0, md: 0 },
+          boxShadow: {
+            xs: "1px 1px 3px 1px #494aa225",
+            sm: "1px 1px 3px 1px #494aa225",
+            md: "none",
+          },
+        }}
+      >
+        <Grid container rowGap={2} columnSpacing={2} p={{ xs: 2, sm: 3, md: 0 }}>
+          <Grid item xs={12} sm={12} md={5} lg={5} xl={5} mb={{ xs: 0.5 }}>
+            <Departure size={size} />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={1}
+            md={2}
+            lg={2}
+            xl={2}
+            sx={{ display: { sm: "none", xs: "none", md: "block" } }}
+          >
+            <Button
+              fullWidth
+              // variant="outlined"
+              sx={{ height: "100%", color: "gray" }}
+              onClick={switchDestinations}
+            >
+              <AiOutlineSwap size={20} />
+            </Button>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={1}
+            lg={1}
+            xl={1}
+            sx={{ display: { sm: "block", xs: "block", md: "none" } }}
+          >
+            <Stack direction="row" alignItems="center" position="relative">
+              <Divider variant="fullWidth" sx={{ borderStyle: "dashed", flex: 1, flexFlow: 1 }} />
+              <Box position="absolute" right={0} bgcolor="white">
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  sx={{ height: "100%", color: "gray", backgroundColor: "white" }}
+                  onClick={switchDestinations}
+                >
+                  <IoSwapVerticalOutline size={20} />
+                </Button>
+              </Box>
+            </Stack>
+          </Grid>
+          <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
+            <Destination size={size} />
+          </Grid>
+        </Grid>
+      </Paper>
+    );
+  };
 
   return (
     <SearchContext.Provider
@@ -151,45 +243,46 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
         handleError,
       }}
     >
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-          <Departure size={size} />
+      <Grid container columnSpacing={2} rowGap={2} px={2} py={1}>
+        <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
+          <Box>
+            <MobileMenu />
+          </Box>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={1}
-          md={1}
-          lg={1}
-          xl={1}
-          sx={{ display: { sm: "none", xs: "none", md: "block" } }}
-        >
-          <Button
-            fullWidth
-            variant="outlined"
-            sx={{ height: "100%", color: "gray" }}
-            onClick={switchDestinations}
-          >
-            <AiOutlineSwap size={20} />
-          </Button>
-        </Grid>
-        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-          <Destination size={size} />
-        </Grid>
+
         <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
-          <DesktopDatePicker
-            type="date"
-            value={departureDate}
-            label="Date de départ"
-            minDate={moment()}
-            renderInput={(params) => (
-              <TextField {...params} fullWidth size={size} onClick={() => setdateOpen(true)} />
-            )}
-            onChange={(value) => setDepartureDate(value)}
-            open={dateOpen}
-            onOpen={() => setdateOpen(true)}
-            onClose={() => setdateOpen(false)}
-          />
+          <Box
+            flex={1}
+            border={{ xs: "1px solid lightGray", md: "none" }}
+            py={{ xs: 0.5 }}
+            px={{ xs: 1 }}
+            borderRadius={{ xs: 1 }}
+          >
+            <DesktopDatePicker
+              type="date"
+              value={departureDate}
+              label="Date de départ"
+              minDate={moment()}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  size="small"
+                  variant="standard"
+                  onClick={() => setdateOpen(true)}
+                  InputProps={{ disableUnderline: true, ...params.InputProps }}
+                  inputProps={{
+                    ...params.inputProps,
+                    style: { ...params.inputProps.style, fontWeight: 500, color: COLORS.black },
+                  }}
+                />
+              )}
+              onChange={(value) => setDepartureDate(value)}
+              open={dateOpen}
+              onOpen={() => setdateOpen(true)}
+              onClose={() => setdateOpen(false)}
+            />
+          </Box>
         </Grid>
         <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
           <Button
