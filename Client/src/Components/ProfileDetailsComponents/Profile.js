@@ -11,10 +11,11 @@ import {
   TextField,
   Typography,
   FormHelperText,
+  Divider,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useEffect, useState } from "react";
-import { FaPlaneDeparture, FaUserAlt } from "react-icons/fa";
+import { FaPlaneDeparture, FaUserAlt, FaUserEdit, FaUserPlus } from "react-icons/fa";
 import { IoMdSave } from "react-icons/io";
 import { MdOutlineInsertPhoto } from "react-icons/md";
 
@@ -77,6 +78,130 @@ const StaticAnnounces = () => {
           </Box>
         )}
       </Stack>
+    </Box>
+  );
+};
+
+const Header = ({ HeaderInformations, loading, currentUser }) => {
+  return (
+    <Grid container spacing={2} flex={1}>
+      {HeaderInformations.map((data) => (
+        <Grid item xs={6} sm={6} md={3} lg={3} xl={3} key={data.key}>
+          <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
+            <Box p={2} textAlign="center">
+              <Typography variant="h6" color={COLORS.warning}>
+                {loading ? (
+                  <Skeleton width="100%" />
+                ) : (
+                  <>{data.number >= 10 ? data.number : "0" + data.number}</>
+                )}
+              </Typography>
+              <Typography variant="body2" color="GrayText">
+                {data.label}
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      ))}
+    </Grid>
+  );
+};
+const TopHeader = ({ user, loading, getAvatar, currentUser }) => {
+  return (
+    <Box flex={1} mr={{ xs: 0, sm: 0, md: 2 }}>
+      <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
+        <Stack p={2} direction="row" spacing={2} flex={1}>
+          <Avatar alt={user?.photoUrl} src={user?.photoUrl}>
+            {getAvatar()}
+          </Avatar>
+          <Stack direction="row" alignItems="center" justifyContent="space-between" flex={1}>
+            <Box>
+              <Typography variant="h6" color="#2B3445" fontWeight={500}>
+                {loading ? <Skeleton width={100} /> : user?.firstName + " " + user?.lastName}
+              </Typography>
+              <Typography variant="body2" color="primary">
+                {loading ? <Skeleton width={100} /> : user?.country}
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="center">
+              <Typography color="GrayText" letterSpacing={1} fontWeight={300}>
+                {user?.role === "GP" ? "GP DEBUTANT" : "CLIENT"}
+              </Typography>
+              <RiMedal2Line size={18} color="goldenrod" />
+            </Box>
+          </Stack>
+        </Stack>
+        {currentUser?.uid !== user?.userId && (
+          <Box px={2} pb={2}>
+            <Divider sx={{ px: 1 }} light />
+
+            <Stack
+              direction="row"
+              my={2}
+              flex={1}
+              divider={<Divider sx={{ py: 1 }} orientation="vertical" />}
+            >
+              <Stack direction="column" alignItems="center" flex={1}>
+                <Typography variant="h6" minWidth={20} color={COLORS.warning}>
+                  {loading ? <Skeleton width="100%" /> : user.flights?.length}
+                </Typography>
+                <Typography variant="body2" color="GrayText">
+                  Vols
+                </Typography>
+              </Stack>
+              <Stack direction="column" alignItems="center" flex={1}>
+                <Typography variant="h6" minWidth={20} color={COLORS.warning}>
+                  {loading ? <Skeleton width="100%" /> : user.followers.length}
+                </Typography>
+                <Typography variant="body2" color="GrayText">
+                  Abonnés
+                </Typography>
+              </Stack>
+              <Stack direction="column" alignItems="center" flex={1}>
+                <Typography variant="h6" minWidth={20} color={COLORS.warning}>
+                  {loading ? <Skeleton width="100%" /> : user?.packages?.length}
+                </Typography>
+                <Typography variant="body2" color="GrayText">
+                  Colis
+                </Typography>
+              </Stack>
+            </Stack>
+            {loading ? (
+              <Skeleton width="100%" height={40} />
+            ) : (
+              <Box>
+                {user.userId !== currentUser?.uid ? (
+                  <Box>
+                    {user?.followers.length > 0 && user.followers.includes(currentUser?.uid) ? (
+                      <Button
+                        startIcon={<FaUserPlus />}
+                        fullWidth
+                        variant="contained"
+                        // onClick={unFollow}
+                      >
+                        se désabonner
+                      </Button>
+                    ) : (
+                      <Button
+                        startIcon={<FaUserPlus />}
+                        fullWidth
+                        variant="contained"
+                        // onClick={follow}
+                      >
+                        Suivre
+                      </Button>
+                    )}
+                  </Box>
+                ) : (
+                  <Button startIcon={<FaUserEdit />} fullWidth variant="contained">
+                    Modifier profil
+                  </Button>
+                )}
+              </Box>
+            )}
+          </Box>
+        )}
+      </Paper>
     </Box>
   );
 };
@@ -219,6 +344,11 @@ const Profile = () => {
   ]);
   const [editing, setediting] = useState(false);
 
+  useEffect(() => {
+    async function fetchDatas() {}
+    fetchDatas();
+  }, []);
+
   return (
     <Box>
       {!editing ? (
@@ -239,61 +369,20 @@ const Profile = () => {
             direction={{ xs: "column", sm: "column", md: "row", lg: "row", xl: "row" }}
             rowGap={2}
           >
-            <Box flex={1} mr={{ xs: 0, sm: 0, md: 2 }}>
-              <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
-                <Stack p={3} direction="row" spacing={2} flex={1}>
-                  <Avatar alt={user?.photoUrl} src={user?.photoUrl}>
-                    {getAvatar()}
-                  </Avatar>
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flex={1}
-                  >
-                    <Box>
-                      <Typography variant="h6" color="#2B3445" fontWeight={500}>
-                        {loading ? (
-                          <Skeleton width={100} />
-                        ) : (
-                          user?.firstName + " " + user?.lastName
-                        )}
-                      </Typography>
-                      <Typography variant="body2" color="primary">
-                        {loading ? <Skeleton width={100} /> : user?.country}
-                      </Typography>
-                    </Box>
-                    <Box display="flex" alignItems="center">
-                      <Typography color="GrayText" letterSpacing={1} fontWeight={300}>
-                        {user?.role === "GP" ? "GP DEBUTANT" : "CLIENT"}
-                      </Typography>
-                      <RiMedal2Line size={18} color="goldenrod" />
-                    </Box>
-                  </Stack>
-                </Stack>
-              </Paper>
-            </Box>
+            <TopHeader
+              user={user}
+              loading={loading}
+              getAvatar={getAvatar}
+              currentUser={currentUser}
+            />
 
-            <Grid container spacing={2} flex={1}>
-              {HeaderInformations.map((data) => (
-                <Grid item xs={6} sm={6} md={3} lg={3} xl={3} key={data.key}>
-                  <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
-                    <Box p={2} textAlign="center">
-                      <Typography variant="h6" color={COLORS.warning}>
-                        {loading ? (
-                          <Skeleton width="100%" />
-                        ) : (
-                          <>{data.number >= 10 ? data.number : "0" + data.number}</>
-                        )}
-                      </Typography>
-                      <Typography variant="body2" color="GrayText">
-                        {data.label}
-                      </Typography>
-                    </Box>
-                  </Paper>
-                </Grid>
-              ))}
-            </Grid>
+            {currentUser?.uid === id && (
+              <Header
+                HeaderInformations={HeaderInformations}
+                loading={loading}
+                currentUser={currentUser}
+              />
+            )}
           </Stack>
           <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)", mt: 4 }}>
             <Box p={2}>
@@ -336,7 +425,7 @@ const Profile = () => {
                     </ButtonBase>
                   )}
                 </Grid>
-                <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
+                <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
                   <Typography variant="body2" color="GrayText">
                     Adresse
                   </Typography>

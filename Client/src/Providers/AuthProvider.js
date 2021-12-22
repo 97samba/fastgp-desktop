@@ -4,14 +4,14 @@ import SignUpDialog from "../Components/SignUpDialog";
 export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [openConnectionDialog, setopenConnectionDialog] = useState(false);
-  function handelOpen() {
+  function handelOpenSignInDialog() {
     setopenConnectionDialog(true);
   }
   function handleClose() {
     setopenConnectionDialog(false);
   }
   return (
-    <AuthContext.Provider value={{ openConnectionDialog, handelOpen, handleClose }}>
+    <AuthContext.Provider value={{ openConnectionDialog, handelOpenSignInDialog, handleClose }}>
       {children}
       <SignUpDialog open={openConnectionDialog} />
     </AuthContext.Provider>

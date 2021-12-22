@@ -23,6 +23,7 @@ import PubBar from "./PubBar";
 import { SearchPageContext } from "../Pages/Search";
 import Carousel from "react-elastic-carousel";
 import COLORS from "../../colors";
+import SearchImage from "../../Images/search.svg";
 
 const Paginator = ({ datas }) => {
   const getCount = () => {
@@ -35,7 +36,7 @@ const Paginator = ({ datas }) => {
   );
 };
 const FlightList = () => {
-  const { flights, loading, filteredFlight, nearFlights, superlatives, initializing } =
+  const { onBoarding, loading, filteredFlight, nearFlights, superlatives, initializing } =
     useContext(SearchPageContext);
   const [bestItemViewerOpened, setbestItemViewerOpened] = useState(false);
   const [bestItemViewed, setbestItemViewed] = useState(null);
@@ -167,85 +168,96 @@ const FlightList = () => {
     return (
       <Box mt={1}>
         {/* <Grid container spacing={2}> */}
-        <Carousel
-          showArrows={true}
-          pagination={false}
-          disableArrowsOnEnd={true}
-          breakPoints={breakPoints}
-          renderArrow={(props) =>
-            props.type === "NEXT" ? (
-              <Stack height="100%" justifyContent="center">
-                {" "}
-                <FaAngleRight {...props} color={COLORS.primary} />
-              </Stack>
-            ) : (
-              <Stack height="100%" justifyContent="center">
-                <FaAngleLeft {...props} color={COLORS.primary} />
-              </Stack>
-            )
-          }
-        >
-          {bests.map((best, index) => (
-            <BestPrice data={best.flight} label={best.label} key={index} />
-          ))}
-        </Carousel>
-        {/* </Grid> */}
-        {bestItemViewerOpened && !loading ? <BestItemViewer /> : null}
 
-        {loading ? (
-          <Box pt={2}>
-            {[1, 2, 3, 4, 5].map((data, index) => (
-              <FlightSkeleton index={index} />
-            ))}
-          </Box>
+        {onBoarding ? (
+          <Stack direction="column" my={2} flex={1} alignItems="center" spacing={2}>
+            <Typography variant="h5" fontWeight={600} color="primary">
+              Que recherchez-vous?
+            </Typography>
+            <img src={SearchImage} alt={SearchImage} width="40%" />
+          </Stack>
         ) : (
-          <Box>
-            {filteredFlight.length > 0 ? (
+          <>
+            <Carousel
+              showArrows={true}
+              pagination={false}
+              disableArrowsOnEnd={true}
+              breakPoints={breakPoints}
+              renderArrow={(props) =>
+                props.type === "NEXT" ? (
+                  <Stack height="100%" justifyContent="center">
+                    {" "}
+                    <FaAngleRight {...props} color={COLORS.primary} />
+                  </Stack>
+                ) : (
+                  <Stack height="100%" justifyContent="center">
+                    <FaAngleLeft {...props} color={COLORS.primary} />
+                  </Stack>
+                )
+              }
+            >
+              {bests.map((best, index) => (
+                <BestPrice data={best.flight} label={best.label} key={index} />
+              ))}
+            </Carousel>
+            {/* </Grid> */}
+            {bestItemViewerOpened && !loading ? <BestItemViewer /> : null}
+            {loading || initializing ? (
               <Box pt={2}>
-                {filteredFlight.map((data, index) => (
-                  <Box>
-                    <Flight data={data} key={index} />
-                  </Box>
+                {[1, 2, 3, 4, 5].map((data, index) => (
+                  <FlightSkeleton index={index} />
                 ))}
-                <Paginator datas={filteredFlight} />
               </Box>
             ) : (
-              <Paper variant="outlined" sx={{ my: 2 }}>
-                <Stack
-                  direction="row"
-                  p={5}
-                  justifyContent="center"
-                  spacing={2}
-                  sx={{ background: "white" }}
-                >
-                  <Typography variant="body1" color="GrayText">
-                    Pas de résultats...
-                  </Typography>
-                  <FaRegCalendarTimes color="gray" size={20} />
-                </Stack>
-              </Paper>
+              <Box>
+                {filteredFlight.length > 0 ? (
+                  <Box pt={2}>
+                    {filteredFlight.map((data, index) => (
+                      <Box>
+                        <Flight data={data} key={index} />
+                      </Box>
+                    ))}
+                    <Paginator datas={filteredFlight} />
+                  </Box>
+                ) : (
+                  <Paper variant="outlined" sx={{ my: 2 }}>
+                    <Stack
+                      direction="row"
+                      p={5}
+                      justifyContent="center"
+                      spacing={2}
+                      sx={{ background: "white" }}
+                    >
+                      <Typography variant="body1" color="GrayText">
+                        Pas de résultats...
+                      </Typography>
+                      <FaRegCalendarTimes color="gray" size={20} />
+                    </Stack>
+                  </Paper>
+                )}
+              </Box>
             )}
-          </Box>
+            <Stack
+              my={3}
+              border={0.5}
+              borderColor="lightgray"
+              py={0.5}
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+              borderRadius={1}
+              direction="row"
+            >
+              <Typography fontSize={14} color="GrayText">
+                Plus de résultats proches
+              </Typography>
+              <FaArrowDown size={12} color="gray" />
+            </Stack>
+            {nearFlights.map((data, index) => (
+              <Flight data={data} key={index} />
+            ))}
+          </>
         )}
-        <Stack
-          my={3}
-          border={0.5}
-          borderColor="lightgray"
-          py={0.5}
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-          borderRadius={1}
-          direction="row"
-        >
-          <Typography fontSize={14} color="GrayText">
-            Plus de résultats proches
-          </Typography>
-          <FaArrowDown size={12} color="gray" />
-        </Stack>
-        {nearFlights.map((data, index) => (
-          <Flight data={data} key={index} />
-        ))}
       </Box>
     );
   };

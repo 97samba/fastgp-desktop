@@ -15,15 +15,9 @@ const ProfilDescriptor = ({ state }) => {
         <Divider sx={{ my: 1 }} />
         <Stack direction={{ xs: "row", sm: "row", md: "column" }}>
           <Box flex={{ xs: 2, sm: 1 }}>
-            <Stack
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-              spacing={1}
-              my={4}
-            >
+            <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} m={2}>
               <img
-                width="50%"
+                width="100%"
                 alt={state.publisher?.photoURL ? state.publisher.photoURL : ProfilPic}
                 src={state.publisher?.photoURL ? state.publisher.photoURL : ProfilPic}
                 style={{ borderRadius: 5 }}

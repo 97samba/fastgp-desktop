@@ -63,7 +63,7 @@ export const dashTab = [
     label: "Annonces",
     icon: <FaPlaneDeparture size={15} />,
     key: "flights",
-    secured: false,
+    secured: true,
   },
   {
     label: "Favoris",

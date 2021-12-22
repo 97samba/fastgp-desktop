@@ -33,7 +33,8 @@ const View = () => {
 
   const visitProfil = () => {
     if (flightState.ownerId) {
-      history.push(`/GPprofile/${flightState.ownerId}`);
+      // history.push(`/GPprofile/${flightState.ownerId}`);
+      history.push(`/profilDetails/${flightState.ownerId}/${flightState.ownerId}/myProfile`);
     }
   };
 

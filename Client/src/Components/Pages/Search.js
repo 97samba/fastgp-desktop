@@ -1,12 +1,11 @@
 import React, { createContext, useEffect, useState } from "react";
 
-import { Container, Paper } from "@mui/material";
+import { Container } from "@mui/material";
 import SignUpDialog from "../SignUpDialog";
 import moment from "moment";
 
-import { useHistory } from "react-router";
 import FlightList from "../SearchComponents/FlightList";
-import { GetAllFlights, QueryFlights } from "../../firebase/db";
+import { QueryFlights } from "../../firebase/db";
 import DynamicSearchBar from "../SearchComponents/DynamicSearchBar";
 
 export const SearchPageContext = createContext();
@@ -15,6 +14,7 @@ const Search = () => {
   const [filteredFlight, setfilteredFlight] = useState(flights);
   const [nearFlights, setnearFlights] = useState([]);
   const [loading, setloading] = useState(true);
+  const [onBoarding, setonBoarding] = useState(true);
   const [superlatives, setsuperlatives] = useState({
     best: {},
     cheapest: {},
@@ -39,6 +39,7 @@ const Search = () => {
   // const history = useHistory();
 
   const getSomeFlights = async (departure, destination, date) => {
+    onBoarding && setonBoarding(false);
     !initializing && setinitializing(true);
     !loading && setloading(true);
     const results = await QueryFlights(departure, destination, date);
@@ -166,6 +167,7 @@ const Search = () => {
           superlatives,
           initializing,
           setinitializing,
+          onBoarding,
         }}
       >
         <DynamicSearchBar />
