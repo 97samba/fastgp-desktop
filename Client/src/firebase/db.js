@@ -111,7 +111,8 @@ const getExactResults = async (departureCity, destinationCity, departureDate) =>
     collection(db, "flights"),
     where("departure.name", "==", departureCity),
     where("destination.name", "==", destinationCity),
-    where("departureDate", ">=", departureDate)
+    where("departureDate", ">=", departureDate),
+    orderBy("departureDate", "desc")
   );
   await getDocs(q)
     .then((snap) => {
@@ -158,6 +159,8 @@ export async function savePhotoUrl(photoUrl, email) {
 
   await updateDoc(docRef, { photoUrl });
 }
+
+export const getUserReservationsNumber = async (id, isOwner) => {};
 
 /**
  * Reservations
