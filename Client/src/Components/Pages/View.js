@@ -73,44 +73,46 @@ const View = () => {
         currentUser,
         flightState,
         history,
+        loading,
       }}
     >
       <Container sx={{ minWidth: "90%", mt: 5, backgroundColor: COLORS.background }}>
-        {loading ? (
-          <Typography>loading</Typography>
-        ) : (
-          <Grid container minHeight={300} spacing={2}>
-            <Grid item xs={12} sm={12} md={3} lg={3} xl={3} order={{ xs: 1, sm: 1, md: 0 }}>
-              <ProfilDescriptor state={flightState} />
-            </Grid>
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              <Typography
-                color="GrayText"
-                gutterBottom
-                variant="captions"
-                display={{ sx: "block", sm: "block", md: "none" }}
-              >
-                Vos deux premières livraisons sont gratuites*
-              </Typography>{" "}
-              <Stack direction="column" spacing={2}>
-                <FlightInformations state={flightState} />
-                <Reservation />
-                <ContactInfo state={flightState} adViewed={adViewed} setadViewed={setadViewed} />
-              </Stack>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={3}
-              lg={3}
-              xl={3}
-              display={{ xs: "none", sm: "none", md: "block" }}
-            >
-              <Summary />
-            </Grid>
+        <Grid container minHeight={300} spacing={2}>
+          <Grid item xs={12} sm={12} md={3} lg={3} xl={3} order={{ xs: 1, sm: 1, md: 0 }}>
+            <ProfilDescriptor state={flightState} />
           </Grid>
-        )}
+          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+            <Typography
+              color="GrayText"
+              gutterBottom
+              variant="captions"
+              display={{ sx: "block", sm: "block", md: "none" }}
+            >
+              Vos deux premières livraisons sont gratuites*
+            </Typography>{" "}
+            <Stack direction="column" spacing={2}>
+              <FlightInformations state={flightState} />
+              <Reservation />
+              <ContactInfo
+                state={flightState}
+                adViewed={adViewed}
+                setadViewed={setadViewed}
+                loading={loading}
+              />
+            </Stack>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={3}
+            lg={3}
+            xl={3}
+            display={{ xs: "none", sm: "none", md: "block" }}
+          >
+            <Summary />
+          </Grid>
+        </Grid>
       </Container>
     </ViewContext.Provider>
   );
