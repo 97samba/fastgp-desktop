@@ -173,10 +173,10 @@ const Reservations = () => {
     setReservations(results);
   }
   async function rejectPackage(id) {
-    await changeReservationStatus(id, "ko");
+    await changeReservationStatus(id, "ko", currentUser?.email);
   }
   async function validatePackage(id) {
-    await changeReservationStatus(id, "ok");
+    await changeReservationStatus(id, "ok", currentUser?.email);
   }
 
   useEffect(() => {

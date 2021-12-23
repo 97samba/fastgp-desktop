@@ -20,6 +20,7 @@ import ProfileDetails from "./Components/Pages/ProfileDetails";
 import Shop from "./Components/Pages/Shop";
 import ContactUs from "./Components/Pages/ContactUs";
 import Layout from "./Components/Layout";
+import Verification from "./Components/Pages/Verification";
 moment.locale("fr", {
   months:
     "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
@@ -146,6 +147,7 @@ const App = () => {
                   <Route path="/register/:choice" component={Register} />
                   <Route path="/contactUs" component={ContactUs} />
                   <Route path="/shop" component={Shop} />
+                  <Route path="/verification/__/auth/" component={Verification} />
                   <Route path="*" component={NotFound} />
                 </Switch>
               </AuthProvider>

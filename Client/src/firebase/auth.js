@@ -6,6 +6,11 @@ import {
   onAuthStateChanged,
   updateProfile,
   fetchSignInMethodsForEmail,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  confirmPasswordReset,
+  verifyPasswordResetCode,
+  applyActionCode,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { getDoc, doc, setDoc } from "firebase/firestore";
@@ -57,7 +62,13 @@ export const register = async (state) => {
     userId: user.user.uid,
   };
 
-  setDoc(doc(db, "users", state.email), credentials).then((data) => console.log(`data`, data));
+  await setDoc(doc(db, "users", state.email), credentials).then(() =>
+    console.log(`user inserted in database`)
+  );
+
+  await sendEmailVerification(user)
+    .then()
+    .catch(() => console.log("email sent"));
   return true;
 };
 
@@ -99,6 +110,9 @@ export const registerGP = async (state, identityUrl) => {
     role: "GP",
     identityUrl,
     documentIdentity: state.documentIdentity,
+    emailVerified: false,
+    phoneNumberVerified: false,
+    documentVerified: false,
     whatsapp1: state.whatsapp1,
     identityNumber: state.identityNumber,
     phone2: state?.phone2,
@@ -108,6 +122,9 @@ export const registerGP = async (state, identityUrl) => {
   };
 
   await setDoc(doc(db, "users", state.email), credentials);
+  await sendEmailVerification(user)
+    .then()
+    .catch(() => console.log("email sent"));
   return true;
 };
 
@@ -145,4 +162,21 @@ export async function setPhotoUrl(url) {
   await updateProfile(user, { photoURL: url })
     .then(() => savePhotoUrl(url, user?.email))
     .catch((error) => console.log("erreur lors de l'ajout de la photo", error));
+}
+
+/**
+ * verify email and password
+ */
+
+export async function sendResetPassword(email) {
+  await sendPasswordResetEmail(auth, email);
+}
+export async function ResetPassword(actionCode, oobCode, newPassword) {
+  await verifyPasswordResetCode(auth, actionCode).then((email) => {
+    confirmPasswordReset(auth, oobCode, newPassword);
+  });
+}
+
+export async function verifyEmail(oobCode) {
+  await applyActionCode(auth, oobCode).then((resp) => console.log("email done"));
 }

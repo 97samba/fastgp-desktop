@@ -13,7 +13,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { FaPlaneDeparture, FaUserAlt, FaUsers } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
 import { IoMdHeartEmpty, IoMdPricetags } from "react-icons/io";
-import { IoLocationSharp } from "react-icons/io5";
+import { IoDocument, IoLocationSharp } from "react-icons/io5";
 import { MdPayment } from "react-icons/md";
 import COLORS from "../../colors";
 import Profile from "../ProfileDetailsComponents/Profile";
@@ -75,6 +75,13 @@ export const dashTab = [
     label: "Reservations",
     icon: <IoMdPricetags size={17} />,
     key: "reservations",
+    secured: true,
+  },
+
+  {
+    label: "Documents",
+    icon: <IoDocument size={17} />,
+    key: "documents",
     secured: true,
   },
 ];

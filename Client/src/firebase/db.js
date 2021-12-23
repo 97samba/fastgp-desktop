@@ -1,6 +1,4 @@
 // Import the functions you need from the SDKs you need
-import { async } from "@firebase/util";
-import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   query,
@@ -15,7 +13,6 @@ import {
   updateDoc,
   arrayUnion,
   arrayRemove,
-  Timestamp,
 } from "firebase/firestore";
 import moment from "moment";
 import { app } from "./config";
@@ -160,8 +157,6 @@ export async function savePhotoUrl(photoUrl, email) {
   await updateDoc(docRef, { photoUrl });
 }
 
-export const getUserReservationsNumber = async (id, isOwner) => {};
-
 /**
  * Reservations
  */
@@ -217,10 +212,15 @@ export const postUserReservation = async (sender, reciever, flight, reservationI
   return next;
 };
 
-export const changeReservationStatus = async (id, status) => {
+export const changeReservationStatus = async (id, status, email) => {
   const docRef = doc(db, "reservations", id);
 
-  await updateDoc(docRef, { status: status });
+  await updateDoc(docRef, { status: status }).then(() => {
+    if (status === "ok") {
+      const docRef = doc(db, "users", email);
+      updateDoc(docRef, { reservations: arrayUnion(id) });
+    }
+  });
 };
 
 /**
