@@ -48,6 +48,7 @@ const Reservation = () => {
     itemDescription: "",
     error: false,
     payer: "Envoyeur",
+    accordionOpen: false,
   });
 
   function handleBagageTypeChange(e) {
@@ -134,7 +135,12 @@ const Reservation = () => {
           />
           <Box>
             <Typography variant="body2" color="GrayText" flexGrow={1}></Typography>
-            <Accordion variant="outlined">
+            <Accordion
+              variant="outlined"
+              sx={{ border: state.accordionOpen && "white" }}
+              expanded={state.accordionOpen}
+              onClick={() => setstate({ ...state, accordionOpen: !state.accordionOpen })}
+            >
               <AccordionSummary
                 expandIcon={<MdExpandMore />}
                 aria-controls="panel1bh-content"

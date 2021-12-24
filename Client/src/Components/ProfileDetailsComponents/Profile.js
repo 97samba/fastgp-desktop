@@ -41,10 +41,9 @@ const StaticAnnounces = () => {
   }
 
   useEffect(() => {
-    console.log(`id`, id);
     const subscribe = getRecentFlights();
     return subscribe;
-  }, []);
+  }, [id]);
 
   return (
     <Box>
@@ -132,7 +131,7 @@ const TopHeader = ({ user, loading, getAvatar, currentUser }) => {
           </Stack>
         </Stack>
         {currentUser?.uid !== user?.userId && (
-          <Box px={2} pb={2}>
+          <Box px={{ xs: 2, sm: 2, md: 10 }} pb={2}>
             <Divider sx={{ px: 1 }} light />
 
             <Stack

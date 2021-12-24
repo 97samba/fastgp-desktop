@@ -40,7 +40,7 @@ const View = () => {
 
   useEffect(() => {
     async function fetchDatas() {
-      if (!id) history.push("/");
+      if (id === undefined) history.push("/");
       if (id && history.location.state === undefined) {
         var flight = await getAFlight(id);
         setflightState(flight);

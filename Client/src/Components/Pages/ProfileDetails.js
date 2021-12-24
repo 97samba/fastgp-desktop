@@ -239,7 +239,7 @@ const ProfileDetails = () => {
   useEffect(() => {
     // console.log(`currentUser`, currentUser);
     getUser();
-  }, []);
+  }, [id]);
 
   return (
     <ProfileDetailsContext.Provider

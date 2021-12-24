@@ -68,7 +68,7 @@ export const register = async (state) => {
 
   await sendEmailVerification(user)
     .then()
-    .catch(() => console.log("email sent"));
+    .catch(() => console.log("email sent to ", user.email));
   return true;
 };
 
@@ -175,6 +175,9 @@ export async function ResetPassword(actionCode, oobCode, newPassword) {
   await verifyPasswordResetCode(auth, actionCode).then((email) => {
     confirmPasswordReset(auth, oobCode, newPassword);
   });
+}
+export async function resendEmailVerification() {
+  await sendEmailVerification(auth.currentUser);
 }
 
 export async function verifyEmail(oobCode) {

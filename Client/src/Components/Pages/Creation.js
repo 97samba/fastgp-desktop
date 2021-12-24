@@ -26,6 +26,7 @@ import { useHistory } from "react-router";
 import { getUserFlights, userDetails } from "../../firebase/db";
 import moment from "moment";
 import Contribution from "../CreationComponents/Contribution";
+import QrCodeAndSummary from "../CreationComponents/QrCodeAndSummary";
 
 export const CreationContext = createContext();
 
@@ -238,6 +239,7 @@ const Creation = () => {
             </Stack>
           </Paper>
           <PaymentButton />
+          <QrCodeAndSummary />
         </Stack>
       </Paper>
     );
@@ -320,7 +322,7 @@ const Creation = () => {
               <Valises />
               <Prices />
               <Contribution />
-              <StartingDialog />
+              {/* <StartingDialog /> */}
             </Paper>
           </Grid>
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
