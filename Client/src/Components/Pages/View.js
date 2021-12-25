@@ -82,14 +82,6 @@ const View = () => {
             <ProfilDescriptor state={flightState} />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-            <Typography
-              color="GrayText"
-              gutterBottom
-              variant="captions"
-              display={{ sx: "block", sm: "block", md: "none" }}
-            >
-              Vos deux premières livraisons sont gratuites*
-            </Typography>{" "}
             <Stack direction="column" spacing={2}>
               <FlightInformations state={flightState} />
               <Reservation />

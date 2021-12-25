@@ -138,8 +138,7 @@ const Reservation = () => {
             <Accordion
               variant="outlined"
               sx={{ border: state.accordionOpen && "white" }}
-              expanded={state.accordionOpen}
-              onClick={() => setstate({ ...state, accordionOpen: !state.accordionOpen })}
+              onClick={() => setstate({ ...state, accordionOpen: true })}
             >
               <AccordionSummary
                 expandIcon={<MdExpandMore />}

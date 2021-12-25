@@ -6,6 +6,7 @@ import {
   FaCoins,
   FaEuroSign,
   FaMoneyBill,
+  FaMoneyBillWave,
   FaPlaneArrival,
   FaPlaneDeparture,
   FaRegCircle,
@@ -210,7 +211,7 @@ const Creation = () => {
           <Paper elevation={0} sx={{ border: 1, borderColor: "#D5D5D5" }}>
             <Stack direction="row" p={1} alignItems="center" justifyContent="space-between">
               <Stack direction="row" alignItems="center">
-                <FaEuroSign color="#A5A5A5" />
+                <FaMoneyBillWave color="#A5A5A5" />
                 <Typography ml={2}>
                   {prices.filter((price) => price.type === "pricePerKG")[0].price}
                 </Typography>

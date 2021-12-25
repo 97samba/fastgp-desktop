@@ -257,7 +257,15 @@ const ProfileDetails = () => {
     >
       <Container>
         <Grid container spacing={4} py={4}>
-          <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={3}
+            lg={3}
+            xl={3}
+            display={{ xs: currentUser?.uid === id ? "block" : "none", sm: "none", md: "block" }}
+          >
             <Left />
           </Grid>
           <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>

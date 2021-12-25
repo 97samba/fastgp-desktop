@@ -25,11 +25,31 @@ const Contribution = () => {
             Participation facultative:
           </Typography>
           <RadioGroup row value={state.contribution} onChange={handleContributionChange}>
-            <FormControlLabel label="0 €" value={0} control={<Radio size="small" />} />
-            <FormControlLabel label="5 €" value={5} control={<Radio size="small" />} />
-            <FormControlLabel label="10 €" value={10} control={<Radio size="small" />} />
-            <FormControlLabel label="15 €" value={15} control={<Radio size="small" />} />
-            <FormControlLabel label="20 €" value={20} control={<Radio size="small" />} />
+            <FormControlLabel
+              label={"0 " + state.currency}
+              value={0}
+              control={<Radio size="small" />}
+            />
+            <FormControlLabel
+              label={"5 " + state.currency}
+              value={5}
+              control={<Radio size="small" />}
+            />
+            <FormControlLabel
+              label={"10 " + state.currency}
+              value={10}
+              control={<Radio size="small" />}
+            />
+            <FormControlLabel
+              label={"15 " + state.currency}
+              value={15}
+              control={<Radio size="small" />}
+            />
+            <FormControlLabel
+              label={"20 " + state.currency}
+              value={20}
+              control={<Radio size="small" />}
+            />
           </RadioGroup>
         </Grid>
         <Grid item md={12} lg={12} xs={12}>
