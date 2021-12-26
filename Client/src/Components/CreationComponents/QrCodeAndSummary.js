@@ -4,15 +4,25 @@ import moment from "moment";
 import React, { useContext, useState } from "react";
 import { FaCalendarAlt, FaPlane, FaShippingFast } from "react-icons/fa";
 import { IoMdPricetag } from "react-icons/io";
-import { MdPhone } from "react-icons/md";
+import { MdPhone, MdQrCode2 } from "react-icons/md";
 import QRCode from "react-qr-code";
 import COLORS from "../../colors";
-import AnnounceImage from "../../Images/Announce-3.svg";
+import AnnounceImage from "../../Images/Announce-4.svg";
 import { CreationContext } from "../Pages/Creation";
 
 const QrCodeAndSummary = ({ id }) => {
   const [open, setopen] = useState(false);
-  const { departure, destination, distributionDate, prices, state } = useContext(CreationContext);
+
+  const {
+    departure,
+    destination,
+    distributionDate,
+    prices,
+    state,
+    showFinishDialog,
+    finishDialogOpen,
+  } = useContext(CreationContext);
+
   const QrCodePass = ({ label }) => {
     const url = "https://fir-c69a6.firebaseapp.com/view/";
     function getQRCodeValue() {
@@ -45,9 +55,9 @@ const QrCodeAndSummary = ({ id }) => {
               alignItems="center"
               justifyContent="center"
               mt={2}
-              spacing={1.5}
+              spacing={1.2}
             >
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography color="primary" fontWeight="bold" variant="body1">
                   {departure.name || "Ville"}
                 </Typography>
@@ -93,27 +103,30 @@ const QrCodeAndSummary = ({ id }) => {
                   </Typography>
                 </Stack>
               </Stack>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <MdQrCode2 size={40} color={COLORS.primary} />
+              </Stack>
 
-              <Stack direction="row" spacing={1} alignItems="center" mt={2}>
-                <Typography color="primary" fontWeight="bold" variant="body2">
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Typography color="primary" fontWeight="bold" variant="caption">
                   FAST GP
                 </Typography>
-                <FaShippingFast color={COLORS.primary} size={18} />
+                <FaShippingFast color={COLORS.primary} size={15} />
               </Stack>
             </Stack>
           </Box>
         </Stack>
-        <Box mt={-7}>
-          <QrCodePass label="Ce QRcode redirige vers votre annonce." />
-        </Box>
+        <Box mt={-7}>{/* <QrCodePass label="Ce QRcode redirige vers votre annonce." /> */}</Box>
       </Dialog>
     );
   };
 
   return (
-    <Stack pt={4}>
+    <Stack pt={2}>
       <Button onClick={() => setopen(true)}>
-        <QrCodePass label="Cliquer pour voir l'annonce" />
+        <Box pt={2}>
+          <QrCodePass label="Cliquer pour voir l'annonce" />
+        </Box>
       </Button>
       <Summarydialog />
     </Stack>

@@ -1,7 +1,7 @@
 import moment from "moment";
 import { postAflight } from "../firebase/db";
 
-export const verifyNewPost = (
+export const verifyNewPost = async (
   departure,
   destination,
   departureDate,
@@ -23,10 +23,12 @@ export const verifyNewPost = (
   state
 ) => {
   VerifyCountries(departure, destination);
-  verifyContacts(publisher) &&
+  if (
+    verifyContacts(publisher) &&
     verifySuitcases(suitcases) &&
-    verifyDates(departureDate, distributionDate, acceptJJ) &&
-    postAflight(
+    verifyDates(departureDate, distributionDate, acceptJJ)
+  ) {
+    var result = await postAflight(
       {
         version: "2.0",
         departure,
@@ -54,6 +56,8 @@ export const verifyNewPost = (
       },
       email
     );
+    return result;
+  }
 };
 
 const transformPrices = (prices) => {
@@ -78,10 +82,7 @@ const VerifyCountries = (departure, destination) => {
 };
 
 const verifyDates = (departureDate, distributionDate, acceptJJ) => {
-  if (
-    moment(departureDate).isSame(distributionDate) ||
-    moment(departureDate).isAfter(distributionDate)
-  ) {
+  if (moment(departureDate).isAfter(distributionDate)) {
     console.log("erreur date");
     return false;
   }

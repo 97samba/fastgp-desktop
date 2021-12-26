@@ -7,8 +7,10 @@ import data from "../../data/test.json";
 import { CreationContext } from "../Pages/Creation";
 
 const Departure = () => {
-  const { depotAddress, setdepotAddress, departure, setdeparture } = useContext(CreationContext);
+  const { depotAddress, setdepotAddress, departure, setdeparture, errors } =
+    useContext(CreationContext);
   const [destinations, setdestinations] = useState([]);
+
   useEffect(() => {
     let newState = [];
     data.map((doc) => {
@@ -16,6 +18,7 @@ const Departure = () => {
     });
     setdestinations(newState);
   }, []);
+
   const handleSave = (value) => {
     setdeparture(value);
     setdepotAddress({ ...depotAddress, city: value?.name });
@@ -34,6 +37,11 @@ const Departure = () => {
     >
       <Box flex={2}>
         <Typography gutterBottom>1. Départ</Typography>
+        {errors.departureError && errors.addError && (
+          <Typography gutterBottom variant="body2" color="error">
+            Départ incorrect
+          </Typography>
+        )}
       </Box>
       <Grid container flex={3} spacing={2}>
         <Grid item md={12} lg={12} xs={12}>
@@ -42,7 +50,7 @@ const Departure = () => {
             options={destinations}
             noOptionsText="Destination introuvable"
             getOptionLabel={getLabel}
-            groupBy={(option) => option.country}
+            groupBy={(option) => option?.country}
             renderOption={(props, option) => <Typography {...props}>{option.name}</Typography>}
             renderInput={(params) => (
               <TextField {...params} size="small" variant="outlined" label="Départ" fullWidth />
@@ -52,7 +60,7 @@ const Departure = () => {
         </Grid>
         <Grid item md={12} lg={12} xs={12}>
           <TextField
-            value={depotAddress.address}
+            value={depotAddress?.address}
             label="Adresse"
             fullWidth
             size="small"
@@ -65,14 +73,14 @@ const Departure = () => {
             label="Ville"
             fullWidth
             size="small"
-            value={depotAddress.city}
+            value={depotAddress?.city}
             onChange={(e) => setdepotAddress({ ...depotAddress, city: e.target.value })}
           />
         </Grid>
         <Grid item md={6} lg={6} xs={12}>
           <TextField
             label="Code Postal"
-            value={depotAddress.postalCode}
+            value={depotAddress?.postalCode}
             fullWidth
             size="small"
             onChange={(e) => setdepotAddress({ ...depotAddress, postalCode: e.target.value })}

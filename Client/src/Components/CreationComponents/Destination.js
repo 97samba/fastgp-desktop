@@ -7,7 +7,7 @@ import data from "../../data/test.json";
 import { CreationContext } from "../Pages/Creation";
 
 const Destination = () => {
-  const { retraitAddress, setRetraitAddress, destination, setdestination } =
+  const { retraitAddress, setRetraitAddress, destination, setdestination, errors } =
     useContext(CreationContext);
   const [destinations, setdestinations] = useState([]);
   useEffect(() => {
@@ -36,6 +36,11 @@ const Destination = () => {
     >
       <Box flex={2}>
         <Typography gutterBottom>2. Destination </Typography>
+        {errors.destinationError && errors.addError && (
+          <Typography gutterBottom variant="body2" color="error">
+            Destination incorrecte
+          </Typography>
+        )}
       </Box>
       <Grid container flex={3} spacing={2}>
         <Grid item md={12} lg={12} xs={12}>
@@ -44,7 +49,7 @@ const Destination = () => {
             value={destination}
             options={destinations}
             getOptionLabel={getLabel}
-            groupBy={(option) => option.country}
+            groupBy={(option) => option?.country}
             renderOption={(props, option) => <Typography {...props}>{option.name}</Typography>}
             renderInput={(params) => (
               <TextField {...params} size="small" variant="outlined" label="Destination" />
@@ -54,7 +59,7 @@ const Destination = () => {
         </Grid>
         <Grid item md={12} lg={12} xs={12}>
           <TextField
-            value={retraitAddress.address}
+            value={retraitAddress?.address}
             label="Adresse"
             fullWidth
             size="small"
@@ -67,13 +72,13 @@ const Destination = () => {
             label="Ville"
             fullWidth
             size="small"
-            value={retraitAddress.city}
+            value={retraitAddress?.city}
             onChange={(e) => setRetraitAddress({ ...retraitAddress, city: e.target.value })}
           />
         </Grid>
         <Grid item md={6} lg={6} xs={12}>
           <TextField
-            value={retraitAddress.postalCode}
+            value={retraitAddress?.postalCode}
             label="Code Postal"
             fullWidth
             size="small"

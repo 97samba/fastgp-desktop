@@ -4,7 +4,6 @@ import {
   FaCalendarAlt,
   FaCheckCircle,
   FaCoins,
-  FaEuroSign,
   FaMoneyBill,
   FaMoneyBillWave,
   FaPlaneArrival,
@@ -22,21 +21,28 @@ import Dates from "../CreationComponents/Dates";
 import Contacts from "../CreationComponents/Contacts";
 import Valises from "../CreationComponents/Valises";
 import Prices from "../CreationComponents/Prices";
-import StartingDialog from "../CreationComponents/StartingDialog";
 import { useHistory } from "react-router";
 import { getUserFlights, userDetails } from "../../firebase/db";
 import moment from "moment";
 import Contribution from "../CreationComponents/Contribution";
 import QrCodeAndSummary from "../CreationComponents/QrCodeAndSummary";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 export const CreationContext = createContext();
 
 const PaymentButton = () => {
-  const { handleNewPost } = useContext(CreationContext);
+  const { handleNewPost, state } = useContext(CreationContext);
   return (
-    <Button variant="contained" color="success" endIcon={<IoAddCircle />} onClick={handleNewPost}>
-      Publier
-    </Button>
+    <LoadingButton
+      variant="contained"
+      loading={state.creating}
+      color="success"
+      loadingPosition="end"
+      endIcon={<IoAddCircle />}
+      onClick={handleNewPost}
+    >
+      {!state.creating ? "Publier" : "Publication..."}
+    </LoadingButton>
   );
 };
 
@@ -121,11 +127,34 @@ const Creation = () => {
     contribution: 5,
     contributionPaymentMethod: "money",
     currency: "€",
+    creating: false,
+  });
+  const [errors, seterrors] = useState({
+    addError: false,
+    addErrorlabel: "Erreur inconnue",
+    departureError: false,
+    destinationError: false,
+    dateError: false,
+    contactError: false,
+    suitecaseError: false,
+    priceError: false,
   });
   const [user, setuser] = useState({});
 
-  const handleNewPost = () => {
-    verifyNewPost(
+  const [finishDialogOpen, setfinishDialogOpen] = useState(false);
+
+  function showFinishDialog() {
+    errors.addError && seterrors({ ...errors, addError: false });
+    setfinishDialogOpen(true);
+  }
+
+  function displayAddError() {
+    seterrors({ ...errors, addError: true });
+  }
+
+  async function handleNewPost() {
+    setstate({ ...state, creating: true });
+    var result = await verifyNewPost(
       departure,
       destination,
       departureDate,
@@ -148,7 +177,9 @@ const Creation = () => {
       paymentMethod,
       state
     );
-  };
+    setstate({ ...state, creating: false });
+    result ? showFinishDialog() : displayAddError();
+  }
   function uploadNewConfiguration(id) {
     setstate({ ...state, dialogLoading: true });
 
@@ -310,6 +341,10 @@ const Creation = () => {
         user,
         setuser,
         uploadNewConfiguration,
+        finishDialogOpen,
+        showFinishDialog,
+        errors,
+        seterrors,
       }}
     >
       <Container sx={{ minWidth: "90%" }}>

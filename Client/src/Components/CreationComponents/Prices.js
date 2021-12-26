@@ -18,7 +18,7 @@ import { FaCoins } from "react-icons/fa";
 import { CreationContext } from "../Pages/Creation";
 
 const Prices = () => {
-  const { paymentMethod, setpaymentMethod, prices, setprices, state, setstate } =
+  const { paymentMethod, setpaymentMethod, prices, setprices, state, setstate, errors } =
     useContext(CreationContext);
 
   const changePrice = (type, newPrice_) => {
@@ -57,6 +57,11 @@ const Prices = () => {
     >
       <Box flex={2}>
         <Typography gutterBottom>6. Prix et moyens de paiement</Typography>
+        {errors.priceError && errors.addError && (
+          <Typography gutterBottom variant="body2" color="error">
+            Erreur prix
+          </Typography>
+        )}
       </Box>
       <Grid container flex={3} spacing={2}>
         <Grid item md={12} lg={12} xs={12}>

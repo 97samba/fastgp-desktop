@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { FaPlaneDeparture, FaUserAlt, FaUsers } from "react-icons/fa";
+import { FaPlaneDeparture, FaUserAlt } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
 import { IoMdHeartEmpty, IoMdPricetags } from "react-icons/io";
 import { IoDocument, IoLocationSharp } from "react-icons/io5";
@@ -18,7 +18,7 @@ import { MdPayment } from "react-icons/md";
 import COLORS from "../../colors";
 import Profile from "../ProfileDetailsComponents/Profile";
 import { useHistory, useParams } from "react-router-dom";
-import { userDetails } from "../../firebase/db";
+import { getGPReservations, getUserReservations, userDetails } from "../../firebase/db";
 import PaymentMethod from "../ProfileDetailsComponents/PaymentMethod";
 import Location from "../ProfileDetailsComponents/Location";
 import Packages from "../ProfileDetailsComponents/Packages";
@@ -54,13 +54,7 @@ export const dashTab = [
     secured: true,
   },
   {
-    label: "Mes GP",
-    icon: <FaUsers size={17} />,
-    key: "gps",
-    secured: true,
-  },
-  {
-    label: "Annonces",
+    label: "Mes annonces",
     icon: <FaPlaneDeparture size={15} />,
     key: "flights",
     secured: true,
@@ -72,7 +66,7 @@ export const dashTab = [
     secured: true,
   },
   {
-    label: "Reservations",
+    label: "Mes réservations",
     icon: <IoMdPricetags size={17} />,
     key: "reservations",
     secured: true,
@@ -199,6 +193,8 @@ const ProfileDetails = () => {
   const [profilState, setprofilState] = useState({
     loading: true,
   });
+  const [HeaderInformations, setHeaderInformations] = useState([]);
+  const [reservations, setreservations] = useState([]);
 
   const [loading, setloading] = useState(true);
   const [user, setuser] = useState();
@@ -221,11 +217,68 @@ const ProfileDetails = () => {
     history.push("/profilDetails/" + id + "/" + key);
   }
 
+  async function getHeaderInformations(userType) {
+    var results = [];
+    if (userType === "client") {
+      results = await getUserReservations(id);
+      const headers = [
+        {
+          label: "Mes Colis",
+          number: results?.length,
+          key: "packages",
+        },
+        {
+          label: "En attente",
+          number: results?.filter((a) => a.status === "pending")?.length,
+          key: "pending",
+        },
+        {
+          label: "Livraisons en cours",
+          number: results?.filter((a) => a.status === "ok")?.length,
+          key: "shipping",
+        },
+        {
+          label: "Colis boutique",
+          number: 0,
+          key: "shop",
+        },
+      ];
+      setHeaderInformations(headers);
+    } else {
+      results = await getGPReservations(id);
+      const headers = [
+        {
+          label: "Colis",
+          number: results?.length,
+          key: "packages",
+        },
+        {
+          label: "En attente",
+          number: results?.filter((a) => a.status === "pending").length,
+          key: "pending",
+        },
+        {
+          label: "Livraisons en cours",
+          number: results?.filter((a) => a.status === "ok").length,
+          key: "shipping",
+        },
+        {
+          label: "Colis boutique",
+          number: 0,
+          key: "shop",
+        },
+      ];
+      setHeaderInformations(headers);
+    }
+    setreservations(results);
+  }
+
   async function getUser() {
     if (id) {
       await getPage();
       var result = await userDetails(id);
       setuser(result);
+      await getHeaderInformations(result.role);
       setloading(false);
     } else {
       history.push("/login");
@@ -237,9 +290,11 @@ const ProfileDetails = () => {
     }
   }
   useEffect(() => {
-    // console.log(`currentUser`, currentUser);
     getUser();
   }, [id]);
+  useEffect(() => {
+    getPage();
+  }, [subpage]);
 
   return (
     <ProfileDetailsContext.Provider
@@ -253,6 +308,8 @@ const ProfileDetails = () => {
         currentUser,
         id,
         getAvatar,
+        HeaderInformations,
+        reservations,
       }}
     >
       <Container>

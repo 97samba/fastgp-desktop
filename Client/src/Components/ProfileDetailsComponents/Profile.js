@@ -168,35 +168,39 @@ const TopHeader = ({ user, loading, getAvatar, currentUser }) => {
             {loading ? (
               <Skeleton width="100%" height={40} />
             ) : (
-              <Box>
-                {user.userId !== currentUser?.uid ? (
+              <>
+                {!loading && (
                   <Box>
-                    {user?.followers.length > 0 && user.followers.includes(currentUser?.uid) ? (
-                      <Button
-                        startIcon={<FaUserPlus />}
-                        fullWidth
-                        variant="contained"
-                        // onClick={unFollow}
-                      >
-                        se désabonner
-                      </Button>
+                    {user.userId !== currentUser?.uid ? (
+                      <Box>
+                        {user?.followers.length > 0 && user.followers.includes(currentUser?.uid) ? (
+                          <Button
+                            startIcon={<FaUserPlus />}
+                            fullWidth
+                            variant="contained"
+                            // onClick={unFollow}
+                          >
+                            se désabonner
+                          </Button>
+                        ) : (
+                          <Button
+                            startIcon={<FaUserPlus />}
+                            fullWidth
+                            variant="contained"
+                            // onClick={follow}
+                          >
+                            Suivre
+                          </Button>
+                        )}
+                      </Box>
                     ) : (
-                      <Button
-                        startIcon={<FaUserPlus />}
-                        fullWidth
-                        variant="contained"
-                        // onClick={follow}
-                      >
-                        Suivre
+                      <Button startIcon={<FaUserEdit />} fullWidth variant="contained">
+                        Modifier profil
                       </Button>
                     )}
                   </Box>
-                ) : (
-                  <Button startIcon={<FaUserEdit />} fullWidth variant="contained">
-                    Modifier profil
-                  </Button>
                 )}
-              </Box>
+              </>
             )}
           </Box>
         )}
@@ -316,31 +320,9 @@ const ModifyProfile = ({ setediting }) => {
   );
 };
 const Profile = () => {
-  const { profilState, user, loading, currentUser, id, getAvatar } =
+  const { profilState, user, loading, currentUser, HeaderInformations, id, getAvatar } =
     useContext(ProfileDetailsContext);
 
-  const [HeaderInformations, setHeaderInformations] = useState([
-    {
-      label: "Mes Colis",
-      number: 1,
-      key: "packages",
-    },
-    {
-      label: "En attente",
-      number: 0,
-      key: "pending",
-    },
-    {
-      label: "Livraison en cours",
-      number: 1,
-      key: "shipping",
-    },
-    {
-      label: "Achats Boutique",
-      number: 0,
-      key: "shop",
-    },
-  ]);
   const [editing, setediting] = useState(false);
 
   useEffect(() => {

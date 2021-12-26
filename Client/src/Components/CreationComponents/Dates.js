@@ -26,6 +26,7 @@ const Dates = () => {
     setlastDepot,
     acceptJJ,
     setacceptJJ,
+    errors,
   } = useContext(CreationContext);
 
   const [dateOpenDeparture, setdateOpenDeparture] = useState(false);
@@ -40,6 +41,11 @@ const Dates = () => {
     >
       <Box flex={2}>
         <Typography gutterBottom>3. Dates </Typography>
+        {errors.dateError && errors.addError && (
+          <Typography gutterBottom variant="body2" color="error">
+            Date(s) incorrecte (s)
+          </Typography>
+        )}
       </Box>
       <Grid container flex={3} spacing={2}>
         <Grid item md={6} lg={6} xs={12}>

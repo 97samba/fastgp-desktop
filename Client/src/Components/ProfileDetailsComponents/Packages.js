@@ -2,7 +2,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Avatar,
   Button,
   Grid,
   Paper,
@@ -12,16 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { IoMdSave } from "react-icons/io";
 import { MdExpandMore } from "react-icons/md";
-
-import { RiMedal2Line } from "react-icons/ri";
 import COLORS from "../../colors";
 import { ProfileDetailsContext } from "../Pages/ProfileDetails";
-import { getUserReservations } from "../../firebase/db";
-import { useParams } from "react-router-dom";
 import moment from "moment";
 import BoardingPass from "../ViewComponents/BoardingPass";
 
@@ -92,6 +87,27 @@ const AddReservation = ({ setediting }) => {
         </Box>
       </Paper>
     </Box>
+  );
+};
+const PackageSkeleton = () => {
+  return (
+    <Paper sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
+      <Grid container spacing={1} display="flex" color={COLORS.black} p={1}>
+        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+          <Typography></Typography>
+          <Skeleton height={18} width="50%" />
+        </Grid>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+          <Skeleton height={15} width="50%" />
+        </Grid>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+          <Skeleton height={15} width="50%" />
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+          <Skeleton height={15} width="50%" />
+        </Grid>
+      </Grid>
+    </Paper>
   );
 };
 
@@ -206,22 +222,9 @@ const Package = ({ data }) => {
 };
 
 const Packages = () => {
-  const { profilState, user, loading } = useContext(ProfileDetailsContext);
-  const { id, subpage, subID } = useParams();
-
-  const [Reservations, setReservations] = useState([]);
+  const { profilState, user, reservations, loading } = useContext(ProfileDetailsContext);
 
   const [editing, setediting] = useState(false);
-
-  async function getReservations() {
-    const results = await getUserReservations(id);
-    setReservations(results);
-  }
-
-  useEffect(() => {
-    getReservations();
-    return null;
-  }, []);
 
   return (
     <Box>
@@ -236,52 +239,38 @@ const Packages = () => {
               Modifier
             </Button>
           </Stack>
-          <Box flex={1}>
-            <Paper
-              elevation={0}
-              sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)", height: "100%" }}
-            >
-              <Stack p={3} direction="row" spacing={2} flex={1}>
-                <Avatar sx={{ width: 50, height: 50 }}>S</Avatar>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" flex={1}>
-                  <Box>
-                    <Typography variant="h6" color="#2B3445" fontWeight={500}>
-                      {loading ? <Skeleton width={100} /> : user.firstName + " " + user.lastName}
-                    </Typography>
-                    <Typography variant="body2" color="primary">
-                      {loading ? <Skeleton width={100} /> : user.country}
-                    </Typography>
-                  </Box>
-                  <Box display="flex" alignItems="center">
-                    <Typography color="GrayText" letterSpacing={1} fontWeight={300}>
-                      GP DEBUTANT
-                    </Typography>
-                    <RiMedal2Line size={18} color="goldenrod" />
-                  </Box>
-                </Stack>
-              </Stack>
-            </Paper>
-          </Box>
-          {Reservations.length > 0 ? (
-            <Stack spacing={2} my={3}>
+          {loading ? (
+            <Stack spacing={2}>
               <Header />
-              {Reservations.map((reservation, index) => (
-                <Package data={reservation} key={index} />
+
+              {["1", "2", "3", "4"].map((item) => (
+                <PackageSkeleton key={item} />
               ))}
             </Stack>
           ) : (
-            <Paper
-              sx={{
-                flex: 1,
-                boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
-                p: 2,
-                my: 4,
-                textAlign: "center",
-              }}
-              elevation={0}
-            >
-              <Typography color="GrayText">Vous n'avez pas de réservations.</Typography>
-            </Paper>
+            <>
+              {reservations?.length > 0 ? (
+                <Stack spacing={2} my={3}>
+                  <Header />
+                  {reservations.map((reservation, index) => (
+                    <Package data={reservation} key={index} />
+                  ))}
+                </Stack>
+              ) : (
+                <Paper
+                  sx={{
+                    flex: 1,
+                    boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+                    p: 2,
+                    my: 4,
+                    textAlign: "center",
+                  }}
+                  elevation={0}
+                >
+                  <Typography color="GrayText">Vous n'avez pas de réservations.</Typography>
+                </Paper>
+              )}
+            </>
           )}
         </Box>
       ) : (

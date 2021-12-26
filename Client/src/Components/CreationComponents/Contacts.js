@@ -19,7 +19,7 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import { CreationContext } from "../Pages/Creation";
 
 const Contacts = () => {
-  const { facebookLink, setfacebookLink, contacts, setcontacts, publisher, setpublisher } =
+  const { facebookLink, setfacebookLink, contacts, setcontacts, publisher, setpublisher, errors } =
     useContext(CreationContext);
   const [state, setstate] = useState({});
   const [open, setopen] = useState(false);
@@ -43,6 +43,11 @@ const Contacts = () => {
     >
       <Box flex={2}>
         <Typography gutterBottom>4. Contacts</Typography>
+        {errors.contactError && errors.addError && (
+          <Typography gutterBottom variant="body2" color="error">
+            Erreur contact
+          </Typography>
+        )}
       </Box>
       <Grid container flex={3} spacing={2}>
         <Grid item md={6} lg={6} xs={12}>

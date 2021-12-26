@@ -22,7 +22,7 @@ const Valises = () => {
   const [open, setopen] = useState(false);
   const [state, setstate] = useState({ type: "soute", weight: 23, added: true });
 
-  const { suitcases, setsuitcases } = useContext(CreationContext);
+  const { suitcases, setsuitcases, errors } = useContext(CreationContext);
 
   const changeWeight = (id, newWeight) => {
     var newSuitcase = suitcases.map((suitcase) => {
@@ -88,6 +88,11 @@ const Valises = () => {
     >
       <Box flex={2}>
         <Typography gutterBottom>5. Valises</Typography>
+        {errors.suitecaseError && errors.addError && (
+          <Typography gutterBottom variant="body2" color="error">
+            Erreur valise
+          </Typography>
+        )}
       </Box>
       <Grid container flex={3} spacing={2}>
         <Grid item md={12} lg={12} xs={12}>
