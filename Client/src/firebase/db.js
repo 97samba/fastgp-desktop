@@ -26,17 +26,17 @@ export const getAFlight = async (id) => {
 };
 
 export const postAflight = async (flight, email) => {
-  var done = false;
+  var newFlightId = "";
   await addDoc(collection(db, "flights"), flight)
     .then(async (data) => {
       await updateDoc(doc(db, "users", email), { flights: arrayUnion(data.id) }).catch((error) =>
         console.log("erreur lors de l'ajout de l'id du vol", error)
       );
-      done = true;
+      newFlightId = data.id;
     })
     .then(() => console.log("ajout avec succes"))
     .catch((error) => console.log(`erreur creation post`, error));
-  return done;
+  return newFlightId;
 };
 
 export async function FollowGP(email, followerId) {

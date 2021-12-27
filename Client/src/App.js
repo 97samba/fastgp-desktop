@@ -143,7 +143,7 @@ const App = () => {
                   <Route path="/profilDetails/:id/:subpage/:subID" component={ProfileDetails} />
                   <Route path="/profilDetails" component={ProfileDetails} />
                   <Route path="/login" component={Login} />
-                  <Route path="/register" component={Register} />
+                  {/* <Route path="/register" component={Register} /> */}
                   <Route path="/register/:choice" component={Register} />
                   <Route path="/contactUs" component={ContactUs} />
                   <Route path="/shop" component={Shop} />

@@ -13,7 +13,13 @@ import {
 } from "react-icons/fa";
 import { IoAddCircle } from "react-icons/io5";
 
-import { verifyNewPost } from "../../Middleware/CreationMiddleware";
+import {
+  verifyContacts,
+  VerifyCountries,
+  verifyDates,
+  verifyNewPost,
+  verifySuitcases,
+} from "../../Middleware/CreationMiddleware";
 import { useAuth } from "../../firebase/auth";
 import Departure from "../CreationComponents/Departure";
 import Destination from "../CreationComponents/Destination";
@@ -27,6 +33,7 @@ import moment from "moment";
 import Contribution from "../CreationComponents/Contribution";
 import QrCodeAndSummary from "../CreationComponents/QrCodeAndSummary";
 import LoadingButton from "@mui/lab/LoadingButton";
+import StartingDialog from "../CreationComponents/StartingDialog";
 
 export const CreationContext = createContext();
 
@@ -40,6 +47,7 @@ const PaymentButton = () => {
       loadingPosition="end"
       endIcon={<IoAddCircle />}
       onClick={handleNewPost}
+      disabled={state.created}
     >
       {!state.creating ? "Publier" : "Publication..."}
     </LoadingButton>
@@ -128,6 +136,8 @@ const Creation = () => {
     contributionPaymentMethod: "money",
     currency: "€",
     creating: false,
+    created: false,
+    createdItemId: "",
   });
   const [errors, seterrors] = useState({
     addError: false,
@@ -143,42 +153,90 @@ const Creation = () => {
 
   const [finishDialogOpen, setfinishDialogOpen] = useState(false);
 
-  function showFinishDialog() {
-    errors.addError && seterrors({ ...errors, addError: false });
-    setfinishDialogOpen(true);
+  function showFinishDialog(finished) {
+    if (finished) {
+      errors.addError && seterrors({ ...errors, addError: false });
+      setstate({ ...state, created: true });
+      setfinishDialogOpen(true);
+    } else {
+      setfinishDialogOpen(true);
+    }
+  }
+
+  function hideDialog(redirect) {
+    if (state.created) {
+      return;
+    }
+    if (redirect) {
+      history.push("/profilDetails" + currentUser.uid + "/myProfile");
+    } else {
+      setfinishDialogOpen(false);
+    }
   }
 
   function displayAddError() {
     seterrors({ ...errors, addError: true });
   }
 
+  function handleAllErrors() {
+    var countryError = VerifyCountries(departure, destination);
+    var contactError = verifyContacts(publisher);
+    var suitecaseError = verifySuitcases(suitcases);
+    var dateError = verifyDates(departureDate, distributionDate, acceptJJ);
+
+    seterrors({
+      ...errors,
+      addError:
+        countryError === false ||
+        contactError === false ||
+        suitecaseError === false ||
+        dateError === false,
+      departureError: !countryError,
+      destinationError: !countryError,
+      contactError: !contactError,
+      suitecaseError: !suitecaseError,
+      dateError: false,
+    });
+    if (countryError && contactError && suitecaseError && dateError) {
+      return true;
+    }
+    return false;
+  }
+
   async function handleNewPost() {
     setstate({ ...state, creating: true });
-    var result = await verifyNewPost(
-      departure,
-      destination,
-      departureDate,
-      distributionDate,
-      lastDepot,
-      acceptJJ,
-      depotAddress,
-      retraitAddress,
-      currentUser.uid,
-      currentUser.email,
-      prices.map((price) => {
-        return { type: price.type, price: price.price };
-      }),
-      publisher,
-      state.contribution,
-      state.contributionPaymentMethod,
-      contacts,
-      facebookLink,
-      suitcases,
-      paymentMethod,
-      state
-    );
+    if (handleAllErrors()) {
+      var result = await verifyNewPost(
+        departure,
+        destination,
+        departureDate,
+        distributionDate,
+        lastDepot,
+        acceptJJ,
+        depotAddress,
+        retraitAddress,
+        currentUser.uid,
+        currentUser.email,
+        prices.map((price) => {
+          return { type: price.type, price: price.price };
+        }),
+        publisher,
+        state.contribution,
+        state.contributionPaymentMethod,
+        contacts,
+        facebookLink,
+        suitcases,
+        paymentMethod,
+        state
+      );
+      if (result !== "") {
+        showFinishDialog(true);
+        setstate({ ...state, creating: false, created: true, createdItemId: result });
+        console.log(`result`, result);
+      }
+      return;
+    }
     setstate({ ...state, creating: false });
-    result ? showFinishDialog() : displayAddError();
   }
   function uploadNewConfiguration(id) {
     setstate({ ...state, dialogLoading: true });
@@ -345,6 +403,7 @@ const Creation = () => {
         showFinishDialog,
         errors,
         seterrors,
+        hideDialog,
       }}
     >
       <Container sx={{ minWidth: "90%" }}>
@@ -358,7 +417,7 @@ const Creation = () => {
               <Valises />
               <Prices />
               <Contribution />
-              {/* <StartingDialog /> */}
+              <StartingDialog />
             </Paper>
           </Grid>
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>

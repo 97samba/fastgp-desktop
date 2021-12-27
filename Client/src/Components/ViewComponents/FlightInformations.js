@@ -9,6 +9,7 @@ import { GoPackage } from "react-icons/go";
 import { IoAirplaneSharp, IoPricetagsOutline } from "react-icons/io5";
 import COLORS from "../../colors";
 import { ViewContext } from "../Pages/View";
+import { FaInfo } from "react-icons/fa";
 
 const FlightInformations = ({ state }) => {
   const { loading } = useContext(ViewContext);
@@ -183,6 +184,26 @@ const FlightInformations = ({ state }) => {
                       <Typography variant="body2"> / valise*</Typography>
                     </Stack>
                   </Stack>
+                </Box>
+              </Stack>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            {loading ? (
+              <Skeleton height={60} />
+            ) : (
+              <Stack direction="row" spacing={2} alignItems="center">
+                <IconButton>
+                  <FaInfo color="#494aa2" />
+                </IconButton>
+                <Box flex={1}>
+                  <Typography gutterBottom color="primary" fontWeight="bold">
+                    Informations supplémentaires
+                  </Typography>
+                  <Divider sx={{ mb: 1 }} />
+                  <Typography variant="body2" color="GrayText">
+                    {state.moreInfo ? state.moreInfo : "Pas d'informations supplémentaires"}
+                  </Typography>
                 </Box>
               </Stack>
             )}

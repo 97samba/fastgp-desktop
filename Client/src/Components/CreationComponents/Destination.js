@@ -18,7 +18,7 @@ const Destination = () => {
     setdestinations(newState);
   }, []);
   const handleSave = (value) => {
-    setdestination(value);
+    value ? setdestination(value) : setdestination({ name: "", country: "" });
     setRetraitAddress({ ...retraitAddress, city: value?.name });
   };
   const getLabel = (option) => {

@@ -72,7 +72,7 @@ const Middle = () => {
         <ClientForm />
       ) : PageState.userType === "gp" ? (
         <GPForm />
-      ) : PageState.userType === "becomeGP" ? (
+      ) : PageState.userType === "becomeGp" ? (
         <BecomeGp />
       ) : (
         <ChoiceScreen />
@@ -165,15 +165,23 @@ const Register = () => {
     currentUser,
     verifyUserInput,
   };
+  // useEffect(() => {
+  //   if (currentUser?.uid) {
+  //     if (choice === "becomeGp") {
+  //       setPageState({ ...PageState, userType: choice });
+  //     }
+  //   }
+  // }, [currentUser]);
+
   useEffect(() => {
-    if (currentUser) {
-      if (choice === "client" || choice === "gp" || choice === "becomGp") {
-        setPageState({ ...PageState, userType: choice });
-      } else {
-        history.replace("/register/start");
-      }
+    console.log(`choice`, choice);
+    if (choice === "client" || choice === "gp" || choice === "becomeGp") {
+      setPageState({ ...PageState, userType: choice });
+    } else {
+      history.replace("/register/start");
     }
-  }, [currentUser]);
+  }, []);
+
   return (
     <RegisterContext.Provider value={exported}>
       <Container>
@@ -192,7 +200,7 @@ const Register = () => {
               </Box>
               <Box p={2} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="body2">Devenir covaliseur (GP) ?</Typography>
-                <Button>Devenir GP</Button>
+                <Button onClick={() => history.push("/register/becomeGp")}>Devenir GP</Button>
               </Box>
             </Paper>
           </Grid>

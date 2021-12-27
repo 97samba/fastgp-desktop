@@ -401,7 +401,7 @@ const Profile = () => {
                   ) : (
                     <ButtonBase onClick={() => console.log("object")}>
                       <Typography variant="body2" color={COLORS.black}>
-                        {user.phone}
+                        {currentUser?.uid ? user.phone : "06 ** ** ** **"}
                       </Typography>
                     </ButtonBase>
                   )}
@@ -411,7 +411,7 @@ const Profile = () => {
                     Adresse
                   </Typography>
                   <Typography variant="body2" color={COLORS.black} noWrap>
-                    171 Rue de la Ville, 75000
+                    {currentUser?.uid ? "171 Rue de la Ville, 75000" : "*** *** ********"}
                   </Typography>
                 </Grid>
               </Grid>

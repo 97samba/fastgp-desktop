@@ -16,16 +16,16 @@ import { AuthContext } from "../../Providers/AuthProvider";
 import { ViewContext } from "../Pages/View";
 import Advertiser from "./Advertiser";
 
-const ContactInfo = ({ state, adViewed, setadViewed, loading }) => {
+const ContactInfo = ({ state }) => {
   const [open, setopen] = useState(false);
-  const { currentUser } = useContext(ViewContext);
+  const { currentUser, loading, adViewed, setadViewed } = useContext(ViewContext);
   const { handelOpenSignInDialog } = useContext(AuthContext);
 
   const hideInformations = () => {
     return {
-      phoneNumber: state.publisher.phone.substring(0, 2) + "*******",
+      phoneNumber: state?.publisher?.phone?.substring(0, 2) + "*******",
       facebookLink: "https://www.facebook.fr/*******",
-      whatsapp: state.publisher.whatsapp.substring(0, 2) + "*******",
+      whatsapp: state?.publisher?.whatsapp?.substring(0, 2) + "*******",
     };
   };
 
@@ -44,9 +44,9 @@ const ContactInfo = ({ state, adViewed, setadViewed, loading }) => {
   useEffect(() => {
     adViewed || currentUser?.uid
       ? setdatas({
-          phoneNumber: state.publisher.phone,
+          phoneNumber: state.publisher?.phone,
           facebookLink: state.facebookLink,
-          whatsapp: state.publisher.whatsapp,
+          whatsapp: state.publisher?.whatsapp,
         })
       : setdatas(hideInformations());
   }, [adViewed]);
@@ -54,9 +54,9 @@ const ContactInfo = ({ state, adViewed, setadViewed, loading }) => {
   useEffect(() => {
     currentUser?.uid
       ? setdatas({
-          phoneNumber: state.publisher.phone,
-          facebookLink: state.facebookLink,
-          whatsapp: state.publisher.whatsapp,
+          phoneNumber: state?.publisher?.phone,
+          facebookLink: state?.facebookLink,
+          whatsapp: state.publisher?.whatsapp,
         })
       : setdatas(hideInformations());
   }, [currentUser]);

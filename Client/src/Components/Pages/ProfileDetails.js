@@ -223,7 +223,7 @@ const ProfileDetails = () => {
       results = await getUserReservations(id);
       const headers = [
         {
-          label: "Mes Colis",
+          label: "Colis transportés",
           number: results?.length,
           key: "packages",
         },
@@ -248,7 +248,7 @@ const ProfileDetails = () => {
       results = await getGPReservations(id);
       const headers = [
         {
-          label: "Colis",
+          label: "Colis transportés",
           number: results?.length,
           key: "packages",
         },

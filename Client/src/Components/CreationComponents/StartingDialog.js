@@ -2,7 +2,6 @@ import {
   Button,
   CircularProgress,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
@@ -194,7 +193,13 @@ const StartingDialog = () => {
           <DialogContentText>
             Vous avez un compte client, veuillez devenir un covaliseur en quelques clics.
           </DialogContentText>
-          <Stack direction="row" p={4} flex={1} spacing={2} justifyContent="center">
+          <Stack
+            direction="row"
+            p={{ xs: 0, sm: 2, md: 4 }}
+            flex={1}
+            spacing={2}
+            justifyContent="center"
+          >
             <Button variant="contained" endIcon={<MdCancel />} onClick={() => history.push("/")}>
               Quitter
             </Button>

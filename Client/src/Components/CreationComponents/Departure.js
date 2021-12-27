@@ -20,7 +20,7 @@ const Departure = () => {
   }, []);
 
   const handleSave = (value) => {
-    setdeparture(value);
+    value ? setdeparture(value) : setdeparture({ name: "", country: "" });
     setdepotAddress({ ...depotAddress, city: value?.name });
   };
   const getLabel = (option) => {

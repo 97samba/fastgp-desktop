@@ -24,7 +24,7 @@ const Prices = () => {
   const changePrice = (type, newPrice_) => {
     var newPrice = prices.map((price) => {
       if (price.type === type) {
-        return { ...price, price: Number(newPrice_) };
+        return { ...price, price: newPrice_ };
       }
       return price;
     });

@@ -31,7 +31,7 @@ const EditPublication = ({ handleSave, handleReturn }) => {
       <Stack direction="row" spacing={2} alignItems="center" mb={2}>
         <FaUserAlt color={COLORS.warning} />
         <Typography fontWeight="bold" variant="h5" color="primary" flexGrow={1}>
-          Ajouter une réservation
+          Modifier le vol
         </Typography>
         <Button varaint="contained" color="warning" onClick={handleReturn}>
           Retour
