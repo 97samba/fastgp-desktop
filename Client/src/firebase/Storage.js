@@ -4,9 +4,13 @@ import { app } from "./config";
 
 const storage = getStorage(app);
 
-export async function storeImage(image, folder) {
+export async function storeImage(image, folder, displayName, id) {
   var ImageUrl = "";
-  const imageRef = ref(storage, folder + "/" + image.name);
+
+  const imageRef = ref(
+    storage,
+    folder + displayName?.replace(" ", "_") + "_" + id + "." + image.name.split(".").pop()
+  );
   await uploadBytesResumable(imageRef, image)
     .then(async (snapshot) => {
       await getDownloadURL(snapshot.ref)

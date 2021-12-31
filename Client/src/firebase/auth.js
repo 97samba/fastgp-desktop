@@ -13,7 +13,7 @@ import {
   applyActionCode,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { getDoc, doc, setDoc } from "firebase/firestore";
+import { getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 import { db, savePhotoUrl } from "./db";
 import { app } from "./config";
 
@@ -70,6 +70,23 @@ export const register = async (state) => {
     .then()
     .catch(() => console.log("email sent to ", user.email));
   return true;
+};
+
+export const becomeGp = async (informations, email, identityUrl) => {
+  const document = doc(db, "users", email);
+  var result = false;
+  await updateDoc(document, {
+    phoneNumberVerified: false,
+    emailVerified: false,
+    documentVerified: false,
+    identityUrl: identityUrl,
+    role: "GP",
+    ...informations,
+  })
+    .then(() => (result = true))
+    .catch((error) => console.log(`erreur lors de creation du compte `, error));
+
+  return result;
 };
 
 export const registerGP = async (state, identityUrl) => {

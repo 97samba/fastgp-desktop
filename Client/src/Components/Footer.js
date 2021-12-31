@@ -26,7 +26,7 @@ const Footer = () => {
   ];
 
   const professionals = [
-    { label: "Devenir gp", page: "/register/becomeGP" },
+    { label: "Devenir gp", page: "/register/becomeGp" },
     { label: "Devenir partenaire", page: "/moreInfos" },
     { label: "Reporter un problème", page: "/contactUs" },
   ];

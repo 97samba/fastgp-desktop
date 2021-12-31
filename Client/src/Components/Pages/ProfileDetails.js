@@ -25,6 +25,7 @@ import Packages from "../ProfileDetailsComponents/Packages";
 import { useAuth } from "../../firebase/auth";
 import MyAnnouces from "../ProfileDetailsComponents/MyAnnouces";
 import Reservations from "../ProfileDetailsComponents/Reservations";
+import Documents from "../ProfileDetailsComponents/Documents";
 
 export const boardTab = [
   {
@@ -172,6 +173,10 @@ const Right = () => {
     {
       key: "reservations",
       item: <Reservations />,
+    },
+    {
+      key: "documents",
+      item: <Documents />,
     },
   ];
   function getItem() {

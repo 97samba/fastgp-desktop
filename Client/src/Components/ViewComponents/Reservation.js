@@ -44,7 +44,7 @@ const Reservation = () => {
 
   const [isReceiver, setisReceiver] = useState("yes");
   const [state, setstate] = useState({
-    itemType: "thing",
+    // itemType: "thing",
     itemDescription: "",
     error: false,
     payer: "Envoyeur",
@@ -52,6 +52,7 @@ const Reservation = () => {
   });
 
   function handleBagageTypeChange(e) {
+    console.log(`e`, e.target);
     setstate({ ...state, itemType: e.target.value });
   }
 
@@ -201,7 +202,7 @@ const Reservation = () => {
                       size="small"
                       value={state.itemType}
                       error={state.error && state.itemType === ""}
-                      onChange={handleBagageTypeChange}
+                      onChange={(e) => setstate({ ...state, itemType: e.target.value })}
                     >
                       {bagageType.map((type, index) => (
                         <MenuItem value={type.value} key={index}>

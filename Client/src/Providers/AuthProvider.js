@@ -13,7 +13,7 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{ openConnectionDialog, handelOpenSignInDialog, handleClose }}>
       {children}
-      <SignUpDialog open={openConnectionDialog} />
+      <SignUpDialog />
     </AuthContext.Provider>
   );
 };

@@ -76,7 +76,7 @@ const FirstForm = ({ handleNext }) => {
 
   return (
     <Zoom in={true} timeout={150}>
-      <Box p={{ xs: 2, sm: 2, md: 5 }} pt={2}>
+      <Box px={{ xs: 2, sm: 2, md: 5 }}>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={6} md={6} lg={6}>
             <TextField
@@ -243,7 +243,7 @@ const SecondForm = () => {
       setdisplayError(true);
       return;
     } else {
-      var imgUrl = await storeImage(image, "identities");
+      var imgUrl = await storeImage(image, "identities/");
       const result = await registerGP(state, imgUrl);
 
       console.log("registerdone");
@@ -288,7 +288,7 @@ const SecondForm = () => {
 
   return (
     <Slide direction="left" in={true} timeout={150}>
-      <Box p={{ xs: 2, sm: 2, md: 5 }} pt={2}>
+      <Box p={{ xs: 2, sm: 2, md: 5 }}>
         <Grid container spacing={2} mb={2}>
           <Grid item xs={12} sm={6} md={6} lg={6}>
             <TextField

@@ -1,13 +1,4 @@
-import {
-  Button,
-  Container,
-  FormHelperText,
-  Grid,
-  Link,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Button, Container, FormHelperText, Grid, Paper, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { FaSuitcase } from "react-icons/fa";
@@ -24,6 +15,12 @@ import BecomeGp from "../RegisterComponents/BecomeGp";
 
 const Middle = () => {
   const { PageState, setPageState } = useContext(RegisterContext);
+  const history = useHistory();
+
+  function gotoPage(page, title, subTitle) {
+    setPageState({ ...PageState, title, subTitle });
+    history.push("/register/" + page);
+  }
 
   const ChoiceScreen = () => {
     return (
@@ -34,7 +31,13 @@ const Middle = () => {
             fullWidth
             size="large"
             endIcon={<GoPackage />}
-            onClick={() => setPageState({ ...PageState, userType: "client" })}
+            onClick={() =>
+              gotoPage(
+                "client",
+                "Compte client",
+                "Vous avez 2 livraisons gratuites* aprés votre inscription."
+              )
+            }
           >
             Client
           </Button>
@@ -46,7 +49,13 @@ const Middle = () => {
             color="warning"
             size="large"
             endIcon={<FaSuitcase />}
-            onClick={() => setPageState({ ...PageState, userType: "gp" })}
+            onClick={() =>
+              gotoPage(
+                "gp",
+                "Compte covaliseur (GP)",
+                "Publier votre annonce sans commission ou confier nous la distribution de tous vos bagages."
+              )
+            }
           >
             Covaliseur
           </Button>
@@ -57,15 +66,15 @@ const Middle = () => {
   };
   return (
     <Paper>
-      <Box p={{ xs: 3, sm: 3, md: 5, lg: 5, xl: 5 }} pt={1}>
+      <Box px={5} py={2}>
         <Stack direction="row" justifyContent="center" m={1} alignItems="center">
           <img src={loginImage} alt="login" width="60%" />
         </Stack>
-        <Typography gutterBottom variant="h4" fontWeight="bold" color="primary">
-          Inscription
+        <Typography gutterBottom variant="h5" fontWeight="bold" color="primary">
+          {PageState.title}
         </Typography>
         <Typography gutterBottom variant="caption" color="GrayText">
-          Vous avez 2 livraisons gratuites* aprés votre inscription.
+          {PageState.subTitle}
         </Typography>
       </Box>
       {PageState.userType === "client" ? (
@@ -77,7 +86,7 @@ const Middle = () => {
       ) : (
         <ChoiceScreen />
       )}
-      <Box p={5} mt={1}>
+      <Box px={5} pb={2} my={2}>
         <Typography variant="caption">
           En vous inscrivant, vous acceptez nos conditions d'utilisation et notre Politique de
           confidentialité.
@@ -92,7 +101,11 @@ const Register = () => {
   const history = useHistory();
   const { choice } = useParams();
   const currentUser = useAuth();
-  const [PageState, setPageState] = useState({ loading: false, userType: null });
+  const [PageState, setPageState] = useState({
+    loading: false,
+    userType: null,
+    title: "Inscription",
+  });
   const [state, setstate] = useState({
     email: "",
     password1: "",
@@ -178,9 +191,28 @@ const Register = () => {
     if (choice === "client" || choice === "gp" || choice === "becomeGp") {
       setPageState({ ...PageState, userType: choice });
     } else {
+      console.log("replacing choice");
       history.replace("/register/start");
     }
   }, []);
+
+  useEffect(() => {
+    console.log(`choice`, choice);
+    var label = "";
+    if (choice === "client") {
+      label = "Création compte client";
+    }
+    if (choice === "gp") {
+      label = "Compte covaliseur (GP)";
+    }
+    if (choice === "becomeGp") {
+      label = "Devenir Gp";
+    }
+    if (choice === "start") {
+      label = "Inscription";
+    }
+    setPageState({ ...PageState, userType: choice, title: label });
+  }, [choice]);
 
   return (
     <RegisterContext.Provider value={exported}>
@@ -200,7 +232,13 @@ const Register = () => {
               </Box>
               <Box p={2} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="body2">Devenir covaliseur (GP) ?</Typography>
-                <Button onClick={() => history.push("/register/becomeGp")}>Devenir GP</Button>
+                {PageState.userType === "becomeGp" ? (
+                  <Button onClick={() => history.replace("/register/start")}>
+                    Créer un compte
+                  </Button>
+                ) : (
+                  <Button onClick={() => history.replace("/register/becomeGp")}>Devenir GP</Button>
+                )}
               </Box>
             </Paper>
           </Grid>
