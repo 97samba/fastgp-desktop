@@ -1,7 +1,8 @@
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { Button, Divider, Grid, MenuItem, Stack, TextField, Typography, Zoom } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { FaApple, FaFacebookSquare, FaLock, FaPhoneAlt } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { IoMailSharp, IoPerson, IoPersonOutline } from "react-icons/io5";
@@ -24,8 +25,10 @@ export const ClientForm = () => {
     seterrors,
     RegisterClient,
   } = useContext(RegisterContext);
+  const [registrating, setregistrating] = useState(false);
 
   async function handleRegister() {
+    setregistrating(true);
     const userExists = await verifyIfUserExists(state.email);
 
     if (userExists) {
@@ -35,8 +38,9 @@ export const ClientForm = () => {
       seterrors({ ...errors, emailError: "" });
       setdisplayError(false);
 
-      RegisterClient();
+      await RegisterClient();
     }
+    setregistrating(false);
   }
 
   return (
@@ -184,15 +188,16 @@ export const ClientForm = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} mt={2}>
-          <Button
+          <LoadingButton
             fullWidth
+            loading={registrating}
             size="medium"
             color="warning"
             variant="contained"
             onClick={handleRegister}
           >
             S'inscrire
-          </Button>
+          </LoadingButton>
         </Grid>
         <Box width="100%" py={3}>
           <Divider>ou</Divider>

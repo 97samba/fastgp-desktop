@@ -11,11 +11,12 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
-import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { MdLogout, MdOutlineSpaceDashboard } from "react-icons/md";
 import { FaCog, FaFolder, FaPlus, FaShippingFast, FaShoppingBag, FaUsersCog } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
 import COLORS from "../colors";
 import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../firebase/auth";
 
 const drawerWidth = 250;
 const toolbarWidth = 60;
@@ -104,6 +105,20 @@ const Layout = ({ children }) => {
                   </ListItem>
                 </Box>
               ))}
+              <Box p={2}>
+                <ListItem
+                  sx={{ borderRadius: 2 }}
+                  key="logOut"
+                  button
+                  onClick={() => logoutUser()}
+                  //   className={location.pathname === item.path ? classes.active : classes.nonActive}
+                >
+                  <ListItemIcon>
+                    <MdLogout color="red" />
+                  </ListItemIcon>
+                  <ListItemText color="red" primary="Déconnexion" />
+                </ListItem>
+              </Box>
             </Box>
           </List>
         </Box>

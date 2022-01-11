@@ -1,8 +1,9 @@
 import { Button, Stack, Typography, Grid, Paper, Skeleton } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ProfileDetailsContext } from "../Pages/ProfileDetails";
 import COLORS from "../../colors";
+import { resendEmailVerification } from "../../firebase/auth";
 
 const Header = () => {
   return (
@@ -37,10 +38,11 @@ const Package = ({ type, verification, status, action }) => {
   const Status = ({ text }) => {
     return (
       <Typography
-        sx={{ px: 1, py: 0.5, backgroundColor: "lightgray", borderRadius: 5 }}
+        sx={{ px: 1, py: 0.5, backgroundColor: text ? "green" : "lightgray", borderRadius: 5 }}
         textAlign="center"
         variant="caption"
         noWrap
+        color={text ? "white" : "GrayText"}
       >
         {text ? "Vérifié" : "En attente"}
       </Typography>
@@ -97,6 +99,21 @@ const PackageSkeleton = () => {
 const Documents = () => {
   const { profilState, user, loading } = useContext(ProfileDetailsContext);
 
+  const [clicked, setclicked] = useState({ phone: false, email: false, document: false });
+
+  async function sendEmailVerification() {
+    await resendEmailVerification();
+    setclicked({ ...clicked, email: true });
+  }
+
+  async function phoneVerification() {
+    setclicked({ ...clicked, phone: true });
+  }
+
+  async function documentVerification() {
+    setclicked({ ...clicked, document: true });
+  }
+
   return (
     <Box>
       <Stack direction="row" spacing={2} alignItems="center" mb={2}>
@@ -126,9 +143,22 @@ const Documents = () => {
                 verification={user?.email}
                 status={user?.emailVerified}
                 action={
-                  <Button sx={{ p: 0, m: 0 }} size="small">
-                    renvoyer
-                  </Button>
+                  clicked.email ? (
+                    <Typography variant="body2" color="GrayText">
+                      Veuillez vérifier vos mails
+                    </Typography>
+                  ) : !user?.emailVerified ? (
+                    <Button
+                      sx={{ p: 0, m: 0 }}
+                      disabled={clicked.email}
+                      size="small"
+                      onClick={sendEmailVerification}
+                    >
+                      renvoyer
+                    </Button>
+                  ) : (
+                    <Typography color="green">Vérifié</Typography>
+                  )
                 }
               />
               <Package
@@ -136,9 +166,17 @@ const Documents = () => {
                 verification={user?.documentIdentity}
                 status={user?.documentVerified}
                 action={
-                  <Button sx={{ p: 0, m: 0 }} size="small">
-                    Relancer
-                  </Button>
+                  clicked.document ? (
+                    <Typography variant="body2" color="GrayText">
+                      Veuillez vérifier vos mails
+                    </Typography>
+                  ) : !user?.documentVerified ? (
+                    <Button sx={{ p: 0, m: 0 }} size="small" onClick={documentVerification}>
+                      Relancer
+                    </Button>
+                  ) : (
+                    <Typography color="green">Vérifié</Typography>
+                  )
                 }
               />
               <Package
@@ -146,13 +184,75 @@ const Documents = () => {
                 verification={user?.phone}
                 status={user?.phoneNumberVerified}
                 action={
-                  <Button sx={{ p: 0, m: 0 }} size="small">
-                    Relancer
-                  </Button>
+                  clicked.phone ? (
+                    <Typography variant="body2" color="GrayText">
+                      Nos équipes vous contacteront
+                    </Typography>
+                  ) : !user?.phoneNumberVerified ? (
+                    <Button
+                      sx={{ p: 0, m: 0 }}
+                      disabled={clicked.phone}
+                      onClick={phoneVerification}
+                      size="small"
+                    >
+                      Relancer
+                    </Button>
+                  ) : (
+                    <Typography color="green">Vérifié</Typography>
+                  )
                 }
               />
             </Stack>
-          ) : null}
+          ) : (
+            <Stack spacing={2}>
+              <Package
+                type="Email"
+                verification={user?.email}
+                status={user?.emailVerified}
+                action={
+                  clicked.email ? (
+                    <Typography variant="body2" color="GrayText">
+                      Veuillez vérifier vos mails
+                    </Typography>
+                  ) : !user?.emailVerified ? (
+                    <Button
+                      sx={{ p: 0, m: 0 }}
+                      disabled={clicked.email}
+                      size="small"
+                      onClick={sendEmailVerification}
+                    >
+                      renvoyer
+                    </Button>
+                  ) : (
+                    <Typography color="green">Vérifié</Typography>
+                  )
+                }
+              />
+              <Package
+                type="Téléphone"
+                verification={user?.phone}
+                status={user?.phoneNumberVerified}
+                action={
+                  clicked.phone ? (
+                    <Typography variant="body2" color="GrayText">
+                      Nos équipes vous contacteront
+                    </Typography>
+                  ) : !user?.phoneNumberVerified ? (
+                    <Button
+                      sx={{ p: 0, m: 0 }}
+                      disabled={clicked.phone}
+                      onClick={phoneVerification}
+                      size="small"
+                    >
+                      Relancer
+                    </Button>
+                  ) : (
+                    <Typography color="green">Vérifié</Typography>
+                  )
+                }
+              />
+            </Stack>
+          )}
         </>
       )}
     </Box>

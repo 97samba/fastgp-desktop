@@ -66,9 +66,9 @@ export const register = async (state) => {
     console.log(`user inserted in database`)
   );
 
-  await sendEmailVerification(user)
+  await sendEmailVerification(user.user)
     .then()
-    .catch(() => console.log("email sent to ", user.email));
+    .catch(() => console.log("email sent to ", user.user.email));
   return true;
 };
 
@@ -139,7 +139,7 @@ export const registerGP = async (state, identityUrl) => {
   };
 
   await setDoc(doc(db, "users", state.email), credentials);
-  await sendEmailVerification(user)
+  await sendEmailVerification(user.user)
     .then()
     .catch(() => console.log("email sent"));
   return true;
@@ -198,5 +198,8 @@ export async function resendEmailVerification() {
 }
 
 export async function verifyEmail(oobCode) {
-  await applyActionCode(auth, oobCode).then((resp) => console.log("email done"));
+  await applyActionCode(auth, oobCode).then(async () => {
+    const docRef = doc(db, "users", auth.currentUser.email);
+    await updateDoc(docRef, { emailVerified: true }).then(() => console.log("email verified"));
+  });
 }

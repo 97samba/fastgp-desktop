@@ -22,11 +22,15 @@ import React, { useContext } from "react";
 import { FaAngleLeft, FaEdit, FaPlane, FaSuitcase } from "react-icons/fa";
 import { IoCreateOutline, IoFolderOpenOutline } from "react-icons/io5";
 import { MdCancel, MdCheck } from "react-icons/md";
+import { useHistory } from "react-router-dom";
 import COLORS from "../../colors";
+import { useAuth } from "../../firebase/auth";
 import { CreationContext } from "../Pages/Creation";
 
 const StartingDialog = () => {
-  const { state, setstate, uploadNewConfiguration, history } = useContext(CreationContext);
+  const { state, setstate, uploadNewConfiguration } = useContext(CreationContext);
+  const history = useHistory();
+  const currentUser = useAuth();
 
   function handleNewPublication() {
     setstate({ ...state, openDialog: false });
@@ -140,39 +144,58 @@ const StartingDialog = () => {
           </DialogContentText>
           <Box py={2} px={2}>
             <List>
-              <ListItem disableGutters>
-                <ListItemText>{getVerificationLabel(state?.user?.documentIdentity)}</ListItemText>
-                <ListItemIcon>
-                  {state?.user?.documentVerified ? (
-                    <MdCheck color="green" size={20} />
-                  ) : (
-                    <MdCancel color="red" size={20} />
-                  )}
-                </ListItemIcon>
-              </ListItem>
+              <ListItemButton
+                disableGutters
+                sx={{ px: 1 }}
+                onClick={() => history.push("/profilDetails/" + currentUser?.uid + "/documents")}
+              >
+                <ListItem disableGutters>
+                  <ListItemText>{getVerificationLabel(state?.user?.documentIdentity)}</ListItemText>
+                  <ListItemIcon>
+                    {state?.user?.documentVerified ? (
+                      <MdCheck color="green" size={20} />
+                    ) : (
+                      <MdCancel color="red" size={20} />
+                    )}
+                  </ListItemIcon>
+                </ListItem>
+              </ListItemButton>
               <Divider />
-              <ListItem disableGutters>
-                <ListItemText>Email</ListItemText>
-                <ListItemIcon>
-                  {state?.user?.emailVerified ? (
-                    <MdCheck color="green" size={20} />
-                  ) : (
-                    <MdCancel color="red" size={20} />
-                  )}
-                </ListItemIcon>
-              </ListItem>
+              <ListItemButton
+                disableGutters
+                sx={{ px: 1 }}
+                onClick={() => history.push("/profilDetails/" + currentUser?.uid + "/documents")}
+              >
+                <ListItem disableGutters>
+                  <ListItemText>Email</ListItemText>
+                  <ListItemIcon>
+                    {state?.user?.emailVerified ? (
+                      <MdCheck color="green" size={20} />
+                    ) : (
+                      <MdCancel color="red" size={20} />
+                    )}
+                  </ListItemIcon>
+                </ListItem>
+              </ListItemButton>
               <Divider />
 
-              <ListItem disableGutters>
-                <ListItemText>Téléphone</ListItemText>
-                <ListItemIcon>
-                  {state?.user?.phoneNumberVerified ? (
-                    <MdCheck color="green" size={20} />
-                  ) : (
-                    <MdCancel color="red" size={20} />
-                  )}
-                </ListItemIcon>
-              </ListItem>
+              <ListItemButton
+                disableGutters
+                sx={{ px: 1 }}
+                onClick={() => history.push("/profilDetails/" + currentUser?.uid + "/documents")}
+              >
+                <ListItem disableGutters>
+                  <ListItemText>Téléphone</ListItemText>
+
+                  <ListItemIcon>
+                    {state?.user?.phoneNumberVerified ? (
+                      <MdCheck color="green" size={20} />
+                    ) : (
+                      <MdCancel color="red" size={20} />
+                    )}
+                  </ListItemIcon>
+                </ListItem>
+              </ListItemButton>
               <Divider />
             </List>
           </Box>
@@ -207,7 +230,7 @@ const StartingDialog = () => {
               variant="contained"
               color="warning"
               endIcon={<FaSuitcase />}
-              onClick={() => history.push("/register/becomeGP")}
+              onClick={() => history.push("/register/becomeGp")}
             >
               Devenir Covaliseur
             </Button>

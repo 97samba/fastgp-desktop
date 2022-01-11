@@ -237,8 +237,10 @@ const FirstForm = ({ handleNext }) => {
 };
 const SecondForm = () => {
   const { state, setstate, displayError, setdisplayError, history } = useContext(RegisterContext);
+  const [registrating, setregistrating] = useState(false);
 
   const handleRegister = async () => {
+    setregistrating(true);
     if (state.phone === "" || state.identityNumber === "" || !image.name) {
       setdisplayError(true);
       return;
@@ -250,6 +252,7 @@ const SecondForm = () => {
 
       result ? history.push("/") : setdisplayError(true);
     }
+    setregistrating(false);
   };
   const handleRegisterWithoutDocument = () => {};
 
@@ -477,8 +480,9 @@ const SecondForm = () => {
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} lg={12} mt={4}>
-          <Button
+          <LoadingButton
             fullWidth
+            loading={registrating}
             size="medium"
             color="warning"
             variant="contained"
@@ -486,7 +490,7 @@ const SecondForm = () => {
             endIcon={<FaRegPaperPlane />}
           >
             Finir l'inscription
-          </Button>
+          </LoadingButton>
         </Grid>
       </Box>
     </Slide>

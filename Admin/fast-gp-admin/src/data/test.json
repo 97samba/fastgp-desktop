@@ -1,0 +1,563 @@
+[
+  {
+    "id": 195,
+    "name": "Sénégal",
+    "iso3": "SEN",
+    "iso2": "SN",
+    "numeric_code": "686",
+    "phone_code": "221",
+    "capital": "Dakar",
+    "currency": "XOF",
+    "currency_symbol": "CFA",
+    "tld": ".sn",
+    "native": "Sénégal",
+    "region": "Africa",
+    "subregion": "Western Africa",
+    "translations": {
+      "fr": "Sénégal"
+    },
+    "latitude": "14.00000000",
+    "longitude": "-14.00000000",
+    "emoji": "🇸🇳",
+    "emojiU": "U+1F1F8 U+1F1F3",
+    "states": [
+      {
+        "id": 473,
+        "name": "Dakar",
+        "state_code": "DK",
+        "latitude": "14.71667700",
+        "longitude": "-17.46768610",
+        "type": null
+      },
+      {
+        "id": 480,
+        "name": "Diourbel",
+        "state_code": "DB",
+        "latitude": "14.72830850",
+        "longitude": "-16.25221430",
+        "type": null
+      },
+      {
+        "id": 485,
+        "name": "Louga",
+        "state_code": "LG",
+        "latitude": "15.61417680",
+        "longitude": "-16.22868000",
+        "type": null
+      },
+      {
+        "id": 477,
+        "name": "Saint-Louis",
+        "state_code": "SL",
+        "latitude": "38.62700250",
+        "longitude": "-90.19940420",
+        "type": null
+      },
+      {
+        "id": 484,
+        "name": "Thiès",
+        "state_code": "TH",
+        "latitude": "14.79100520",
+        "longitude": "-16.93586040",
+        "type": null
+      },
+      {
+        "id": 478,
+        "name": "Ziguinchor",
+        "state_code": "ZG",
+        "latitude": "12.56414790",
+        "longitude": "-16.26398250",
+        "type": null
+      }
+    ]
+  },
+
+  {
+    "id": 75,
+    "name": "France",
+    "iso3": "FRA",
+    "iso2": "FR",
+    "numeric_code": "250",
+    "phone_code": "33",
+    "capital": "Paris",
+    "currency": "EUR",
+    "currency_symbol": "€",
+    "tld": ".fr",
+    "native": "France",
+    "region": "Europe",
+    "subregion": "Western Europe",
+    "timezones": [
+      {
+        "zoneName": "Europe/Paris",
+        "gmtOffset": 3600,
+        "gmtOffsetName": "UTC+01:00",
+        "abbreviation": "CET",
+        "tzName": "Central European Time"
+      }
+    ],
+    "translations": {
+      "fr": "France"
+    },
+    "latitude": "46.00000000",
+    "longitude": "2.00000000",
+    "emoji": "🇫🇷",
+    "emojiU": "U+1F1EB U+1F1F7",
+    "states": [
+      {
+        "id": 4798,
+        "name": "Lyon",
+        "state_code": "ARA",
+        "latitude": "45.44714310",
+        "longitude": "4.38525070"
+      },
+      {
+        "id": 4825,
+        "name": "Dijon",
+        "state_code": "BFC",
+        "latitude": "47.28051270",
+        "longitude": "4.99943720"
+      },
+      {
+        "id": 4818,
+        "name": "Orleans",
+        "state_code": "CVL",
+        "latitude": "47.75156860",
+        "longitude": "1.67506310"
+      },
+      {
+        "id": 4806,
+        "name": "Corse",
+        "state_code": "COR",
+        "latitude": "42.03960420",
+        "longitude": "9.01289260"
+      },
+      {
+        "id": 44041,
+        "name": "Metz",
+        "latitude": "49.11911000",
+        "longitude": "6.17269000"
+      },
+      {
+        "id": 44501,
+        "name": "Nancy",
+        "latitude": "48.68439000",
+        "longitude": "6.18496000"
+      },
+      {
+        "id": 45450,
+        "name": "Reims",
+        "latitude": "49.26526000",
+        "longitude": "4.02853000"
+      },
+      {
+        "id": 47110,
+        "name": "Strasbourg",
+        "latitude": "48.58392000",
+        "longitude": "7.74553000"
+      },
+      {
+        "id": 47385,
+        "name": "Troyes",
+        "latitude": "48.30073000",
+        "longitude": "4.08524000"
+      },
+      {
+        "id": 39364,
+        "name": "Amiens",
+        "latitude": "49.90000000",
+        "longitude": "2.30000000"
+      },
+      {
+        "id": 39889,
+        "name": "Beauvais",
+        "latitude": "49.43333000",
+        "longitude": "2.08333000"
+      },
+      {
+        "id": 40469,
+        "name": "Calais",
+        "latitude": "50.95194000",
+        "longitude": "1.85635000"
+      },
+      {
+        "id": 41124,
+        "name": "Compiègne",
+        "latitude": "49.41794000",
+        "longitude": "2.82606000"
+      },
+      {
+        "id": 43485,
+        "name": "Lille",
+        "latitude": "50.63297000",
+        "longitude": "3.05858000"
+      },
+      {
+        "id": 47474,
+        "name": "Valenciennes",
+        "latitude": "50.35909000",
+        "longitude": "3.52506000"
+      },
+      {
+        "id": 40457,
+        "name": "Caen",
+        "latitude": "49.18585000",
+        "longitude": "-0.35912000"
+      },
+      {
+        "id": 43205,
+        "name": "Le Havre",
+        "latitude": "49.49380000",
+        "longitude": "0.10767000"
+      },
+      {
+        "id": 45617,
+        "name": "Rouen",
+        "latitude": "49.44313000",
+        "longitude": "1.09932000"
+      },
+
+      {
+        "id": 40136,
+        "name": "Bordeaux",
+        "latitude": "44.84044000",
+        "longitude": "-0.58050000"
+      },
+      {
+        "id": 43493,
+        "name": "Limoges",
+        "latitude": "45.83153000",
+        "longitude": "1.25781000"
+      },
+
+      {
+        "id": 44298,
+        "name": "Montpellier",
+        "latitude": "43.61092000",
+        "longitude": "3.87723000"
+      },
+      {
+        "id": 47316,
+        "name": "Toulouse",
+        "latitude": "43.60426000",
+        "longitude": "1.44367000"
+      },
+      {
+        "id": 4816,
+        "name": "Paris",
+        "state_code": "75",
+        "latitude": "48.85661400",
+        "longitude": "2.35222190"
+      },
+
+      {
+        "id": 39396,
+        "name": "Angers",
+        "latitude": "47.47381000",
+        "longitude": "-0.54774000"
+      },
+      {
+        "id": 44506,
+        "name": "Nantes",
+        "latitude": "47.21725000",
+        "longitude": "-1.55336000"
+      },
+      {
+        "id": 40512,
+        "name": "Cannes",
+        "latitude": "43.55135000",
+        "longitude": "7.01275000"
+      },
+      {
+        "id": 43883,
+        "name": "Marseille",
+        "latitude": "43.29695000",
+        "longitude": "5.38107000"
+      },
+      {
+        "id": 44587,
+        "name": "Nice",
+        "latitude": "43.70313000",
+        "longitude": "7.26608000"
+      }
+    ]
+  },
+  {
+    "id": 149,
+    "name": "Morocco",
+    "iso3": "MAR",
+    "iso2": "MA",
+    "numeric_code": "504",
+    "phone_code": "212",
+    "capital": "Rabat",
+    "currency": "MAD",
+    "currency_symbol": "DH",
+    "tld": ".ma",
+    "native": "المغرب",
+    "region": "Africa",
+    "subregion": "Northern Africa",
+    "timezones": [
+      {
+        "zoneName": "Africa/Casablanca",
+        "gmtOffset": 3600,
+        "gmtOffsetName": "UTC+01:00",
+        "abbreviation": "WEST",
+        "tzName": "Western European Summer Time"
+      }
+    ],
+    "translations": {
+      "fr": "Maroc"
+    },
+    "latitude": "32.00000000",
+    "longitude": "-5.00000000",
+    "emoji": "🇲🇦",
+    "emojiU": "U+1F1F2 U+1F1E6",
+    "states": [
+      {
+        "id": 3297,
+        "name": "Agadir",
+        "state_code": "ASZ",
+        "latitude": "28.14023950",
+        "longitude": "-9.72326730"
+      },
+      {
+        "id": 4930,
+        "name": "Casablanca",
+        "state_code": "CAS",
+        "latitude": "33.57226780",
+        "longitude": "-7.65703260"
+      },
+      {
+        "id": 4932,
+        "name": "Fès",
+        "state_code": "FES",
+        "latitude": "34.02395790",
+        "longitude": "-5.03675990"
+      },
+      {
+        "id": 4935,
+        "name": "Marrakech",
+        "state_code": "MAR",
+        "latitude": "31.63460230",
+        "longitude": "-8.07789320",
+        "type": null,
+        "cities": []
+      },
+      {
+        "id": 4942,
+        "name": "Rabat",
+        "state_code": "RAB",
+        "latitude": "33.96919900",
+        "longitude": "-6.92730290",
+        "type": null,
+        "cities": []
+      },
+      {
+        "id": 4950,
+        "name": "Tanger",
+        "state_code": "TNG",
+        "latitude": "35.76325390",
+        "longitude": "-5.90450980"
+      }
+    ]
+  },
+  {
+    "id": 233,
+    "name": "United States",
+    "iso3": "USA",
+    "iso2": "US",
+    "numeric_code": "840",
+    "phone_code": "1",
+    "capital": "Washington",
+    "currency": "USD",
+    "currency_symbol": "$",
+    "tld": ".us",
+    "native": "United States",
+    "region": "Americas",
+    "subregion": "Northern America",
+    "translations": {
+      "fr": "États-Unis"
+    },
+    "latitude": "38.00000000",
+    "longitude": "-97.00000000",
+    "emoji": "🇺🇸",
+    "emojiU": "U+1F1FA U+1F1F8",
+    "states": [
+      {
+        "id": 1456,
+        "name": "Alabama",
+        "state_code": "AL",
+        "latitude": "32.31823140",
+        "longitude": "-86.90229800"
+      },
+      {
+        "id": 1416,
+        "name": "California",
+        "state_code": "CA",
+        "latitude": "36.77826100",
+        "longitude": "-119.41793240"
+      },
+      {
+        "id": 1450,
+        "name": "Colorado",
+        "state_code": "CO",
+        "latitude": "39.55005070",
+        "longitude": "-105.78206740"
+      },
+      {
+        "id": 1436,
+        "name": "Florida",
+        "state_code": "FL",
+        "latitude": "27.66482740",
+        "longitude": "-81.51575350"
+      },
+      {
+        "id": 1455,
+        "name": "Georgia",
+        "state_code": "GA",
+        "latitude": "32.16562210",
+        "longitude": "-82.90007510"
+      },
+      {
+        "id": 1425,
+        "name": "Illinois",
+        "state_code": "IL",
+        "latitude": "40.63312490",
+        "longitude": "-89.39852830"
+      },
+      {
+        "id": 1401,
+        "name": "Maryland",
+        "state_code": "MD",
+        "latitude": "39.04575490",
+        "longitude": "-76.64127120"
+      },
+      {
+        "id": 1433,
+        "name": "Massachusetts",
+        "state_code": "MA",
+        "latitude": "42.40721070",
+        "longitude": "-71.38243740"
+      },
+      {
+        "id": 1426,
+        "name": "Michigan",
+        "state_code": "MI",
+        "latitude": "44.31484430",
+        "longitude": "-85.60236430"
+      },
+      {
+        "id": 1417,
+        "name": "New Jersey",
+        "state_code": "NJ",
+        "latitude": "40.05832380",
+        "longitude": "-74.40566120"
+      },
+      {
+        "id": 1452,
+        "name": "New York",
+        "state_code": "NY",
+        "latitude": "40.71277530",
+        "longitude": "-74.00597280"
+      },
+      {
+        "id": 4851,
+        "name": "Ohio",
+        "state_code": "OH",
+        "latitude": "40.41728710",
+        "longitude": "-82.90712300"
+      },
+      {
+        "id": 1407,
+        "name": "Texas",
+        "state_code": "TX",
+        "latitude": "31.96859880",
+        "longitude": "-99.90181310"
+      },
+      {
+        "id": 1462,
+        "name": "Washington",
+        "state_code": "WA",
+        "latitude": "47.75107410",
+        "longitude": "-120.74013850"
+      }
+    ]
+  },
+  {
+    "id": 232,
+    "name": "United Kingdom",
+    "iso3": "GBR",
+    "iso2": "GB",
+    "numeric_code": "826",
+    "phone_code": "44",
+    "capital": "London",
+    "currency": "GBP",
+    "currency_symbol": "£",
+    "tld": ".uk",
+    "native": "United Kingdom",
+    "region": "Europe",
+    "subregion": "Northern Europe",
+    "timezones": [
+      {
+        "zoneName": "Europe/London",
+        "gmtOffset": 0,
+        "gmtOffsetName": "UTC±00",
+        "abbreviation": "GMT",
+        "tzName": "Greenwich Mean Time"
+      }
+    ],
+    "translations": {
+      "fr": "Royaume-Uni"
+    },
+    "latitude": "54.00000000",
+    "longitude": "-2.00000000",
+    "emoji": "🇬🇧",
+    "emojiU": "U+1F1EC U+1F1E7",
+    "states": [
+      {
+        "id": 2425,
+        "name": "Birmingham",
+        "state_code": "BIR",
+        "latitude": "33.51858920",
+        "longitude": "-86.81035670",
+        "type": null,
+        "cities": []
+      },
+      {
+        "id": 2504,
+        "name": "Bolton",
+        "state_code": "BOL",
+        "latitude": "44.37264760",
+        "longitude": "-72.87876250",
+        "type": null,
+        "cities": []
+      },
+      {
+        "id": 2318,
+        "name": "City of Leicester",
+        "state_code": "LCE",
+        "latitude": "52.63687780",
+        "longitude": "-1.13975920",
+        "type": null,
+        "cities": []
+      },
+      {
+        "id": 2424,
+        "name": "London",
+        "state_code": "LND",
+        "latitude": "51.51234430",
+        "longitude": "-0.09098520",
+        "type": null,
+        "cities": []
+      },
+      {
+        "id": 2340,
+        "name": "Liverpool",
+        "state_code": "LIV",
+        "latitude": "32.65649810",
+        "longitude": "-115.47632410",
+        "type": null,
+        "cities": []
+      }
+    ]
+  }
+]

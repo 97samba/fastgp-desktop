@@ -1,4 +1,13 @@
-import { Button, Container, FormHelperText, Grid, Paper, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  FormHelperText,
+  Grid,
+  Link,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { FaSuitcase } from "react-icons/fa";
@@ -155,8 +164,8 @@ const Register = () => {
       return false;
     }
   };
-  const RegisterClient = () => {
-    verifyUserInput() && registerUser();
+  const RegisterClient = async () => {
+    verifyUserInput() && (await registerUser());
   };
   const RegisterGP = () => {
     verifyUserInput();
@@ -217,7 +226,7 @@ const Register = () => {
   return (
     <RegisterContext.Provider value={exported}>
       <Container>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} py={{ xs: 2, sm: 3, md: 6 }}>
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3}></Grid>
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
             <Middle />
@@ -225,21 +234,27 @@ const Register = () => {
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
             <Paper variant="outlined">
               <Box p={2}>
-                <Typography>
-                  Vous avez déja un compte ?{" "}
-                  <Button onClick={() => history.push("/login")}>Connectez vous </Button>
-                </Typography>
+                <Typography>Vous avez déja un compte ? </Typography>
+                <Link href="/login">
+                  <Typography variant="body2">Connectez-vous</Typography>
+                </Link>{" "}
               </Box>
-              <Box p={2} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="body2">Devenir covaliseur (GP) ?</Typography>
-                {PageState.userType === "becomeGp" ? (
-                  <Button onClick={() => history.replace("/register/start")}>
-                    Créer un compte
-                  </Button>
-                ) : (
-                  <Button onClick={() => history.replace("/register/becomeGp")}>Devenir GP</Button>
-                )}
-              </Box>
+              {PageState.userType === "becomeGp" ? (
+                <Box p={2}>
+                  <Typography>Envie de nous rejoindre ?</Typography>
+                  <Link href="/register/start">
+                    <Typography variant="body2">Créer un compte</Typography>
+                  </Link>
+                </Box>
+              ) : (
+                <Box p={2}>
+                  <Typography>Transporter des colis ?</Typography>
+
+                  <Link href="/register/becomeGp">
+                    <Typography variant="body2">Devenir covaliseur (GP) </Typography>
+                  </Link>
+                </Box>
+              )}
             </Paper>
           </Grid>
         </Grid>

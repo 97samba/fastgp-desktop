@@ -1,11 +1,19 @@
 import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
 import moment from "moment";
+
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateAdaptater from "@mui/lab/AdapterMoment";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AuthProvider from "./Components/AuthProvider";
+import Create from "./Components/Pages/Create";
 import Layout from "./Components/Layout";
-import Home from "./Pages/Home";
-import Packages from "./Pages/Packages";
-import Users from "./Pages/Users";
+import Home from "./Components/Pages/Home";
+import LoginDialog from "./Components/LoginDialog";
+import Manage from "./Components/Pages/Manage";
+import Packages from "./Components/Pages/Packages";
+import Users from "./Components/Pages/Users";
 
 function App() {
   const theme = createTheme({
@@ -94,13 +102,20 @@ function App() {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/packages" element={<Packages />} />
-            <Route path="/users" element={<Users />} />
-          </Routes>
-        </Layout>
+        <LocalizationProvider dateAdapter={DateAdaptater}>
+          <AuthProvider>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/packages" element={<Packages />} />
+                <Route path="/users" element={<Users />} />
+                <Route path="/manage" element={<Manage />} />
+                <Route path="/create" element={<Create />} />
+              </Routes>
+              <LoginDialog />
+            </Layout>
+          </AuthProvider>
+        </LocalizationProvider>
       </ThemeProvider>
     </Router>
   );

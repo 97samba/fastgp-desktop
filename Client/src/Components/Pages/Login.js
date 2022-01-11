@@ -193,7 +193,7 @@ const Login = () => {
             <Box p={2}>
               <Typography>
                 Pas de compte ?{" "}
-                <Button onClick={() => history.push("/register")}>Rejoigner-nous </Button>
+                <Button onClick={() => history.push("/register/start")}>Rejoigner-nous </Button>
               </Typography>
             </Box>
           </Paper>
