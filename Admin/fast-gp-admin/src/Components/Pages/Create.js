@@ -1,5 +1,5 @@
 import { Typography, Grid, Container, Paper, Stack } from "@mui/material";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   FaCalendarAlt,
   FaCheckCircle,
@@ -30,6 +30,8 @@ import moment from "moment";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../AuthProvider";
+import StartingDialog from "../CreationComponents/StartingDialog";
+import { getUserFlights, userDetails } from "../../firebase/db";
 
 export const CreationContext = createContext();
 
@@ -51,7 +53,7 @@ const SubmitButton = () => {
 };
 
 const Create = () => {
-  const currentUser = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [departure, setdeparture] = useState({ name: "", country: "" });
   const [destination, setdestination] = useState({ name: "", country: "" });
@@ -92,6 +94,7 @@ const Create = () => {
     phone: "",
     whatsapp: "",
     photoURL: "",
+    // "https://firebasestorage.googleapis.com/v0/b/fir-c69a6.appspot.com/o/websiteImage%2Fscooter-delivery-logo.jpg?alt=media&token=37b01f32-6715-4c03-9381-c6378e5495fa",
   });
   const [contacts, setcontacts] = useState([]);
   const [facebookLink, setfacebookLink] = useState("http://www.facebook.fr");
@@ -103,7 +106,7 @@ const Create = () => {
     { label: "Espéces", type: "money", supported: true },
     { label: "Paypal", type: "paypal", supported: false },
     { label: "Carte", type: "card", supported: false },
-    { type: "transfer", label: "Wave", supported: true },
+    { type: "transfer", label: "Wave", supported: false },
   ]);
   const [canShip, setcanShip] = useState(true);
   const [acceptJJ, setacceptJJ] = useState("non");
@@ -131,6 +134,8 @@ const Create = () => {
     priceError: false,
   });
   const [user, setuser] = useState({});
+  const [announceOrigin, setannounceOrigin] = useState("Facebook");
+  const [moreInfo, setmoreInfo] = useState("");
 
   const [finishDialogOpen, setfinishDialogOpen] = useState(false);
 
@@ -204,7 +209,9 @@ const Create = () => {
         facebookLink,
         suitcases,
         paymentMethod,
-        state
+        state,
+        moreInfo,
+        announceOrigin
       );
       if (result !== "") {
         showFinishDialog(true);
@@ -215,6 +222,7 @@ const Create = () => {
     }
     setstate({ ...state, creating: false });
   }
+
   function uploadNewConfiguration(id) {
     setstate({ ...state, dialogLoading: true });
 
@@ -227,6 +235,8 @@ const Create = () => {
     setsuitcases(model.suitcases);
     setcontacts(model.contacts);
     setfacebookLink(model.facebookLink);
+    setannounceOrigin(model.announceOrigin);
+    setpublisher(model.publisher);
 
     setstate({ ...state, dialogLoading: false, openDialog: false });
   }
@@ -312,6 +322,22 @@ const Create = () => {
     );
   };
 
+  useEffect(() => {
+    async function fetchDatas() {
+      if (currentUser !== null) {
+        console.log("fetching datas", currentUser?.uid);
+        if (currentUser?.uid) {
+          var flights = await getUserFlights(currentUser?.uid);
+          var user = await userDetails(currentUser?.uid);
+          console.log(`flights`, flights);
+          setstate({ ...state, dialogLoading: false, flights: flights, user: user });
+          setpublisher(publisher);
+        }
+      }
+    }
+    fetchDatas();
+  }, [currentUser]);
+
   return (
     <CreationContext.Provider
       value={{
@@ -357,6 +383,10 @@ const Create = () => {
         errors,
         seterrors,
         hideDialog,
+        announceOrigin,
+        setannounceOrigin,
+        moreInfo,
+        setmoreInfo,
       }}
     >
       <Container sx={{ minWidth: "90%" }}>
@@ -369,7 +399,7 @@ const Create = () => {
               <Contacts />
               <Valises />
               <Prices />
-              {/* <StartingDialog /> */}
+              <StartingDialog />
             </Paper>
           </Grid>
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>

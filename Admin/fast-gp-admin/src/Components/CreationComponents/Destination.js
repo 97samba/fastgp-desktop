@@ -85,6 +85,16 @@ const Destination = () => {
             onChange={(e) => setRetraitAddress({ ...retraitAddress, postalCode: e.target.value })}
           />
         </Grid>
+        <Grid item md={12} lg={12} xs={12}>
+          <TextField
+            label="Complément d'adresse"
+            value={retraitAddress?.moreInfo}
+            fullWidth
+            size="small"
+            helperText="Indispensable pour les adresses en Afrique ;)"
+            onChange={(e) => setRetraitAddress({ ...retraitAddress, moreInfo: e.target.value })}
+          />
+        </Grid>
       </Grid>
     </Stack>
   );

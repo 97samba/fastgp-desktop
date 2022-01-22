@@ -20,11 +20,16 @@ export const verifyNewPost = async (
   facebookLink,
   suitcases,
   paymentMethod,
-  state
+  state,
+  moreInfo,
+  announceOrigin
 ) => {
   var result = await postAflight(
     {
       version: "2.0",
+      byFastGp: true,
+      moreInfo,
+      announceOrigin,
       departure,
       destination,
       departureDate: departureDate.toJSON(),

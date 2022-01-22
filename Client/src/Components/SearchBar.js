@@ -41,35 +41,37 @@ const Departure = ({ size }) => {
     return "";
   };
   return (
-    <Autocomplete
-      value={departure}
-      options={destinations}
-      noOptionsText="Destination introuvable"
-      getOptionLabel={getLabel}
-      groupBy={(option) => option.country}
-      renderOption={(props, option) => <Typography {...props}>{option.name}</Typography>}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          margin="none"
-          size={size}
-          variant="standard"
-          label="Départ"
-          fullWidth
-          error={departureError}
-          inputProps={{
-            ...params.inputProps,
-            style: { ...params.inputProps.style, fontWeight: 600, color: COLORS.black },
-          }}
-          InputProps={{
-            disableUnderline: true,
-            ...params.InputProps,
-          }}
-        />
-      )}
-      onBlur={handleError}
-      onChange={(e, value) => handleSave(value)}
-    />
+    <Box sx={{ backgroundColor: "#F5F5F5", borderRadius: 2, px: 1, py: 0.5 }}>
+      <Autocomplete
+        value={departure}
+        options={destinations}
+        noOptionsText="Destination introuvable"
+        getOptionLabel={getLabel}
+        groupBy={(option) => option.country}
+        renderOption={(props, option) => <Typography {...props}>{option.name}</Typography>}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            // margin="none"
+            size={size}
+            variant="standard"
+            label="Départ"
+            fullWidth
+            error={departureError}
+            inputProps={{
+              ...params.inputProps,
+              style: { ...params.inputProps.style, fontWeight: 600, color: COLORS.black },
+            }}
+            InputProps={{
+              disableUnderline: true,
+              ...params.InputProps,
+            }}
+          />
+        )}
+        onBlur={handleError}
+        onChange={(e, value) => handleSave(value)}
+      />
+    </Box>
   );
 };
 const Destination = ({ size }) => {
@@ -93,30 +95,33 @@ const Destination = ({ size }) => {
     return "";
   };
   return (
-    <Autocomplete
-      noOptionsText="Destination introuvable"
-      value={destination}
-      options={destinations}
-      getOptionLabel={getLabel}
-      groupBy={(option) => option.country}
-      renderOption={(props, option) => <Typography {...props}>{option.name}</Typography>}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          size={size}
-          variant="standard"
-          label="Destination"
-          error={destinationError}
-          InputProps={{ disableUnderline: true, ...params.InputProps }}
-          inputProps={{
-            ...params.inputProps,
-            style: { ...params.inputProps.style, fontWeight: 600, color: COLORS.black },
-          }}
-        />
-      )}
-      onBlur={handleError}
-      onChange={(e, value) => handleSave(value)}
-    />
+    <Box sx={{ backgroundColor: "#F5F5F5", borderRadius: 2, px: 1, py: 0.5 }}>
+      <Autocomplete
+        noOptionsText="Destination introuvable"
+        value={destination}
+        options={destinations}
+        getOptionLabel={getLabel}
+        groupBy={(option) => option.country}
+        renderOption={(props, option) => <Typography {...props}>{option.name}</Typography>}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            size={size}
+            variant="standard"
+            label="Destination"
+            error={destinationError}
+            InputProps={{ disableUnderline: true, ...params.InputProps }}
+            inputProps={{
+              ...params.inputProps,
+              style: { ...params.inputProps.style, fontWeight: 600, color: COLORS.black },
+            }}
+          />
+        )}
+        onBlur={handleError}
+        onChange={(e, value) => handleSave(value)}
+        sx={{ backgroundColor: "E2E2E2", borderRadius: 2 }}
+      />
+    </Box>
   );
 };
 
@@ -214,7 +219,7 @@ const SearchBar = ({ size = "medium", gotoPage = true }) => {
               <Box position="absolute" right={0} bgcolor="white">
                 <Button
                   fullWidth
-                  variant="outlined"
+                  // variant="outlined"
                   sx={{ height: "100%", color: "gray", backgroundColor: "white" }}
                   onClick={switchDestinations}
                 >

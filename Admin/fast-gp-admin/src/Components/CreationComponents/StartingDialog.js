@@ -10,7 +10,6 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
-  ListItemText,
   Paper,
   Stack,
   Switch,
@@ -19,18 +18,13 @@ import {
 import { Box } from "@mui/system";
 import moment from "moment";
 import React, { useContext } from "react";
-import { FaAngleLeft, FaEdit, FaPlane, FaSuitcase } from "react-icons/fa";
+import { FaAngleLeft, FaEdit, FaPlane } from "react-icons/fa";
 import { IoCreateOutline, IoFolderOpenOutline } from "react-icons/io5";
-import { MdCancel, MdCheck } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
 import COLORS from "../../colors";
-import { AuthContext } from "../AuthProvider";
-import { CreationContext } from "../Pages/Creation";
+import { CreationContext } from "../Pages/Create";
 
 const StartingDialog = () => {
   const { state, setstate, uploadNewConfiguration } = useContext(CreationContext);
-  const navigate = useNavigate();
-  const currentUser = useContext(AuthContext);
 
   function handleNewPublication() {
     setstate({ ...state, openDialog: false });
@@ -47,13 +41,9 @@ const StartingDialog = () => {
 
         <DialogContent>
           <DialogContentText>
-            En créant un allez-retour vous économiser du temps ;)
+            En vous inspirant d'une ancienne annonce, vous chargez vos 10 derniers voyages.
           </DialogContentText>
           <Box mt={2}>
-            <Stack direction="row" justifyContent="space-between" my={2}>
-              <Typography>Allez-retour ?</Typography>
-              <Switch color="success" value={state.roundTrip} />
-            </Stack>
             <Divider />
             {state.dialogPage === "start" ? (
               <Stack direction="row" spacing={2} p={2} my={2}>
@@ -72,7 +62,14 @@ const StartingDialog = () => {
                     onClick={handleCreateFrom}
                   >
                     <Box p={2} textAlign="center">
-                      <IoFolderOpenOutline size="40%" color={COLORS.primary} />
+                      <IoFolderOpenOutline
+                        size="40%"
+                        color={
+                          state.dialogLoading === false && state?.flights?.length < 1
+                            ? "gray"
+                            : COLORS.primary
+                        }
+                      />
                       <Typography>S'inspirer d'une ancienne</Typography>
                     </Box>
                   </Button>
@@ -127,136 +124,11 @@ const StartingDialog = () => {
     );
   };
 
-  const VerificationGPDialog = () => {
-    function getVerificationLabel(key) {
-      if (key === "cni") return "Carte d'identité";
-      if (key === "passport") return "Passeport";
-      if (key === "kbis") return "Kbis entreprise";
-      if (key === "sejour") return "Carte de séjour";
-    }
-    return (
-      <>
-        <DialogTitle>Verifier vos informations</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Certaines de vos informations ne sont validées, veuillez les verifier avant de créer une
-            annonce
-          </DialogContentText>
-          <Box py={2} px={2}>
-            <List>
-              <ListItemButton
-                disableGutters
-                sx={{ px: 1 }}
-                onClick={() => navigate("/profilDetails/" + currentUser?.uid + "/documents")}
-              >
-                <ListItem disableGutters>
-                  <ListItemText>{getVerificationLabel(state?.user?.documentIdentity)}</ListItemText>
-                  <ListItemIcon>
-                    {state?.user?.documentVerified ? (
-                      <MdCheck color="green" size={20} />
-                    ) : (
-                      <MdCancel color="red" size={20} />
-                    )}
-                  </ListItemIcon>
-                </ListItem>
-              </ListItemButton>
-              <Divider />
-              <ListItemButton
-                disableGutters
-                sx={{ px: 1 }}
-                onClick={() => navigate("/profilDetails/" + currentUser?.uid + "/documents")}
-              >
-                <ListItem disableGutters>
-                  <ListItemText>Email</ListItemText>
-                  <ListItemIcon>
-                    {state?.user?.emailVerified ? (
-                      <MdCheck color="green" size={20} />
-                    ) : (
-                      <MdCancel color="red" size={20} />
-                    )}
-                  </ListItemIcon>
-                </ListItem>
-              </ListItemButton>
-              <Divider />
-
-              <ListItemButton
-                disableGutters
-                sx={{ px: 1 }}
-                onClick={() => navigate("/profilDetails/" + currentUser?.uid + "/documents")}
-              >
-                <ListItem disableGutters>
-                  <ListItemText>Téléphone</ListItemText>
-
-                  <ListItemIcon>
-                    {state?.user?.phoneNumberVerified ? (
-                      <MdCheck color="green" size={20} />
-                    ) : (
-                      <MdCancel color="red" size={20} />
-                    )}
-                  </ListItemIcon>
-                </ListItem>
-              </ListItemButton>
-              <Divider />
-            </List>
-          </Box>
-          <Typography variant="caption">
-            La vérification du numéro est facultative pour créer une annonce, mais obligatoire pour
-            la suite.
-          </Typography>
-        </DialogContent>
-      </>
-    );
-  };
-
-  const BecomeGpDialog = () => {
-    return (
-      <>
-        <DialogTitle>Devenir un Covaliseur (GP)</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Vous avez un compte client, veuillez devenir un covaliseur en quelques clics.
-          </DialogContentText>
-          <Stack
-            direction="row"
-            p={{ xs: 0, sm: 2, md: 4 }}
-            flex={1}
-            spacing={2}
-            justifyContent="center"
-          >
-            <Button variant="contained" endIcon={<MdCancel />} onClick={() => navigate("/")}>
-              Quitter
-            </Button>
-            <Button
-              variant="contained"
-              color="warning"
-              endIcon={<FaSuitcase />}
-              onClick={() => navigate("/register/becomeGp")}
-            >
-              Devenir Covaliseur
-            </Button>
-          </Stack>
-        </DialogContent>
-      </>
-    );
-  };
-
   return (
     <Box>
       <Dialog open={state.openDialog}>
         {!state.dialogLoading ? (
-          <>
-            {state?.user?.role === "GP" ? (
-              <>
-                {state?.user?.documentVerified && state?.user?.emailVerified ? (
-                  <MainDialog />
-                ) : (
-                  <VerificationGPDialog />
-                )}
-              </>
-            ) : (
-              <BecomeGpDialog />
-            )}
-          </>
+          <MainDialog />
         ) : (
           <Box p={3} flex={1} textAlign="center">
             <Typography gutterBottom>Chargement de vos informations</Typography>

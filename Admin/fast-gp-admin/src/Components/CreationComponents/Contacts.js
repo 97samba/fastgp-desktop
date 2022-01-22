@@ -11,15 +11,27 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  MenuItem,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { FaFacebook, FaPhone, FaTrashAlt, FaUserCircle, FaWhatsapp } from "react-icons/fa";
+import { FaFacebook, FaInfo, FaPhone, FaTrashAlt, FaUserCircle, FaWhatsapp } from "react-icons/fa";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { CreationContext } from "../Pages/Create";
 
 const Contacts = () => {
-  const { facebookLink, setfacebookLink, contacts, setcontacts, publisher, setpublisher, errors } =
-    useContext(CreationContext);
+  const {
+    facebookLink,
+    setfacebookLink,
+    contacts,
+    setcontacts,
+    publisher,
+    setpublisher,
+    announceOrigin,
+    setannounceOrigin,
+    errors,
+    moreInfo,
+    setmoreInfo,
+  } = useContext(CreationContext);
   const [state, setstate] = useState({});
   const [open, setopen] = useState(false);
 
@@ -32,6 +44,7 @@ const Contacts = () => {
     let newState = contacts.filter((contact) => contact.id !== id);
     setcontacts(newState);
   };
+  const origins = ["Facebook", "Whatsapp", "Internet"];
 
   return (
     <Stack
@@ -99,6 +112,34 @@ const Contacts = () => {
             type="url"
             InputProps={{ endAdornment: <FaFacebook color="gray" /> }}
             onChange={(e) => setfacebookLink(e.target.value)}
+          />
+        </Grid>
+        <Grid item md={12} lg={12} xs={12}>
+          <TextField
+            value={announceOrigin}
+            label="Origine de l'annonce"
+            fullWidth
+            size="small"
+            select
+            onChange={(e) => setannounceOrigin(e.target.value)}
+          >
+            {origins.map((origin, index) => (
+              <MenuItem key={index} value={origin}>
+                {origin}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        <Grid item md={12} lg={12} xs={12}>
+          <TextField
+            value={moreInfo}
+            label="Informations supplémentaires"
+            fullWidth
+            multiline
+            size="small"
+            rows={3}
+            InputProps={{ endAdornment: <FaInfo color="gray" /> }}
+            onChange={(e) => setmoreInfo(e.target.value)}
           />
         </Grid>
         {contacts.map((contact) => (

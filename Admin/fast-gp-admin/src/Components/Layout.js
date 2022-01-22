@@ -10,18 +10,20 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useContext } from "react";
 import { MdLogout, MdOutlineSpaceDashboard } from "react-icons/md";
 import { FaCog, FaFolder, FaPlus, FaShippingFast, FaShoppingBag, FaUsersCog } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
 import COLORS from "../colors";
 import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../firebase/auth";
+import { AuthContext } from "./AuthProvider";
 
 const drawerWidth = 250;
 const toolbarWidth = 60;
 const Layout = ({ children }) => {
   const navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext);
 
   const menuItems = [
     {
@@ -119,6 +121,11 @@ const Layout = ({ children }) => {
                   <ListItemText color="red" primary="Déconnexion" />
                 </ListItem>
               </Box>
+            </Box>
+            <Box textAlign="center">
+              <Typography variant="caption">
+                {currentUser?.email.split(".")[0] || "non connecté"}
+              </Typography>
             </Box>
           </List>
         </Box>

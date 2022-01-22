@@ -25,6 +25,8 @@ export const verifyNewPost = async (
   var result = await postAflight(
     {
       version: "2.0",
+      byFastGp: false,
+
       departure,
       destination,
       departureDate: departureDate.toJSON(),

@@ -69,7 +69,7 @@ const ProductSearchBar = () => {
 };
 const FilterBar = () => {
   return (
-    <Stack direction="column" spacing={2}>
+    <Stack direction="column" spacing={2} display={{ xs: "none", sm: "none", md: "block" }}>
       <Box>
         <Typography fontWeight="bold" color="GrayText">
           Catégories
@@ -263,7 +263,7 @@ const Subscribe = () => {
 
   return (
     <Dialog open={dialogOpen} onClose={handleClose}>
-      <DialogTitle>Soyer notifier le jour du lancement</DialogTitle>
+      <DialogTitle>Soyez notifier le jour du lancement</DialogTitle>
       <DialogContent>
         <DialogContentText>Gagner deux livraisons gratuites ou moins 40%</DialogContentText>
         <Box p={2}>

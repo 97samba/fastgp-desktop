@@ -11,8 +11,10 @@ const AuthProvider = ({ children }) => {
     var subscriber = onAuthStateChanged(auth, (value) => setCurrentUser(value));
     console.log(`currentUser`, currentUser);
     return subscriber;
-  }, []);
-  return <AuthContext.Provider value={{ currentUser }}>{children}</AuthContext.Provider>;
+  }, [currentUser]);
+  return (
+    <AuthContext.Provider value={{ currentUser, setCurrentUser }}>{children}</AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;
