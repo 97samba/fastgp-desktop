@@ -168,7 +168,7 @@ const Documents = () => {
                 action={
                   clicked.document ? (
                     <Typography variant="body2" color="GrayText">
-                      Veuillez vérifier vos mails
+                      Nos équipes verifient vos documents.
                     </Typography>
                   ) : !user?.documentVerified ? (
                     <Button sx={{ p: 0, m: 0 }} size="small" onClick={documentVerification}>
