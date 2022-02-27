@@ -244,19 +244,20 @@ const StartingDialog = () => {
     <Box>
       <Dialog open={state.openDialog}>
         {!state.dialogLoading ? (
-          <>
-            {state?.user?.role === "GP" ? (
-              <>
-                {state?.user?.documentVerified && state?.user?.emailVerified ? (
-                  <MainDialog />
-                ) : (
-                  <VerificationGPDialog />
-                )}
-              </>
-            ) : (
-              <BecomeGpDialog />
-            )}
-          </>
+          <MainDialog/>
+          // <>
+          //   {state?.user?.role === "GP" ? (
+          //     <>
+          //       {state?.user?.documentVerified && state?.user?.emailVerified ? (
+          //         <MainDialog />
+          //       ) : (
+          //         <VerificationGPDialog />
+          //       )}
+          //     </>
+          //   ) : (
+          //     <BecomeGpDialog />
+          //   )}
+          // </>
         ) : (
           <Box p={3} flex={1} textAlign="center">
             <Typography gutterBottom>Chargement de vos informations</Typography>
