@@ -52,7 +52,7 @@ const Search = () => {
         setflights(results);
         // setnearFlights(results?.near);
         //setsuperlatives(getSuperlatives(results));
-        //getTheMinAndMaxPrice(results);
+        getTheMinAndMaxPrice(results);
         results.length < 10 ? setnoMoreFlight(true) : setnoMoreFlight(false);
 
         setloading(false);

@@ -82,8 +82,8 @@ export const getUserFlights = async (userId) => {
     let flights = [];
     const q = query(
         collection(db, "flights"),
-        where("ownerId", "==", userId)
-        // orderBy("createdAt", "asc")
+        where("ownerId", "==", userId),
+        orderBy("departureDate", "desc")
     );
     await getDocs(q).then((data) => {
         data.docs.forEach((doc) => flights.push({ ...doc.data(), id: doc.id }));
@@ -309,7 +309,8 @@ export const getUserRecentFlights = async (userId) => {
     const q = query(
         collection(db, "flights"),
         // where("departureDate", ">=", Timestamp.fromDate(new Date())),
-        where("ownerId", "==", userId)
+        where("ownerId", "==", userId),
+        orderBy("departureDate", "asc")
     );
     await getDocs(q).then((data) => {
         data.docs.forEach(
