@@ -14,7 +14,6 @@ import {
     arrayUnion,
     arrayRemove,
     startAfter,
-    startAt,
 } from "firebase/firestore";
 import moment from "moment";
 import { app } from "./config";
@@ -43,6 +42,17 @@ export const postAflight = async (flight, email) => {
         .then(() => console.log("ajout avec succes"))
         .catch((error) => console.log(`erreur creation post`, error));
     return newFlightId;
+};
+
+export const updateAFlight = async (flight, id) => {
+    const docRef = doc(db, "flights", id);
+    console.log("editing ", id);
+    let error = false;
+
+    await updateDoc(docRef, flight)
+        .then(() => console.log("done"))
+        .catch(() => (error = true));
+    return error;
 };
 
 export async function FollowGP(email, followerId) {
@@ -78,12 +88,14 @@ export async function userDetails(id) {
         .catch((erreur) => console.log("erreur", erreur));
     return user;
 }
-export const getUserFlights = async (userId) => {
+export const getUserFlights = async (userId, limitiation) => {
     let flights = [];
+    limitiation === 10 ? (limitiation = 10) : (limitiation = 100);
     const q = query(
         collection(db, "flights"),
         where("ownerId", "==", userId),
-        orderBy("departureDate", "desc")
+        orderBy("departureDate", "desc"),
+        limit(limitiation)
     );
     await getDocs(q).then((data) => {
         data.docs.forEach((doc) => flights.push({ ...doc.data(), id: doc.id }));

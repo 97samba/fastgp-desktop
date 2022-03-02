@@ -35,18 +35,32 @@ import Contacts from "../CreationComponents/Contacts";
 import Valises from "../CreationComponents/Valises";
 import Prices from "../CreationComponents/Prices";
 import { useHistory } from "react-router";
-import { getUserFlights, userDetails } from "../../firebase/db";
+import { getAFlight, getUserFlights, userDetails } from "../../firebase/db";
 import moment from "moment";
 import Contribution from "../CreationComponents/Contribution";
 import QrCodeAndSummary from "../CreationComponents/QrCodeAndSummary";
 import LoadingButton from "@mui/lab/LoadingButton";
 import StartingDialog from "../CreationComponents/StartingDialog";
+import { MdEdit } from "react-icons/md";
+import EditDialog from "../CreationComponents/EditDialog";
 
 export const CreationContext = createContext();
 
 const PaymentButton = () => {
-    const { handleNewPost, state } = useContext(CreationContext);
-    return (
+    const { handleNewPost, state, pageMode } = useContext(CreationContext);
+    return pageMode === "edit" ? (
+        <LoadingButton
+            variant="contained"
+            loading={state.creating}
+            color="warning"
+            loadingPosition="end"
+            endIcon={<MdEdit />}
+            onClick={handleNewPost}
+            disabled={state.created}
+        >
+            {!state.creating ? "Modifier le vol" : "Publication..."}
+        </LoadingButton>
+    ) : (
         <LoadingButton
             variant="contained"
             loading={state.creating}
@@ -64,6 +78,11 @@ const PaymentButton = () => {
 const Creation = () => {
     const currentUser = useAuth();
     const history = useHistory();
+    const queryParams = new URLSearchParams(window.location.search);
+
+    const [pageMode, setpageMode] = useState(
+        queryParams.get("mode") || "create"
+    );
     const [departure, setdeparture] = useState({ name: "", country: "" });
     const [destination, setdestination] = useState({ name: "", country: "" });
     const [depotAddress, setdepotAddress] = useState({
@@ -146,6 +165,8 @@ const Creation = () => {
         created: false,
         createdItemId: "",
     });
+    const [editDialogLoading, seteditDialogLoading] = useState(true);
+
     const [errors, seterrors] = useState({
         addError: false,
         addErrorlabel: "Erreur inconnue",
@@ -179,10 +200,6 @@ const Creation = () => {
         } else {
             setfinishDialogOpen(false);
         }
-    }
-
-    function displayAddError() {
-        seterrors({ ...errors, addError: true });
     }
 
     function handleAllErrors() {
@@ -234,7 +251,9 @@ const Creation = () => {
                 facebookLink,
                 suitcases,
                 paymentMethod,
-                state
+                state,
+                pageMode,
+                queryParams.get("id")
             );
             if (result !== "") {
                 showFinishDialog(true);
@@ -262,8 +281,9 @@ const Creation = () => {
         setsuitcases(model.suitcases);
         setcontacts(model.contacts);
         setfacebookLink(model.facebookLink);
-
+        uploadPrices(model.prices.pricePerKG, model.prices.pricePerSuitcase);
         setstate({ ...state, dialogLoading: false, openDialog: false });
+        seteditDialogLoading(false);
     }
 
     const Summary = () => {
@@ -412,13 +432,42 @@ const Creation = () => {
         );
     };
 
+    function testFlightOwner(publication) {
+        if (publication?.ownerId !== currentUser?.uid) {
+            console.log(
+                "redirecting to home bad owner ",
+                publication?.ownerId,
+                currentUser?.uid
+            );
+            history.push("/");
+        }
+    }
+
+    function uploadPrices(pricekg, pricesuitcase) {
+        let newPrices = [
+            {
+                type: "pricePerKG",
+                price: pricekg,
+                label: "Prix par kilo",
+                icon: <FaCoins style={{ flex: 1 }} color="A5A5A5" />,
+            },
+            {
+                type: "pricePerSuitcase",
+                price: pricesuitcase,
+                label: "Prix par valise",
+                icon: <FaMoneyBill style={{ flex: 1 }} color="A5A5A5" />,
+            },
+        ];
+        setprices(newPrices);
+    }
+
     useEffect(() => {
         async function fetchDatas() {
             if (currentUser === null) {
                 history.push("/login");
             } else {
-                if (currentUser?.uid) {
-                    var flights = await getUserFlights(currentUser.uid);
+                if (currentUser?.uid && queryParams.get("mode") !== "edit") {
+                    var flights = await getUserFlights(currentUser.uid, 10);
                     var user = await userDetails(currentUser.uid);
                     setstate({
                         ...state,
@@ -440,6 +489,81 @@ const Creation = () => {
         }
         fetchDatas();
     }, [currentUser]);
+
+    useEffect(() => {
+        async function fetchDatas() {
+            if (currentUser === null) {
+                history.push("/login");
+            } else {
+                if (currentUser?.uid) {
+                    if (
+                        history.location?.state?.edit === true ||
+                        queryParams.get("mode") === "edit"
+                    ) {
+                        changeToEditMode();
+                        console.log("Mode", queryParams.get("mode"));
+                        let model;
+                        if (history.location.state?.publication) {
+                            model = history.location.state.publication;
+                        } else {
+                            queryParams.get("id")
+                                ? (model = await getAFlight(
+                                      queryParams.get("id")
+                                  ))
+                                : history.push("/");
+                        }
+                        testFlightOwner(model);
+
+                        setdeparture(model.departure);
+                        setdestination(model.destination);
+                        setdepotAddress(model.depotAddress);
+                        setRetraitAddress(model.retraitAddress);
+                        setsuitcases(model.suitcases);
+                        setcontacts(model.contacts);
+                        setfacebookLink(model.facebookLink);
+                        setdepartureDate(new Date(model.departureDate));
+                        setdistributionDate(new Date(model.distributionDate));
+                        uploadPrices(
+                            model.prices.pricePerKG,
+                            model.prices.pricePerSuitcase
+                        );
+                        var user = await userDetails(currentUser.uid);
+
+                        setstate({
+                            ...state,
+                            contribution: model.contribution,
+                            contributionPaymentMethod:
+                                model.contributionPaymentMethod,
+                            currency: model.currency,
+                            user: user,
+                            openDialog: false,
+                        });
+                        var whatshappNumber =
+                            user.whatsapp2 === "oui" ? user.phone2 : user.phone;
+                        setpublisher({
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            phone: user.phone,
+                            whatsapp: whatshappNumber,
+                            photoURL: user?.photoUrl,
+                        });
+                        seteditDialogLoading(false);
+                        console.log("prices ", model.prices);
+                    } else {
+                        // history.push("/");
+                    }
+                } else {
+                    console.log("user null");
+                }
+            }
+        }
+        fetchDatas();
+    }, [currentUser?.uid]);
+
+    function changeToEditMode() {
+        console.log("history  :>> ", history.location.state);
+        setpageMode("edit");
+    }
 
     return (
         <CreationContext.Provider
@@ -487,6 +611,9 @@ const Creation = () => {
                 errors,
                 seterrors,
                 hideDialog,
+                pageMode,
+                editDialogLoading,
+                seteditDialogLoading,
             }}
         >
             <Container sx={{ minWidth: "90%" }}>
@@ -500,6 +627,7 @@ const Creation = () => {
                             <Valises />
                             <Prices />
                             <Contribution />
+
                             <StartingDialog />
                         </Paper>
                     </Grid>
