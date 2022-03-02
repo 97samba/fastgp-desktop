@@ -86,13 +86,13 @@ const Creation = () => {
     const [departure, setdeparture] = useState({ name: "", country: "" });
     const [destination, setdestination] = useState({ name: "", country: "" });
     const [depotAddress, setdepotAddress] = useState({
-        address: "110 rue samba",
-        postalCode: "75000",
+        address: "",
+        postalCode: "",
         city: "",
     });
     const [retraitAddress, setRetraitAddress] = useState({
-        address: "53 Barbes Rochechoir",
-        postalCode: "78900",
+        address: "",
+        postalCode: "",
         city: "",
     });
 
@@ -467,7 +467,7 @@ const Creation = () => {
                 history.push("/login");
             } else {
                 if (currentUser?.uid && queryParams.get("mode") !== "edit") {
-                    var flights = await getUserFlights(currentUser.uid, 10);
+                    var flights = await getUserFlights(currentUser.uid, 5);
                     var user = await userDetails(currentUser.uid);
                     setstate({
                         ...state,

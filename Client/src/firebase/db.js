@@ -90,7 +90,7 @@ export async function userDetails(id) {
 }
 export const getUserFlights = async (userId, limitiation) => {
     let flights = [];
-    limitiation === 10 ? (limitiation = 10) : (limitiation = 100);
+    limitiation === 5 ? (limitiation = 5) : (limitiation = 100);
     const q = query(
         collection(db, "flights"),
         where("ownerId", "==", userId),

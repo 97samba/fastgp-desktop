@@ -57,17 +57,9 @@ const StartingDialog = () => {
 
                 <DialogContent>
                     <DialogContentText>
-                        En créant un allez-retour vous économiser du temps ;)
+                        Voici vos 5 dernières publications
                     </DialogContentText>
                     <Box mt={2}>
-                        <Stack
-                            direction="row"
-                            justifyContent="space-between"
-                            my={2}
-                        >
-                            <Typography>Allez-retour ?</Typography>
-                            <Switch color="success" value={state.roundTrip} />
-                        </Stack>
                         <Divider />
                         {state.dialogPage === "start" ? (
                             <Stack direction="row" spacing={2} p={2} my={2}>
