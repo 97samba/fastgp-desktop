@@ -48,12 +48,16 @@ const Search = () => {
         !initializing && setinitializing(true);
         !loading && setloading(true);
         const results = await QueryFlights(departure, destination, date);
-        setfilteredFlight(results);
-        setflights(results);
-        // setnearFlights(results?.near);
-        //setsuperlatives(getSuperlatives(results));
-        getTheMinAndMaxPrice(results);
-        results.length < 10 ? setnoMoreFlight(true) : setnoMoreFlight(false);
+
+        setfilteredFlight(results.exact);
+        setflights(results.exact);
+        setnearFlights(results?.transit);
+        console.log("results.transit :>> ", results.transit);
+        setsuperlatives(getSuperlatives(results.exact));
+        // getTheMinAndMaxPrice(results);
+        results.exact?.length < 10
+            ? setnoMoreFlight(true)
+            : setnoMoreFlight(false);
 
         setloading(false);
         setinitializing(false);
@@ -87,7 +91,8 @@ const Search = () => {
         console.log("noMoreFlight :>> ", noMoreFlight);
     }
 
-    const getSuperlatives = (datas) => {
+    const getSuperlatives = (posts) => {
+        let datas = posts;
         let cheapest, best, fastest, nearest;
         cheapest =
             best =

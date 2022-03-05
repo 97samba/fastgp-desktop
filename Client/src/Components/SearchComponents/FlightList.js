@@ -35,6 +35,7 @@ import Carousel from "react-elastic-carousel";
 import COLORS from "../../colors";
 import SearchImage from "../../Images/search.svg";
 import { useParams } from "react-router-dom";
+import TransitList from "./TransitList";
 
 const Paginator = ({ datas }) => {
     const { noMoreFlight, showTenMoreFlights } = useContext(SearchPageContext);
@@ -280,46 +281,48 @@ const FlightList = () => {
                     </Stack>
                 ) : (
                     <>
-                        <Box minHeight={50}>
-                            <Carousel
-                                showArrows={true}
-                                pagination={false}
-                                disableArrowsOnEnd={true}
-                                breakPoints={breakPoints}
-                                renderArrow={(props) =>
-                                    props.type === "NEXT" ? (
-                                        <Stack
-                                            height="100%"
-                                            justifyContent="center"
-                                        >
-                                            {" "}
-                                            <FaAngleRight
-                                                {...props}
-                                                color={COLORS.primary}
-                                            />
-                                        </Stack>
-                                    ) : (
-                                        <Stack
-                                            height="100%"
-                                            justifyContent="center"
-                                        >
-                                            <FaAngleLeft
-                                                {...props}
-                                                color={COLORS.primary}
-                                            />
-                                        </Stack>
-                                    )
-                                }
-                            >
-                                {bests.map((best, index) => (
-                                    <BestPrice
-                                        data={best.flight}
-                                        label={best.label}
-                                        key={index}
-                                    />
-                                ))}
-                            </Carousel>
-                        </Box>
+                        {superlatives.length > 0 && (
+                            <Box minHeight={50}>
+                                <Carousel
+                                    showArrows={true}
+                                    pagination={false}
+                                    disableArrowsOnEnd={true}
+                                    breakPoints={breakPoints}
+                                    renderArrow={(props) =>
+                                        props.type === "NEXT" ? (
+                                            <Stack
+                                                height="100%"
+                                                justifyContent="center"
+                                            >
+                                                {" "}
+                                                <FaAngleRight
+                                                    {...props}
+                                                    color={COLORS.primary}
+                                                />
+                                            </Stack>
+                                        ) : (
+                                            <Stack
+                                                height="100%"
+                                                justifyContent="center"
+                                            >
+                                                <FaAngleLeft
+                                                    {...props}
+                                                    color={COLORS.primary}
+                                                />
+                                            </Stack>
+                                        )
+                                    }
+                                >
+                                    {bests.map((best, index) => (
+                                        <BestPrice
+                                            data={best.flight}
+                                            label={best.label}
+                                            key={index}
+                                        />
+                                    ))}
+                                </Carousel>
+                            </Box>
+                        )}
                         {/* </Grid> */}
                         {bestItemViewerOpened && !loading ? (
                             <BestItemViewer />
@@ -343,14 +346,9 @@ const FlightList = () => {
                                                 {index + 1 == 10 &&
                                                     filteredFlight.length % 10 >
                                                         0 && (
-                                                        <Divider sx={{ mb: 2 }}>
-                                                            <Typography
-                                                                variant="body2"
-                                                                color="GrayText"
-                                                            >
-                                                                Résultat(s)
-                                                            </Typography>
-                                                        </Divider>
+                                                        <Divider
+                                                            sx={{ mb: 3 }}
+                                                        ></Divider>
                                                     )}
                                             </Box>
                                         ))}
@@ -360,7 +358,7 @@ const FlightList = () => {
                                     <Paper variant="outlined" sx={{ my: 2 }}>
                                         <Stack
                                             direction="row"
-                                            p={5}
+                                            p={3}
                                             justifyContent="center"
                                             spacing={2}
                                             sx={{ background: "white" }}
@@ -380,25 +378,6 @@ const FlightList = () => {
                                 )}
                             </Box>
                         )}
-                        <Stack
-                            my={3}
-                            border={0.5}
-                            borderColor="lightgray"
-                            py={0.5}
-                            justifyContent="center"
-                            alignItems="center"
-                            spacing={1}
-                            borderRadius={1}
-                            direction="row"
-                        >
-                            <Typography fontSize={14} color="GrayText">
-                                Plus de résultats proches
-                            </Typography>
-                            <FaArrowDown size={12} color="gray" />
-                        </Stack>
-                        {nearFlights.map((data, index) => (
-                            <Flight data={data} key={index} />
-                        ))}
                     </>
                 )}
             </Box>
@@ -424,6 +403,8 @@ const FlightList = () => {
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={7}>
                 <Middle />
+                {/* {nearFlights.length > 0 && <TransitList />} */}
+                <TransitList />
             </Grid>
             <Grid
                 item

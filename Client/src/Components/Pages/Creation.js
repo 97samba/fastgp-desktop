@@ -1,11 +1,4 @@
-import {
-    Typography,
-    Grid,
-    Container,
-    Paper,
-    Stack,
-    Button,
-} from "@mui/material";
+import { Typography, Grid, Container, Paper, Stack } from "@mui/material";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
     FaCalendarAlt,
@@ -42,7 +35,6 @@ import QrCodeAndSummary from "../CreationComponents/QrCodeAndSummary";
 import LoadingButton from "@mui/lab/LoadingButton";
 import StartingDialog from "../CreationComponents/StartingDialog";
 import { MdEdit } from "react-icons/md";
-import EditDialog from "../CreationComponents/EditDialog";
 
 export const CreationContext = createContext();
 
@@ -482,7 +474,7 @@ const Creation = () => {
                         lastName: user.lastName,
                         phone: user.phone,
                         whatsapp: whatshappNumber,
-                        photoURL: user?.photoUrl,
+                        photoURL: currentUser?.photoURL,
                     });
                 }
             }
@@ -545,7 +537,7 @@ const Creation = () => {
                             lastName: user.lastName,
                             phone: user.phone,
                             whatsapp: whatshappNumber,
-                            photoURL: user?.photoUrl,
+                            photoURL: currentUser?.photoURL,
                         });
                         seteditDialogLoading(false);
                         console.log("prices ", model.prices);

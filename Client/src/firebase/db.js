@@ -149,9 +149,15 @@ export async function QueryFlights(departure, destination, date) {
         destination.name,
         date
     );
+    var transitFlights = [];
+
+    if (exactResults.length === 0) {
+        console.log("fetching transit");
+        transitFlights = await SearchForTransit(departure, destination, date);
+    }
 
     // console.log(`exactResults`, exactResults.length);
-    return exactResults;
+    return { exact: exactResults, transit: transitFlights };
 }
 const getExactResults = async (
     departureCity,
@@ -200,6 +206,89 @@ const getNearResults = async (
         .catch((error) => console.log(`error`, error));
 
     return nearResults;
+};
+/**
+ * Transit
+ */
+
+const SearchForTransit = async (departure, destination, date) => {
+    let results1 = [];
+    let results2 = [];
+    let transitFlights = [];
+
+    const query1 = query(
+        collection(db, "flights"),
+        where("departure.name", "==", departure.name),
+        where("destination.name", "==", "Dakar"),
+        where("departureDate", ">=", date),
+        orderBy("departureDate", "asc"),
+        limit(20)
+    );
+    // where("destination.name", "in", ["Dakar", "Paris"]),
+    await getDocs(query1).then((datas) =>
+        datas.docs.forEach((doc) =>
+            results1.push({ ...doc.data(), id: doc.id })
+        )
+    );
+
+    console.log(
+        "resultats ",
+        departure.name,
+        " :>> ",
+        "Dakar",
+        results1.length
+    );
+
+    if (results1.length === 0) {
+        return transitFlights;
+    }
+
+    //la plus date minimum
+    let minimalDate = results1[0]?.departureDate;
+
+    console.log("minimalDate :>> ", minimalDate);
+
+    const query2 = query(
+        collection(db, "flights"),
+        where("departure.name", "==", "Dakar"),
+        where("destination.name", "==", destination.name),
+        where("distributionDate", ">=", minimalDate),
+        orderBy("distributionDate", "asc"),
+        limit(20)
+    );
+
+    await getDocs(query2).then((datas) =>
+        datas.docs.forEach((doc) =>
+            results2.push({ ...doc.data(), id: doc.id })
+        )
+    );
+
+    console.log(
+        "resultats 2:>> ",
+        "Dakar",
+        " :>> ",
+        destination.name,
+        results2.length
+    );
+
+    //Comparaison des dates
+    results2.forEach((result2) => {
+        results1.forEach((result1) => {
+            let delay = Math.abs(
+                moment(result2.departureDate).diff(
+                    moment(result1.departureDate),
+                    "days"
+                )
+            );
+            if (delay <= 10 && delay > 0) {
+                console.log("One transit found");
+
+                transitFlights.push({ first: result1, second: result2 });
+            }
+        });
+    });
+
+    return transitFlights;
 };
 
 /*

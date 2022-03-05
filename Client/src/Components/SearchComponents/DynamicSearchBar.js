@@ -284,7 +284,7 @@ const DynamicSearchBar = ({ size = "small" }) => {
     }
     function getCity(cityName, country) {
         var result = data
-            .filter((value) => value.name === country)[0]
+            .filter((value) => value.translations.fr === country)[0]
             .states.filter((city) => city.name === cityName)[0];
         return { ...result, country };
     }

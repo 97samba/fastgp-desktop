@@ -198,6 +198,7 @@ export function useAuth() {
  */
 export async function setPhotoUrl(url) {
     var user = auth.currentUser;
+    console.log("user :>> ", user);
     await updateProfile(user, { photoURL: url })
         .then(() => savePhotoUrl(url, user?.email))
         .catch((error) =>
