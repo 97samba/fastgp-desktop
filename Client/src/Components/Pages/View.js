@@ -115,13 +115,15 @@ const View = () => {
                     </Grid>
                     <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                         <Stack direction="column" spacing={2}>
-                            <FlightInformations state={flightState} />
+                            <FlightInformations
+                                state={flightState}
+                                context={ViewContext}
+                            />
                             <Reservation />
                             <ContactInfo
                                 state={flightState}
-                                adViewed={adViewed}
-                                setadViewed={setadViewed}
                                 loading={loading}
+                                ViewContext={ViewContext}
                             />
                         </Stack>
                     </Grid>

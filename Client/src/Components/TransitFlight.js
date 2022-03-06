@@ -35,8 +35,11 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 const TransitFlight = ({ departure, destination, size = "100%" }) => {
     const history = useHistory();
-    const viewFlight = (flight) => {
-        history.push(`/view/${flight.id}`, flight);
+    const viewTransit = () => {
+        history.push(`/viewTransit/${departure.id}/${destination.id}`, {
+            departure,
+            destination,
+        });
     };
     const calculateWeight = () => {
         let weight = 0;
@@ -334,7 +337,7 @@ const TransitFlight = ({ departure, destination, size = "100%" }) => {
                         size="small"
                         fullWidth
                         color="warning"
-                        onClick={() => viewFlight(departure)}
+                        onClick={() => viewTransit(departure)}
                     >
                         Voir
                     </Button>
@@ -411,7 +414,7 @@ const TransitFlight = ({ departure, destination, size = "100%" }) => {
                             >
                                 <Link
                                     underline="none"
-                                    href={`/profilDetails/${departure.ownerId}/myProfile`}
+                                    href={`/profilDetails/${destination.ownerId}/myProfile`}
                                 >
                                     <Typography fontSize={11}>
                                         {destination.publisher.firstName[0].toUpperCase()}
@@ -438,7 +441,7 @@ const TransitFlight = ({ departure, destination, size = "100%" }) => {
                                 <Typography fontSize={12}>et</Typography>
                                 <Link
                                     underline="none"
-                                    href={`/profilDetails/${departure.ownerId}/myProfile`}
+                                    href={`/profilDetails/${destination.ownerId}/myProfile`}
                                 >
                                     <Typography fontSize={12}>
                                         {destination.publisher.firstName}
@@ -498,7 +501,7 @@ const TransitFlight = ({ departure, destination, size = "100%" }) => {
                 >
                     <MenuItem
                         disableGutters
-                        onClick={() => viewFlight(departure)}
+                        onClick={() => viewTransit(departure)}
                         sx={{ py: 2 }}
                     >
                         <Grid px={2} container flex={1} alignItems="center">

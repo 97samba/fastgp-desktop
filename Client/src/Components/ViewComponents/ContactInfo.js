@@ -13,10 +13,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { BsTelephone } from "react-icons/bs";
 import { FaFacebook, FaUserCircle, FaWhatsapp } from "react-icons/fa";
 import { AuthContext } from "../../Providers/AuthProvider";
-import { ViewContext } from "../Pages/View";
 import Advertiser from "./Advertiser";
 
-const ContactInfo = ({ state }) => {
+const ContactInfo = ({ state, ViewContext, label }) => {
     const [open, setopen] = useState(false);
     const { currentUser, loading, adViewed, setadViewed } =
         useContext(ViewContext);
@@ -76,7 +75,7 @@ const ContactInfo = ({ state }) => {
             ) : (
                 <>
                     <Typography variant="h5" color="GrayText">
-                        Contact
+                        Contact {label}
                     </Typography>
 
                     <Divider sx={{ my: 2 }} />
@@ -209,7 +208,11 @@ const ContactInfo = ({ state }) => {
                             </Grid>
                         )}
                     </Grid>
-                    <Advertiser open={open} handleClose={handleClose} />
+                    <Advertiser
+                        open={open}
+                        handleClose={handleClose}
+                        context={ViewContext}
+                    />
                 </>
             )}
         </Paper>
