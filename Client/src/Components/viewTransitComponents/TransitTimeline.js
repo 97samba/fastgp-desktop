@@ -73,7 +73,7 @@ const TransitTimeline = ({ context }) => {
             elevation={0}
             sx={{
                 py: 2,
-                px: { xs: 2, sm: 2, md: 3 },
+                px: { xs: 1, sm: 2, md: 3 },
                 mb: 1,
                 boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
             }}
@@ -83,19 +83,24 @@ const TransitTimeline = ({ context }) => {
                     <TimeLineSkeleton />
                 ) : (
                     <Box>
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="h5" color={COLORS.black}>
+                        <Stack
+                            direction="row"
+                            alignItems="center"
+                            spacing={2}
+                            mx={2}
+                        >
+                            <Typography variant="h5" color={COLORS.primary}>
                                 {departure.departure.name}
                             </Typography>
                             <BiDirections color={COLORS.black} size={20} />
-                            <Typography variant="h5" color={COLORS.black}>
+                            <Typography variant="h5" color={COLORS.primary}>
                                 {destination.destination.name}
                             </Typography>
                         </Stack>
-                        <Stack my={2}>
+                        <Stack m={2}>
                             <Typography variant="body2" color={COLORS.black}>
                                 Type de bagage : <b>1 colis pesé</b> | Veuillez
-                                avertir les deux GP de votre transit.
+                                avertir les deux GP de votre transit .
                             </Typography>
                         </Stack>
 
@@ -107,9 +112,9 @@ const TransitTimeline = ({ context }) => {
                             <TimelineItem>
                                 <TimelineOppositeContent
                                     sx={{
-                                        maxWidth: 80,
+                                        maxWidth: { xs: 50, md: 80 },
                                         paddingLeft: 0,
-                                        paddingRight: 2,
+                                        paddingRight: { xs: 1, md: 2 },
                                     }}
                                     color="text.secondary"
                                 >
@@ -117,6 +122,7 @@ const TransitTimeline = ({ context }) => {
                                         direction="row"
                                         alignItems="center"
                                         spacing={0.5}
+                                        display={{ xs: "none", md: "block" }}
                                     >
                                         <FaPlaneDeparture
                                             color={COLORS.warning}
@@ -129,6 +135,19 @@ const TransitTimeline = ({ context }) => {
                                             ).format("DD MMMM")}
                                         </Typography>
                                     </Stack>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{
+                                            display: {
+                                                xs: "block",
+                                                md: "none",
+                                            },
+                                        }}
+                                    >
+                                        {moment(departure.departureDate).format(
+                                            "DD MMMM"
+                                        )}
+                                    </Typography>
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineDot />
@@ -148,9 +167,9 @@ const TransitTimeline = ({ context }) => {
                             <TimelineItem>
                                 <TimelineOppositeContent
                                     sx={{
-                                        maxWidth: 80,
+                                        maxWidth: { xs: 50, md: 80 },
                                         paddingLeft: 0,
-                                        paddingRight: 2,
+                                        paddingRight: { xs: 1, md: 2 },
                                     }}
                                     color="text.secondary"
                                 >
@@ -158,6 +177,7 @@ const TransitTimeline = ({ context }) => {
                                         direction="row"
                                         alignItems="center"
                                         spacing={0.5}
+                                        display={{ xs: "none", md: "block" }}
                                     >
                                         <FaPlaneArrival
                                             color={COLORS.warning}
@@ -170,6 +190,20 @@ const TransitTimeline = ({ context }) => {
                                             ).format("DD, MMMM")}
                                         </Typography>
                                     </Stack>
+                                    <Typography
+                                        color="GrayText"
+                                        variant="body2"
+                                        sx={{
+                                            display: {
+                                                xs: "block",
+                                                md: "none",
+                                            },
+                                        }}
+                                    >
+                                        {moment(
+                                            departure.distributionDate
+                                        ).format("DD MMMM")}
+                                    </Typography>
                                 </TimelineOppositeContent>
 
                                 <TimelineSeparator>
@@ -226,9 +260,9 @@ const TransitTimeline = ({ context }) => {
                             <TimelineItem>
                                 <TimelineOppositeContent
                                     sx={{
-                                        maxWidth: 80,
+                                        maxWidth: { xs: 50, md: 80 },
                                         paddingLeft: 0,
-                                        paddingRight: 2,
+                                        paddingRight: { xs: 1, md: 2 },
                                     }}
                                     color="text.secondary"
                                 >
@@ -236,6 +270,7 @@ const TransitTimeline = ({ context }) => {
                                         direction="row"
                                         alignItems="center"
                                         spacing={0.5}
+                                        display={{ xs: "none", md: "block" }}
                                     >
                                         <FaPlaneDeparture
                                             color={COLORS.warning}
@@ -248,6 +283,20 @@ const TransitTimeline = ({ context }) => {
                                             ).format("DD, MMMM")}
                                         </Typography>
                                     </Stack>
+                                    <Typography
+                                        color="GrayText"
+                                        variant="body2"
+                                        sx={{
+                                            display: {
+                                                xs: "block",
+                                                md: "none",
+                                            },
+                                        }}
+                                    >
+                                        {moment(
+                                            destination.departureDate
+                                        ).format("DD MMMM")}
+                                    </Typography>
                                 </TimelineOppositeContent>
 
                                 <TimelineSeparator>
@@ -268,9 +317,9 @@ const TransitTimeline = ({ context }) => {
                             <TimelineItem>
                                 <TimelineOppositeContent
                                     sx={{
-                                        maxWidth: 80,
+                                        maxWidth: { xs: 50, md: 80 },
                                         paddingLeft: 0,
-                                        paddingRight: 2,
+                                        paddingRight: { xs: 1, md: 2 },
                                     }}
                                     color="text.secondary"
                                 >
@@ -278,6 +327,7 @@ const TransitTimeline = ({ context }) => {
                                         direction="row"
                                         alignItems="center"
                                         spacing={0.5}
+                                        display={{ xs: "none", md: "block" }}
                                     >
                                         <FaPlaneArrival
                                             color={COLORS.warning}
@@ -290,6 +340,20 @@ const TransitTimeline = ({ context }) => {
                                             ).format("DD, MMMM")}
                                         </Typography>
                                     </Stack>
+                                    <Typography
+                                        color="GrayText"
+                                        variant="body2"
+                                        sx={{
+                                            display: {
+                                                xs: "block",
+                                                md: "none",
+                                            },
+                                        }}
+                                    >
+                                        {moment(
+                                            destination.distributionDate
+                                        ).format("DD MMMM")}
+                                    </Typography>
                                 </TimelineOppositeContent>
 
                                 <TimelineSeparator>

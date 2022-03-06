@@ -11,6 +11,7 @@ import {
     AvatarGroup,
     Avatar,
     Link,
+    CircularProgress,
 } from "@mui/material";
 import React, { createContext, useEffect, useState, useContext } from "react";
 
@@ -233,6 +234,7 @@ const TransitProfileDescriptor = ({ state }) => {
 
 const ViewTransit = () => {
     const history = useHistory();
+    const { departureId, destinationId } = useParams();
     const [loading, setloading] = useState(true);
     const [adViewed, setadViewed] = useState(false);
     const [departure, setdeparture] = useState(
@@ -242,6 +244,13 @@ const ViewTransit = () => {
         history.location.state?.destination
     );
     useEffect(() => {
+        async function fetchDatas() {
+            var dep = await getAFlight(departureId);
+            var dest = await getAFlight(destinationId);
+            setdeparture(dep);
+            setdestination(dest);
+            setloading(false);
+        }
         if (
             history.location.state?.departure &&
             history.location.state?.destination
@@ -249,8 +258,8 @@ const ViewTransit = () => {
             setloading(false);
             setdeparture(history.location.state.departure);
             setdestination(history.location.state.destination);
-
-            console.log("history.location.state :>> ", history.location.state);
+        } else {
+            fetchDatas();
         }
     }, []);
     return (
@@ -284,33 +293,39 @@ const ViewTransit = () => {
                         <TransitProfileDescriptor state={departure} />
                     </Grid>
                     <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-                        <Stack direction="column" spacing={2}>
-                            <TransitTimeline context={ViewTransitContext} />
-                            <FlightInformations
-                                state={departure}
-                                label={`Premier vol - transporté par ${departure?.publisher.firstName} ${departure.publisher.lastName}`}
-                                context={ViewTransitContext}
-                            />
-                            <ContactInfo
-                                state={departure}
-                                loading={loading}
-                                ViewContext={ViewTransitContext}
-                                label={`: GP ${departure?.departure.name} - ${departure.destination.name}`}
-                            />
-                            <FlightInformations
-                                state={destination}
-                                label={`Second vol - transporté par ${destination.publisher.firstName} ${destination.publisher.lastName}`}
-                                context={ViewTransitContext}
-                            />
-                            {/* <Reservation /> */}
+                        {!loading ? (
+                            <Stack direction="column" spacing={2}>
+                                <TransitTimeline context={ViewTransitContext} />
+                                <FlightInformations
+                                    state={departure}
+                                    label={`Premier vol - transporté par ${departure?.publisher.firstName} ${departure.publisher.lastName}`}
+                                    context={ViewTransitContext}
+                                />
+                                <ContactInfo
+                                    state={departure}
+                                    loading={loading}
+                                    ViewContext={ViewTransitContext}
+                                    label={`: GP ${departure?.departure.name} - ${departure.destination.name}`}
+                                />
+                                <FlightInformations
+                                    state={destination}
+                                    label={`Second vol - transporté par ${destination.publisher.firstName} ${destination.publisher.lastName}`}
+                                    context={ViewTransitContext}
+                                />
+                                {/* <Reservation /> */}
 
-                            <ContactInfo
-                                state={destination}
-                                loading={loading}
-                                ViewContext={ViewTransitContext}
-                                label={`: GP ${destination.departure.name} - ${destination.destination.name}`}
-                            />
-                        </Stack>
+                                <ContactInfo
+                                    state={destination}
+                                    loading={loading}
+                                    ViewContext={ViewTransitContext}
+                                    label={`: GP ${destination.departure.name} - ${destination.destination.name}`}
+                                />
+                            </Stack>
+                        ) : (
+                            <Box>
+                                <CircularProgress />
+                            </Box>
+                        )}
                     </Grid>
                     <Grid
                         item
