@@ -3,6 +3,10 @@ import {
     AccordionDetails,
     AccordionSummary,
     Button,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     Grid,
     Paper,
     Skeleton,
@@ -18,10 +22,11 @@ import { MdCancel, MdExpandMore } from "react-icons/md";
 
 import COLORS from "../../colors";
 import { ProfileDetailsContext } from "../Pages/ProfileDetails";
-import { getUserFlights } from "../../firebase/db";
+import { deleteOneFlight, getUserFlights } from "../../firebase/db";
 import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import Flight from "../Flight";
+import { useAuth } from "../../firebase/auth";
 
 const Header = () => {
     return (
@@ -78,7 +83,7 @@ const Header = () => {
     );
 };
 
-const Publication = ({ data, editPublication }) => {
+const Publication = ({ data, editPublication, ShowDeleteDialog }) => {
     const calculateWeight = () => {
         let weight = 0;
         data.suitcases.map((suitecase) => (weight += suitecase.weight));
@@ -151,6 +156,7 @@ const Publication = ({ data, editPublication }) => {
                                 .subtract(2, "days")
                                 .isSameOrBefore(moment())}
                             endIcon={<MdCancel />}
+                            onClick={() => ShowDeleteDialog(data.id)}
                         >
                             Annuler vol
                         </Button>
@@ -202,13 +208,54 @@ const PublicationSkeleton = () => {
         </Paper>
     );
 };
+const DeleteFlightDialog = ({
+    deleteDialog,
+    setdeleteDialog,
+    deleteFlight,
+}) => {
+    return (
+        <Dialog open={deleteDialog} onClose={() => setdeleteDialog(false)}>
+            <DialogTitle>Confirmer la suppression de l'annonce</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    La suppression de l'annonce entraine la clôture de toutes
+                    les reservations liées.
+                </DialogContentText>
+                <Stack
+                    direction="row"
+                    spacing={3}
+                    justifyContent="center"
+                    py={2}
+                >
+                    <Button
+                        variant="outlined"
+                        color="warning"
+                        onClick={() => setdeleteDialog(false)}
+                    >
+                        Non
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={deleteFlight}
+                    >
+                        Oui
+                    </Button>
+                </Stack>
+            </DialogContent>
+        </Dialog>
+    );
+};
 
 const MyAnnouces = () => {
     const history = useHistory();
+    const currentUser = useAuth();
     const { profilState } = useContext(ProfileDetailsContext);
     const { id, subpage, subID } = useParams();
 
     const [publications, setpublications] = useState([]);
+    const [deleteDialog, setdeleteDialog] = useState(false);
+    const [itemToBeDeleted, setItemToBeDeleted] = useState("");
 
     const [editing, setediting] = useState(false);
 
@@ -226,6 +273,16 @@ const MyAnnouces = () => {
             edit: true,
             publication,
         });
+    }
+    function ShowDeleteDialog(id) {
+        setItemToBeDeleted(id);
+        setdeleteDialog(true);
+    }
+    async function deleteAFlight() {
+        console.log("deleting a flight", itemToBeDeleted);
+        const res = await deleteOneFlight(itemToBeDeleted, currentUser?.email);
+        setdeleteDialog(false);
+        setItemToBeDeleted("");
     }
 
     function handleSave(data) {}
@@ -279,6 +336,7 @@ const MyAnnouces = () => {
                                         data={publication}
                                         key={index}
                                         editPublication={editPublication}
+                                        ShowDeleteDialog={ShowDeleteDialog}
                                     />
                                 ))}
                             </Stack>
@@ -302,6 +360,11 @@ const MyAnnouces = () => {
                     </>
                 )}
             </Box>
+            <DeleteFlightDialog
+                deleteDialog={deleteDialog}
+                setdeleteDialog={setdeleteDialog}
+                deleteFlight={deleteAFlight}
+            />
         </Box>
     );
 };

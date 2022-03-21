@@ -288,7 +288,9 @@ const FlightInformations = ({ state, context, label }) => {
                                                 variant="h6"
                                                 color={COLORS.warning}
                                             >
-                                                {state.prices.pricePerKG} $
+                                                {state.prices.pricePerKG +
+                                                    " " +
+                                                    state.currency}
                                             </Typography>
                                             <Typography variant="body2">
                                                 /Kg
@@ -305,8 +307,9 @@ const FlightInformations = ({ state, context, label }) => {
                                                 variant="h6"
                                                 color={COLORS.warning}
                                             >
-                                                {state.prices.pricePerSuitcase}{" "}
-                                                $
+                                                {state.prices.pricePerSuitcase +
+                                                    " " +
+                                                    state.currency}
                                             </Typography>
                                             <Typography variant="body2">
                                                 {" "}

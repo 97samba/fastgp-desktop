@@ -16,7 +16,6 @@ import {
 import React, { createContext, useEffect, useState, useContext } from "react";
 
 import { useHistory, useParams } from "react-router";
-import Reservation from "../ViewComponents/Reservation";
 import ContactInfo from "../ViewComponents/ContactInfo";
 import FlightInformations from "../ViewComponents/FlightInformations";
 import { getAFlight } from "../../firebase/db";
@@ -32,6 +31,7 @@ import {
     FaCheckCircle,
 } from "react-icons/fa";
 import TransitTimeline from "../viewTransitComponents/TransitTimeline";
+import Reservation from "../viewTransitComponents/Reservation";
 
 const ViewTransitContext = createContext();
 
@@ -320,11 +320,18 @@ const ViewTransit = () => {
                                     ViewContext={ViewTransitContext}
                                     label={`: GP ${destination.departure.name} - ${destination.destination.name}`}
                                 />
+                                <Reservation />
                             </Stack>
                         ) : (
-                            <Box>
+                            <Stack
+                                direction="row"
+                                flex={1}
+                                justifyContent="center"
+                                alignItems="center"
+                                textAlign="center"
+                            >
                                 <CircularProgress />
-                            </Box>
+                            </Stack>
                         )}
                     </Grid>
                     <Grid

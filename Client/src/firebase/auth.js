@@ -11,6 +11,9 @@ import {
     confirmPasswordReset,
     verifyPasswordResetCode,
     applyActionCode,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signInWithRedirect,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
@@ -229,4 +232,22 @@ export async function verifyEmail(oobCode) {
             console.log("email verified")
         );
     });
+}
+
+/**
+ * Authentification par les reseaux
+ */
+
+export async function AuthenticateWithGoogle(email, password) {
+    console.log("email :>> ", email);
+    const provider = new GoogleAuthProvider();
+    // await signInWithPopup(auth, provider)
+    //     .then((result) => {
+    //         const credentials = GoogleAuthProvider.credentialFromResult(result);
+    //         const token = credentials.accessToken;
+    //         const user = result.user;
+    //         console.log("token :>> ", token, "user : ", user);
+    //     })
+    //     .catch((error) => console.log("error :>> ", error));
+    await signInWithRedirect(auth, provider);
 }

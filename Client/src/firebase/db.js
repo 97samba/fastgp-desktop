@@ -14,6 +14,7 @@ import {
     arrayUnion,
     arrayRemove,
     startAfter,
+    setDoc,
 } from "firebase/firestore";
 import moment from "moment";
 import { app } from "./config";
@@ -55,6 +56,20 @@ export const updateAFlight = async (flight, id) => {
     return error;
 };
 
+export const deleteOneFlight = async (id, email) => {
+    const flightRef = await doc(db, "/flights/" + id);
+    let error = false;
+    await updateDoc(flightRef, { deleted: true })
+        .catch((err) => (error = true))
+        .then(async () => {
+            console.log("ownerId :>> ", email);
+            const userRef = await doc(db, "/users/" + email);
+            await updateDoc(userRef, { flights: arrayRemove(id) }).catch(
+                (err) => (error = true) && console.log(err)
+            );
+        });
+    return error;
+};
 export async function FollowGP(email, followerId) {
     const ref = doc(db, "users", email);
     var followed = false;
@@ -93,6 +108,7 @@ export const getUserFlights = async (userId, limitiation) => {
     limitiation === 5 ? (limitiation = 5) : (limitiation = 100);
     const q = query(
         collection(db, "flights"),
+        // where("deleted", "not-in", [true]),
         where("ownerId", "==", userId),
         orderBy("departureDate", "desc"),
         limit(limitiation)
@@ -376,10 +392,16 @@ export const postUserReservation = async (
         reservationDate: new Date().toJSON(),
         shipping: flight.destination.name === "Dakar" ? true : false,
     };
+    console.log("after docref ", reservation, "state ", reservationInfo);
+
     var next = false;
     await addDoc(docRef, reservation)
         .then(() => (next = true))
+        .then(() => console.log("reservation done"))
         .catch(() => console.log("Erreur lors de la reservation"));
+
+    console.log("after addDoc");
+
     return next;
 };
 
@@ -398,7 +420,12 @@ export const changeReservationStatus = async (id, status, email) => {
  * flights
  */
 export const getFeaturedFlight = async () => {
-    const q = query(collection(db, "flights"), orderBy("createdAt"), limit(5));
+    const q = query(
+        collection(db, "flights"),
+        where("departureDate", ">=", new Date().toJSON()),
+        orderBy("departureDate", "asc"),
+        limit(5)
+    );
     var results = [];
     await getDocs(q).then((datas) =>
         datas.forEach((data) => results.push(data.data()))

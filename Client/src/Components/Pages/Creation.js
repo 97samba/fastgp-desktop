@@ -454,6 +454,7 @@ const Creation = () => {
     }
 
     useEffect(() => {
+        console.log("currentUser :>> ", currentUser);
         async function fetchDatas() {
             if (currentUser === null) {
                 history.push("/login");

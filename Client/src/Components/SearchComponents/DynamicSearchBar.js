@@ -2,10 +2,13 @@ import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import {
     Autocomplete,
     Button,
+    Chip,
     Container,
     Divider,
     Grid,
     IconButton,
+    Menu,
+    MenuItem,
     Paper,
     Stack,
     TextField,
@@ -22,6 +25,7 @@ import { MdSearch } from "react-icons/md";
 import { GoDash } from "react-icons/go";
 import moment from "moment";
 import { IoSwapVerticalOutline } from "react-icons/io5";
+import { FaAngleDown } from "react-icons/fa";
 
 export const SearchContext = createContext();
 
@@ -145,6 +149,81 @@ const Destination = ({ size }) => {
         />
     );
 };
+const MobileFilter = () => {
+    const { orderBy, setorderBy } = useContext(SearchPageContext);
+    const [triAnchor, settriAnchor] = useState(null);
+    const openTri = Boolean(triAnchor);
+
+    function changeTri(newTri) {
+        setorderBy(newTri);
+        settriAnchor(null);
+    }
+
+    return (
+        <Box>
+            <Stack
+                flex={1}
+                direction="row"
+                justifyContent="space-between"
+                p={0.5}
+                bgcolor={COLORS.background}
+            >
+                <MenuItem
+                    sx={{
+                        borderRadius: 2,
+                        p: 0,
+                        border: "1px solid lightGray",
+                        px: 1,
+                    }}
+                    disableGutters
+                    disableTouchRipple
+                >
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                        <Typography variant="body2">Filtres</Typography>
+                    </Stack>
+                </MenuItem>
+                <MenuItem
+                    sx={{
+                        borderRadius: 2,
+                        p: 0,
+                        border: "1px solid lightGray",
+                        px: 1,
+                    }}
+                    disableGutters
+                    disableTouchRipple
+                    onClick={(e) => settriAnchor(e.currentTarget)}
+                >
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                        <Typography variant="body2">Tri : {orderBy}</Typography>
+                        <FaAngleDown />
+                    </Stack>
+                </MenuItem>
+            </Stack>
+
+            <Menu
+                id="basic-menu"
+                open={openTri}
+                anchorEl={triAnchor}
+                onClose={() => settriAnchor(null)}
+            >
+                <MenuItem
+                    value="Date"
+                    onClick={() => changeTri("Date")}
+                    key="Date"
+                >
+                    Date
+                </MenuItem>
+                <MenuItem
+                    value="Prix"
+                    onClick={() => changeTri("Prix")}
+                    key="Price"
+                >
+                    Prix croissant
+                </MenuItem>
+            </Menu>
+        </Box>
+    );
+};
 const SearchSummaryMobile = ({
     searching,
     displaySearchingBar,
@@ -205,6 +284,7 @@ const SearchSummaryMobile = ({
                         </Typography>
                     </Box>
                 </Stack>
+                <MobileFilter />
             </Paper>
         </Box>
     );

@@ -17,8 +17,6 @@ import {
     FaCircle,
     FaCoins,
     FaCreditCard,
-    FaDotCircle,
-    FaGlobeAfrica,
     FaPlaneArrival,
     FaPlaneDeparture,
     FaSuitcase,

@@ -1,4 +1,5 @@
 import {
+    Box,
     Container,
     Divider,
     Grid,
@@ -16,6 +17,7 @@ import FlightInformations from "../ViewComponents/FlightInformations";
 import { getAFlight } from "../../firebase/db";
 import { useAuth } from "../../firebase/auth";
 import COLORS from "../../colors";
+import FlightNotFound from "../ViewComponents/FlightNotFound";
 
 const Summary = () => {
     return (
@@ -33,6 +35,7 @@ const View = () => {
     const { id } = useParams();
     const currentUser = useAuth();
     const [flightState, setflightState] = useState(history.location.state);
+    const [notFound, setnotFound] = useState(false);
     const [sender, setsender] = useState({
         firstName: "",
         lastName: "",
@@ -61,8 +64,12 @@ const View = () => {
             if (id && history.location.state === undefined) {
                 var flight = await getAFlight(id);
                 console.log("flight :>> ", flight);
-                setflightState(flight);
-                setLoading(false);
+                if (flight?.ownerId) {
+                    setflightState(flight);
+                    setLoading(false);
+                } else {
+                    setnotFound(true);
+                }
             } else {
                 setLoading(false);
             }
@@ -101,44 +108,50 @@ const View = () => {
                     backgroundColor: COLORS.background,
                 }}
             >
-                <Grid container minHeight={300} spacing={2}>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={3}
-                        lg={3}
-                        xl={3}
-                        order={{ xs: 1, sm: 1, md: 0 }}
-                    >
-                        <ProfilDescriptor state={flightState} />
+                {!notFound ? (
+                    <Grid container minHeight={300} spacing={2}>
+                        <Grid
+                            item
+                            xs={12}
+                            sm={12}
+                            md={3}
+                            lg={3}
+                            xl={3}
+                            order={{ xs: 1, sm: 1, md: 0 }}
+                        >
+                            <ProfilDescriptor state={flightState} />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                            <Stack direction="column" spacing={2}>
+                                <FlightInformations
+                                    state={flightState}
+                                    context={ViewContext}
+                                />
+                                <Reservation />
+                                <ContactInfo
+                                    state={flightState}
+                                    loading={loading}
+                                    ViewContext={ViewContext}
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid
+                            item
+                            xs={12}
+                            sm={12}
+                            md={3}
+                            lg={3}
+                            xl={3}
+                            display={{ xs: "none", sm: "none", md: "block" }}
+                        >
+                            <Summary />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-                        <Stack direction="column" spacing={2}>
-                            <FlightInformations
-                                state={flightState}
-                                context={ViewContext}
-                            />
-                            <Reservation />
-                            <ContactInfo
-                                state={flightState}
-                                loading={loading}
-                                ViewContext={ViewContext}
-                            />
-                        </Stack>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={3}
-                        lg={3}
-                        xl={3}
-                        display={{ xs: "none", sm: "none", md: "block" }}
-                    >
-                        <Summary />
-                    </Grid>
-                </Grid>
+                ) : (
+                    <Box flex={1} display="flex" justifyContent="center" py={5}>
+                        <FlightNotFound />
+                    </Box>
+                )}
             </Container>
         </ViewContext.Provider>
     );
