@@ -5,10 +5,7 @@ import {
   Avatar,
   Button,
   Grid,
-  ListItem,
-  ListItemText,
   Paper,
-  Skeleton,
   Stack,
   TextField,
   Typography,
@@ -23,7 +20,11 @@ import { MdCancel, MdCheck, MdExpandMore, MdPhone } from "react-icons/md";
 import { RiMedal2Line } from "react-icons/ri";
 import COLORS from "../../colors";
 import { ProfileDetailsContext } from "../Pages/ProfileDetails";
-import { changeReservationStatus, getGPReservations, getUserReservations } from "../../firebase/db";
+import {
+  changeReservationStatus,
+  getGPReservations,
+  getUserReservations,
+} from "../../firebase/db";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import BoardingPass from "../ViewComponents/BoardingPass";
@@ -59,19 +60,36 @@ const Header = () => {
 
 const Package = ({ data, validatePackage, rejectPackage }) => {
   const Status = ({ text }) => {
+    function getColor() {
+      if (text === "ok")
+        return { color: "#e7f9ed", text: "Validée", textColor: "green" };
+      if (text === "ko")
+        return { color: "#ffeae9", text: "Annulée", textColor: "red" };
+      if (text === "pending")
+        return { color: "#f9f6e7", text: "En attente", textColor: "orange" };
+    }
     return (
       <Typography
-        sx={{ px: 1, py: 0.5, backgroundColor: "lightgray", borderRadius: 5 }}
+        sx={{
+          px: 1,
+          py: 0.5,
+          backgroundColor: getColor().color,
+          borderRadius: 5,
+        }}
+        color={getColor().textColor}
         textAlign="center"
         variant="caption"
         noWrap
       >
-        {text}
+        {getColor().text}
       </Typography>
     );
   };
   return (
-    <Paper sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
+    <Paper
+      sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+      elevation={0}
+    >
       <Accordion elevation={0}>
         <AccordionSummary
           expandIcon={<MdExpandMore />}
@@ -80,7 +98,12 @@ const Package = ({ data, validatePackage, rejectPackage }) => {
         >
           <Grid container spacing={1} display="flex" color={COLORS.black}>
             <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-              <Typography variant="body1" fontWeight={600} color="primary" noWrap>
+              <Typography
+                variant="body1"
+                fontWeight={600}
+                color="primary"
+                noWrap
+              >
                 {data?.departure.name + " - " + data?.destination.name}
               </Typography>
             </Grid>
@@ -104,7 +127,15 @@ const Package = ({ data, validatePackage, rejectPackage }) => {
             <Stack direction="row" spacing={1} color="GrayText">
               <Typography fontWeight="bold">Client : </Typography>
               <Link href={"/profilDetails/" + data.owner + "/myProfile"}>
-                <Typography>{data.sender.firstName + " " + data.sender.lastName}</Typography>
+                <Typography>
+                  {data.sender.firstName + " " + data.sender.lastName}
+                </Typography>
+              </Link>
+            </Stack>
+            <Stack direction="row" spacing={1} color="GrayText">
+              <Typography fontWeight="bold">Vol : </Typography>
+              <Link href={"/view/" + data.flightId}>
+                <Typography>Cliquer ici</Typography>
               </Link>
             </Stack>
             <Stack direction="row" spacing={1} color="GrayText">
@@ -121,14 +152,13 @@ const Package = ({ data, validatePackage, rejectPackage }) => {
             </Stack>
             <Stack direction="row" spacing={1} color="GrayText">
               <Typography fontWeight="bold">Receveur : </Typography>
-              <Typography>{data.reciever.firstName + " " + data.reciever.lastName}</Typography>
+              <Typography>
+                {data.reciever.firstName + " " + data.reciever.lastName}
+              </Typography>
             </Stack>
           </Stack>
           {data.status === "pending" && (
             <Stack direction="row" spacing={1} mt={4} justifyContent="center">
-              <Button size="small" color="warning">
-                Proposer un prix
-              </Button>
               <Button
                 size="small"
                 color="success"
@@ -161,7 +191,9 @@ const Package = ({ data, validatePackage, rejectPackage }) => {
 };
 
 const Reservations = () => {
-  const { profilState, user, loading, currentUser } = useContext(ProfileDetailsContext);
+  const { profilState, user, loading, currentUser } = useContext(
+    ProfileDetailsContext
+  );
   const { id, subpage, subID } = useParams();
 
   const [Reservations, setReservations] = useState([]);
@@ -178,6 +210,7 @@ const Reservations = () => {
   async function validatePackage(id) {
     await changeReservationStatus(id, "ok", currentUser?.email);
   }
+  async function makeOffer(price) {}
 
   useEffect(() => {
     const subscribe = getReservations();
@@ -192,7 +225,11 @@ const Reservations = () => {
           {profilState.label}
         </Typography>
         {currentUser?.uid === id && (
-          <Button varaint="contained" color="warning" onClick={() => setediting(true)}>
+          <Button
+            varaint="contained"
+            color="warning"
+            onClick={() => setediting(true)}
+          >
             Modifier
           </Button>
         )}
@@ -220,7 +257,9 @@ const Reservations = () => {
           }}
           elevation={0}
         >
-          <Typography color="GrayText">Vous n'avez pas de réservations.</Typography>
+          <Typography color="GrayText">
+            Vous n'avez pas de réservations.
+          </Typography>
         </Paper>
       )}
     </Box>

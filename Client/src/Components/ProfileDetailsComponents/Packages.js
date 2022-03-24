@@ -22,7 +22,12 @@ import BoardingPass from "../ViewComponents/BoardingPass";
 
 const AddReservation = ({ setediting }) => {
   const { user } = useContext(ProfileDetailsContext);
-  const [state, setstate] = useState({ firstName: "", address: "", lastName: "", phone: "" });
+  const [state, setstate] = useState({
+    firstName: "",
+    address: "",
+    lastName: "",
+    phone: "",
+  });
 
   function handleSave() {
     setediting(false);
@@ -44,7 +49,10 @@ const AddReservation = ({ setediting }) => {
           Retour
         </Button>
       </Stack>
-      <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
+      <Paper
+        elevation={0}
+        sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+      >
         <Box p={2} my={1}>
           <Grid container spacing={3} pb={1}>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -52,7 +60,9 @@ const AddReservation = ({ setediting }) => {
                 fullWidth
                 label="Prénom"
                 size="small"
-                onChange={(e) => setstate({ ...state, firstName: e.target.value })}
+                onChange={(e) =>
+                  setstate({ ...state, firstName: e.target.value })
+                }
               />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -60,7 +70,9 @@ const AddReservation = ({ setediting }) => {
                 fullWidth
                 label="Nom"
                 size="small"
-                onChange={(e) => setstate({ ...state, lastName: e.target.value })}
+                onChange={(e) =>
+                  setstate({ ...state, lastName: e.target.value })
+                }
               />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -68,7 +80,9 @@ const AddReservation = ({ setediting }) => {
                 fullWidth
                 label="Adresse"
                 size="small"
-                onChange={(e) => setstate({ ...state, address: e.target.value })}
+                onChange={(e) =>
+                  setstate({ ...state, address: e.target.value })
+                }
               />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -81,7 +95,11 @@ const AddReservation = ({ setediting }) => {
               />
             </Grid>
           </Grid>
-          <Button endIcon={<IoMdSave />} variant="contained" onClick={handleSave}>
+          <Button
+            endIcon={<IoMdSave />}
+            variant="contained"
+            onClick={handleSave}
+          >
             Enregister
           </Button>
         </Box>
@@ -91,7 +109,10 @@ const AddReservation = ({ setediting }) => {
 };
 const PackageSkeleton = () => {
   return (
-    <Paper sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
+    <Paper
+      sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+      elevation={0}
+    >
       <Grid container spacing={1} display="flex" color={COLORS.black} p={1}>
         <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
           <Typography></Typography>
@@ -142,19 +163,42 @@ const Header = () => {
 
 const Package = ({ data }) => {
   const Status = ({ text }) => {
+    function getColor() {
+      if (text === "ok")
+        return { color: "#e7f9ed", text: "Validée", textColor: "green" };
+      if (text === "ko")
+        return { color: "#ffeae9", text: "Annulée", textColor: "red" };
+      if (text === "pending")
+        return {
+          color: "#f9f6e7",
+          text: "En attente",
+          textColor: "orange",
+        };
+    }
     return (
       <Typography
-        sx={{ px: 1, py: 0.5, backgroundColor: "lightgray", borderRadius: 5 }}
+        sx={{
+          px: 1,
+          py: 0.5,
+          backgroundColor: getColor().color,
+          borderRadius: 5,
+        }}
+        color={getColor().textColor}
         textAlign="center"
         variant="caption"
         noWrap
       >
-        {text}
+        {getColor().text}
       </Typography>
     );
   };
+
+  function getPrice() {}
   return (
-    <Paper sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
+    <Paper
+      sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+      elevation={0}
+    >
       <Accordion elevation={0}>
         <AccordionSummary
           expandIcon={<MdExpandMore />}
@@ -163,7 +207,12 @@ const Package = ({ data }) => {
         >
           <Grid container spacing={1} display="flex" color={COLORS.black}>
             <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-              <Typography variant="body1" fontWeight={600} color="primary" noWrap>
+              <Typography
+                variant="body1"
+                fontWeight={600}
+                color="primary"
+                noWrap
+              >
                 {data?.departure.name + " - " + data?.destination.name}
               </Typography>
             </Grid>
@@ -186,7 +235,9 @@ const Package = ({ data }) => {
           <Stack spacing={1}>
             <Stack direction="row" spacing={1} color="GrayText">
               <Typography fontWeight="bold">Réception : </Typography>
-              <Typography>{moment(data?.distributionDate).format("dddd D MMM Y")}</Typography>
+              <Typography>
+                {moment(data?.distributionDate).format("dddd D MMM Y")}
+              </Typography>
             </Stack>
             <Stack direction="row" spacing={1} color="GrayText">
               <Typography fontWeight="bold">Type de colis : </Typography>
@@ -202,7 +253,9 @@ const Package = ({ data }) => {
             </Stack>
             <Stack direction="row" spacing={1} color="GrayText">
               <Typography fontWeight="bold">Receveur : </Typography>
-              <Typography>{data.reciever.firstName + " " + data.reciever.lastName}</Typography>
+              <Typography>
+                {data.reciever.firstName + " " + data.reciever.lastName}
+              </Typography>
             </Stack>
             <BoardingPass
               receiver={data.reciever}
@@ -222,7 +275,9 @@ const Package = ({ data }) => {
 };
 
 const Packages = () => {
-  const { profilState, user, reservations, loading } = useContext(ProfileDetailsContext);
+  const { profilState, user, reservations, loading } = useContext(
+    ProfileDetailsContext
+  );
 
   const [editing, setediting] = useState(false);
 
@@ -232,10 +287,19 @@ const Packages = () => {
         <Box py={1}>
           <Stack direction="row" spacing={2} alignItems="center" mb={2}>
             {profilState.icon}
-            <Typography fontWeight="bold" variant="h5" color="primary" flexGrow={1}>
+            <Typography
+              fontWeight="bold"
+              variant="h5"
+              color="primary"
+              flexGrow={1}
+            >
               {profilState.label}
             </Typography>
-            <Button varaint="contained" color="warning" onClick={() => setediting(true)}>
+            <Button
+              varaint="contained"
+              color="warning"
+              onClick={() => setediting(true)}
+            >
               Modifier
             </Button>
           </Stack>
@@ -267,7 +331,9 @@ const Packages = () => {
                   }}
                   elevation={0}
                 >
-                  <Typography color="GrayText">Vous n'avez pas de réservations.</Typography>
+                  <Typography color="GrayText">
+                    Vous n'avez pas de réservations.
+                  </Typography>
                 </Paper>
               )}
             </>
