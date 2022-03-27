@@ -445,7 +445,6 @@ const Reservation = () => {
                         }
                         type="tel"
                         value={receiver.phoneNumber}
-                        helperText="Avec whatsapp de préférence"
                         fullWidth
                         InputProps={{
                           endAdornment: <FaPhoneAlt color="gray" />,
