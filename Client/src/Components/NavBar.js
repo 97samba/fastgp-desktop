@@ -21,7 +21,12 @@ import {
   MenuItem,
   Stack,
 } from "@mui/material";
-import { FaPlaneDeparture, FaShippingFast, FaShoppingBasket, FaUserAlt } from "react-icons/fa";
+import {
+  FaPlaneDeparture,
+  FaShippingFast,
+  FaShoppingBasket,
+  FaUserAlt,
+} from "react-icons/fa";
 import { logout, useAuth } from "../firebase/auth";
 import { IoMdHome } from "react-icons/io";
 import { GoPackage } from "react-icons/go";
@@ -63,7 +68,13 @@ const UserMenu = ({ history, currentUser }) => {
           {getAvatar()}
         </Avatar>
       </IconButton>
-      <Menu open={open} onClose={handleClose} anchorEl={anchorEl} sx={{ mt: 1 }} elevation={1}>
+      <Menu
+        open={open}
+        onClose={handleClose}
+        anchorEl={anchorEl}
+        sx={{ mt: 1 }}
+        elevation={1}
+      >
         <Stack alignItems="center" py={2} px={4}>
           <Avatar
             alt={currentUser?.photoURL}
@@ -107,12 +118,18 @@ const UserMenu = ({ history, currentUser }) => {
           </ListItemIcon>
           Mes colis
         </MenuItem>
-        <MenuItem onClick={() => gotoPage("myProfile")}>
+        <MenuItem onClick={() => gotoPage("reservations")}>
+          <ListItemIcon>
+            <GoPackage />
+          </ListItemIcon>
+          Colis clients
+        </MenuItem>
+        {/* <MenuItem onClick={() => gotoPage("myProfile")}>
           <ListItemIcon>
             <IoSettings />
           </ListItemIcon>
           Paramétres
-        </MenuItem>
+        </MenuItem> */}
         <Box px={1}>
           <Divider />
         </Box>
@@ -190,7 +207,9 @@ export default function NavBar() {
           </IconButton>
           <Stack direction="row" flexGrow={1}>
             <Button
-              onClick={() => history.location.pathname !== "/" && history.push("/")}
+              onClick={() =>
+                history.location.pathname !== "/" && history.push("/")
+              }
               endIcon={<FaShippingFast color="white" size={25} />}
             >
               <Typography variant="h6" color="white">
@@ -244,7 +263,9 @@ export default function NavBar() {
           {currentUser?.uid ? (
             <MenuItem
               disableGutters
-              onClick={() => goToPage("/profilDetails/" + currentUser.uid + "/myProfile")}
+              onClick={() =>
+                goToPage("/profilDetails/" + currentUser.uid + "/myProfile")
+              }
             >
               <Stack direction="row" spacing={1} my={1} mt={2}>
                 {currentUser.photoURL ? (
@@ -272,7 +293,12 @@ export default function NavBar() {
           <List>
             {navLinks.map((link, index) => (
               <ListItem
-                sx={{ height: 40, backgroundColor: "white", borderRadius: 1, mt: 2 }}
+                sx={{
+                  height: 40,
+                  backgroundColor: "white",
+                  borderRadius: 1,
+                  mt: 2,
+                }}
                 href="/create"
                 key={index}
                 onClick={() => goToPage(link.path)}

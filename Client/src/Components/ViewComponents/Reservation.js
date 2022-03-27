@@ -51,17 +51,20 @@ const Reservation = () => {
   } = useContext(ViewContext);
   const { handleOpen } = useContext(AuthContext);
 
-  const [reservationSuccess, setreservationSuccess] = useState(false);
+  const [reservationDialogOpen, setreservationDialogOpen] = useState(false);
   const [reservationLoading, setreservationLoading] = useState(false);
+  const [title, settitle] = useState("Confirmation de la réservation");
+  const [reservationId, setreservationId] = useState("");
+  const [reservating, setreservating] = useState(false);
 
   const [isReceiver, setisReceiver] = useState("yes");
   const [state, setstate] = useState({
-    itemType: "thing",
     itemDescription: "",
     error: false,
-    payer: "Envoyeur",
     accordionOpen: false,
   });
+  const [payer, setpayer] = useState("Envoyeur");
+  const [itemType, setitemType] = useState("thing");
 
   function handleBagageTypeChange(e) {
     console.log(`e`, e.target);
@@ -71,6 +74,11 @@ const Reservation = () => {
   function handleItemDescriptionChange(e) {
     setstate({ ...state, itemDescription: e.target.value });
   }
+
+  /**
+   *
+   * @returns boolean retourne false si erreur et true si les champs sont ok
+   */
   function verifyReservationEntries() {
     if (
       state.itemDescription === "" ||
@@ -82,12 +90,14 @@ const Reservation = () => {
       return false;
     } else {
       if (
-        state.payer === "" ||
-        receiver.firstName === "" ||
-        receiver.lastName === "" ||
-        receiver.phoneNumber === ""
+        isReceiver !== "yes" &&
+        (state.payer === "" ||
+          receiver.firstName === "" ||
+          receiver.lastName === "" ||
+          receiver.phoneNumber === "")
       ) {
         setstate({ ...state, error: true });
+
         return false;
       } else {
         return true;
@@ -95,25 +105,41 @@ const Reservation = () => {
     }
   }
 
-  function showSuccesReservationDialog(succes) {}
-
   async function handleReservation() {
     if (currentUser?.uid) {
       if (verifyReservationEntries()) {
         setstate({ ...state, error: false });
+        setreservationLoading(true);
+        settitle("Réservation en cours");
+        setreservating(true);
         var next = await postUserReservation(
           sender,
           receiver,
           flightState,
-          state,
+          { ...state, itemType, payer },
           currentUser?.uid
         );
-        next
-          ? history.push("/profilDetails/" + currentUser?.uid + "/myProfile")
-          : setstate({ ...state, error: true });
+        console.log("reservation ", next);
+        setreservationId(next);
+        setreservationLoading(false);
+        if (next !== "") {
+          settitle("Réservation envoyée !");
+        } else {
+          settitle("Erreur lors de la réservation");
+          setstate({ ...state, error: true });
+        }
       }
     } else {
       handleOpen();
+    }
+  }
+  function showConfirmationDialog() {
+    let success = verifyReservationEntries();
+    console.log("success", success);
+    if (success) {
+      console.log("showing dialog");
+      setstate({ ...state, error: false });
+      setreservationDialogOpen(true);
     }
   }
 
@@ -225,7 +251,6 @@ const Reservation = () => {
                     <TextField
                       label="Nom"
                       size="small"
-                      error={state.error}
                       helperText={
                         state.error &&
                         sender.lastName === "" &&
@@ -250,7 +275,6 @@ const Reservation = () => {
                     <TextField
                       label="Télephone"
                       size="small"
-                      error={state.error}
                       helperText={
                         state.error &&
                         sender.phoneNumber === "" &&
@@ -277,14 +301,9 @@ const Reservation = () => {
                       label="Type de bagage"
                       fullWidth
                       size="small"
-                      value={state.itemType}
-                      error={state.error && state.itemType === ""}
-                      onChange={(e) =>
-                        setstate({
-                          ...state,
-                          itemType: e.target.value,
-                        })
-                      }
+                      value={itemType}
+                      error={state.error && itemType === ""}
+                      onChange={(e) => setitemType(e.target.value)}
                     >
                       {bagageType.map((type, index) => (
                         <MenuItem value={type.value} key={index}>
@@ -304,7 +323,7 @@ const Reservation = () => {
                         state.itemDescription === "" &&
                         "Description obligatoire"
                       }
-                      placeholder="Ex : description du colis, modéle téléphone, modéle ordinateur, document, nombre d'article ...etc "
+                      placeholder="Ex : description du colis, modéle téléphone, modéle ordinateur, document, nombre d'articles ...etc "
                       multiline
                       fullWidth
                       size="small"
@@ -445,13 +464,8 @@ const Reservation = () => {
                         label="Qui paye ?"
                         fullWidth
                         size="small"
-                        value={state.payer}
-                        onChange={(e) =>
-                          setstate({
-                            ...state,
-                            payer: e.target.value,
-                          })
-                        }
+                        value={payer}
+                        onChange={(e) => setpayer(e.target.value)}
                       >
                         {["Envoyeur", "Receveur"].map((type, index) => (
                           <MenuItem value={type} key={index}>
@@ -466,18 +480,41 @@ const Reservation = () => {
                 <Button
                   variant="contained"
                   size="small"
-                  onClick={handleReservation}
+                  onClick={showConfirmationDialog}
                   fullWidth
                   endIcon={<FaBoxTissue />}
                 >
                   Réserver
                 </Button>
+                {state.error && (
+                  <Typography
+                    variant="body2"
+                    color="error"
+                    textAlign="center"
+                    mt={2}
+                  >
+                    Veuillez vérifier tous les champs svp
+                  </Typography>
+                )}
               </AccordionDetails>
             </Accordion>
           </Box>
           <ReservationDialog
-            success={reservationSuccess}
+            reservationId={reservationId}
+            open={reservationDialogOpen}
+            setOpen={setreservationDialogOpen}
             loading={reservationLoading}
+            handleReservation={handleReservation}
+            sender={sender}
+            reciever={receiver}
+            isReciever={isReceiver}
+            flight={flightState}
+            payer={payer}
+            title={title}
+            itemType={
+              bagageType.filter((element) => element.value === itemType)[0]
+                .label
+            }
           />
         </>
       )}

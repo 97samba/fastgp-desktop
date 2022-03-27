@@ -335,7 +335,11 @@ export async function savePhotoUrl(photoUrl, email) {
  */
 
 export const getUserReservations = async (id) => {
-  const q = query(collection(db, "reservations"), where("owner", "==", id));
+  const q = query(
+    collection(db, "reservations"),
+    where("owner", "==", id),
+    orderBy("reservationDate", "desc")
+  );
   var reservations = [];
   await getDocs(q)
     .then((datas) => {
@@ -351,7 +355,11 @@ export const getUserReservations = async (id) => {
   return reservations;
 };
 export const getGPReservations = async (id) => {
-  const q = query(collection(db, "reservations"), where("gpId", "==", id));
+  const q = query(
+    collection(db, "reservations"),
+    where("gpId", "==", id),
+    orderBy("reservationDate", "desc")
+  );
   var reservations = [];
   await getDocs(q)
     .then((datas) => {
@@ -367,6 +375,15 @@ export const getGPReservations = async (id) => {
   return reservations;
 };
 
+/**
+ *
+ * @param {*} sender informations sur la personne qui envoit
+ * @param {*} reciever informations sur la personne qui recoit
+ * @param {*} flight  informations sur le vol
+ * @param {*} reservationInfo Detail de la reservation
+ * @param {*} owner id de la personne qui reserve
+ * @returns l'ID de la reservation crée
+ */
 export const postUserReservation = async (
   sender,
   reciever,
@@ -380,6 +397,8 @@ export const postUserReservation = async (
     reciever,
     flightId: flight.id,
     gpId: flight.ownerId,
+    prices: flight.prices,
+    currency: flight.currency,
     itemDescription: reservationInfo.itemDescription,
     payer: reservationInfo.payer,
     itemType: reservationInfo.itemType,
@@ -392,15 +411,12 @@ export const postUserReservation = async (
     reservationDate: new Date().toJSON(),
     shipping: flight.destination.name === "Dakar" ? true : false,
   };
-  console.log("after docref ", reservation, "state ", reservationInfo);
 
-  var next = false;
+  var next = "";
   await addDoc(docRef, reservation)
-    .then(() => (next = true))
+    .then((data) => (next = data.id))
     .then(() => console.log("reservation done"))
     .catch(() => console.log("Erreur lors de la reservation"));
-
-  console.log("after addDoc");
 
   return next;
 };
