@@ -321,7 +321,7 @@ const ProfileDetails = () => {
           elevation={0}
           sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
         >
-          <AccordionSummary expandIcon={<MdExpandMore />}>
+          <AccordionSummary expandIcon={<MdExpandMore size={22} />}>
             <MenuItem
               key={profilState.key}
               sx={{

@@ -427,7 +427,13 @@ const Packages = () => {
     <Box>
       {!editing ? (
         <Box py={1}>
-          <Stack direction="row" spacing={2} alignItems="center" mb={2}>
+          <Stack
+            direction="row"
+            spacing={2}
+            alignItems="center"
+            mb={2}
+            display={{ xs: "none", sm: "none", md: "block" }}
+          >
             {profilState.icon}
             <Typography
               fontWeight="bold"

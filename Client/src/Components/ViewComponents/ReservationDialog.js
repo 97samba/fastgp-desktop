@@ -9,7 +9,9 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
+  MenuItem,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -125,6 +127,27 @@ const ReservationDialog = ({
               <Typography variant="body2" colors={COLORS.black}>
                 {payer}
               </Typography>
+            </Stack>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              mt={2}
+            >
+              <Typography variant="body2" color={COLORS.primary}>
+                Paiement :{" "}
+              </Typography>
+              <TextField select size="small" defaultValue="Espéces">
+                {["Espéces", "Carte", "Wave", "Paypal"].map((mode, index) => (
+                  <MenuItem
+                    value={mode}
+                    key={index}
+                    disabled={mode !== "Espéces"}
+                  >
+                    {mode !== "Espéces" ? mode + " (bientôt)" : mode}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Stack>
           </Box>
         </DialogContent>

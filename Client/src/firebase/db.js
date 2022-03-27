@@ -48,11 +48,11 @@ export const postAflight = async (flight, email) => {
 export const updateAFlight = async (flight, id) => {
   const docRef = doc(db, "flights", id);
   console.log("editing ", id);
-  let error = false;
+  let error = id;
 
   await updateDoc(docRef, flight)
     .then(() => console.log("done"))
-    .catch(() => (error = true));
+    .catch(() => (error = ""));
   return error;
 };
 

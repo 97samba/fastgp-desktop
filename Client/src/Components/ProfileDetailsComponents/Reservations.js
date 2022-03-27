@@ -109,7 +109,7 @@ const Package = ({ data, validatePackage, rejectPackage }) => {
   function getPrice() {
     if (data?.prices) {
       if (data.itemType === "thing")
-        return `${data.prices.pricePerKG} ${data.currency}`;
+        return `${data.prices.pricePerKG} ${data.currency}/Kg`;
       else return "à déterminer";
     } else {
       return "à déterminer";
@@ -359,7 +359,13 @@ const Reservations = () => {
 
   return (
     <Box>
-      <Stack direction="row" spacing={2} alignItems="center" mb={2}>
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="center"
+        mb={2}
+        display={{ xs: "none", sm: "none", md: "block" }}
+      >
         {profilState.icon}
         <Typography fontWeight="bold" variant="h5" color="primary" flexGrow={1}>
           {profilState.label}
