@@ -432,7 +432,7 @@ const Packages = () => {
             spacing={2}
             alignItems="center"
             mb={2}
-            display={{ xs: "none", sm: "none", md: "block" }}
+            display={{ xs: "none", sm: "none", md: "flex" }}
           >
             {profilState.icon}
             <Typography
@@ -443,13 +443,6 @@ const Packages = () => {
             >
               {profilState.label}
             </Typography>
-            <Button
-              varaint="contained"
-              color="warning"
-              onClick={() => setediting(true)}
-            >
-              Modifier
-            </Button>
           </Stack>
           <Typography color={COLORS.black} variant="body2">
             Les colis que vous avez envoyés.

@@ -149,15 +149,12 @@ const Documents = () => {
         spacing={2}
         alignItems="center"
         mb={2}
-        display={{ xs: "none", sm: "none", md: "block" }}
+        display={{ xs: "none", sm: "none", md: "flex" }}
       >
         {profilState.icon}
         <Typography fontWeight="bold" variant="h5" color="primary" flexGrow={1}>
           {profilState.label}
         </Typography>
-        <Button varaint="contained" color="warning">
-          Modifier
-        </Button>
       </Stack>
 
       {/* body */}

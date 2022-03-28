@@ -227,7 +227,10 @@ const ProfileDetails = () => {
     if (pageInfo.length === 0) {
       pageInfo = boardTab.filter((tab) => tab.key === subpage);
     }
-    if (pageInfo.length === 0) {
+    if (
+      pageInfo.length === 0 ||
+      (id !== currentUser?.uid && pageInfo[0].secured)
+    ) {
       setprofilState({ ...profilState, ...boardTab[0] });
       history.replace("/profilDetails/" + id + "/" + boardTab[0].key);
     } else {
@@ -246,7 +249,7 @@ const ProfileDetails = () => {
     results = await getUserReservations(id);
     const headers = [
       {
-        label: "Colis transportés",
+        label: "Colis acceptés",
         number: results?.length,
         key: "packages",
       },
@@ -256,15 +259,15 @@ const ProfileDetails = () => {
         key: "pending",
       },
       {
-        label: "Livraisons en cours",
+        label: "Refusés",
         number: results?.filter((a) => a.status === "ok")?.length,
         key: "shipping",
       },
-      {
-        label: "Colis boutique",
-        number: 0,
-        key: "shop",
-      },
+      // {
+      //   label: "Colis boutique",
+      //   number: 0,
+      //   key: "shop",
+      // },
     ];
     setHeaderInformations(headers);
     // } else {
@@ -365,9 +368,23 @@ const ProfileDetails = () => {
       </Box>
     );
   };
+
   useEffect(() => {
     getUser();
   }, [id]);
+
+  // useEffect(() => {
+  //   console.log(currentUser);
+  //   if (currentUser !== undefined) {
+  //     if (currentUser !== null && currentUser?.uid === id) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  // }, [currentUser]);
   useEffect(() => {
     getPage();
   }, [subpage]);

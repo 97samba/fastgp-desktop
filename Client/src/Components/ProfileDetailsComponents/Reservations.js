@@ -350,7 +350,6 @@ const Reservations = () => {
     });
     setReservations(newState);
   }
-  async function makeOffer(price) {}
 
   useEffect(() => {
     const subscribe = getReservations();
@@ -364,7 +363,7 @@ const Reservations = () => {
         spacing={2}
         alignItems="center"
         mb={2}
-        display={{ xs: "none", sm: "none", md: "block" }}
+        display={{ xs: "none", sm: "none", md: "flex" }}
       >
         {profilState.icon}
         <Typography fontWeight="bold" variant="h5" color="primary" flexGrow={1}>

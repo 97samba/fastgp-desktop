@@ -92,7 +92,8 @@ const Header = ({ HeaderInformations, loading, currentUser }) => {
   return (
     <Grid container spacing={2} flex={1}>
       {HeaderInformations.map((data) => (
-        <Grid item xs={6} sm={6} md={3} lg={3} xl={3} key={data.key}>
+        // <Grid item xs={6} sm={6} md={3} lg={3} xl={3} key={data.key}>
+        <Grid item xs={4} sm={4} md={4} lg={4} xl={4} key={data.key}>
           <Paper
             elevation={0}
             sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
@@ -105,7 +106,7 @@ const Header = ({ HeaderInformations, loading, currentUser }) => {
                   <>{data.number >= 10 ? data.number : "0" + data.number}</>
                 )}
               </Typography>
-              <Typography variant="body2" color="GrayText">
+              <Typography variant="caption" color="GrayText">
                 {data.label}
               </Typography>
             </Box>
@@ -275,6 +276,7 @@ const ModifyProfile = ({ setediting }) => {
     phone: "",
   });
   const [image, setimage] = useState("");
+  const [loading, setloading] = useState(false);
 
   function handleImage(e) {
     if (e.target.files.length > 0) {
@@ -290,13 +292,18 @@ const ModifyProfile = ({ setediting }) => {
       ? image?.name + " " + Math.ceil(image?.size / 1000) + " ko"
       : "Image uniquement ****";
   }
+
   async function handleSave() {
-    await StoreUserProfilePhoto(
-      currentUser?.uid,
-      currentUser?.displayName,
-      image
-    );
-    setediting(false);
+    if (image !== "") {
+      setloading(true);
+      await StoreUserProfilePhoto(
+        currentUser?.uid,
+        currentUser?.displayName,
+        image
+      );
+      setediting(false);
+      setloading(false);
+    }
     // window.location.reload(false);
   }
   function handleReturn() {
@@ -315,6 +322,7 @@ const ModifyProfile = ({ setediting }) => {
       });
     }
   }, [user]);
+
   return (
     <Box>
       <Stack direction="row" spacing={2} alignItems="center" mb={2}>
@@ -407,13 +415,14 @@ const ModifyProfile = ({ setediting }) => {
               />
             </Grid>
           </Grid>
-          <Button
+          <LoadingButton
             endIcon={<IoMdSave />}
             variant="contained"
             onClick={handleSave}
+            loading={loading}
           >
             Enregister
-          </Button>
+          </LoadingButton>
         </Box>
       </Paper>
     </Box>
