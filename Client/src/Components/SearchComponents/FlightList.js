@@ -91,14 +91,8 @@ const Paginator = ({ datas }) => {
     );
 };
 const FlightList = () => {
-    const {
-        onBoarding,
-        loading,
-        filteredFlight,
-        nearFlights,
-        superlatives,
-        initializing,
-    } = useContext(SearchPageContext);
+    const { onBoarding, loading, filteredFlight, superlatives, initializing } =
+        useContext(SearchPageContext);
     const [bestItemViewerOpened, setbestItemViewerOpened] = useState(false);
     const [bestItemViewed, setbestItemViewed] = useState(null);
     const [bestItemLabel, setbestItemLabel] = useState("");
@@ -259,7 +253,7 @@ const FlightList = () => {
         };
 
         return (
-            <Box mt={1}>
+            <Box mt={{ xs: 0, md: 1 }}>
                 {/* <Grid container spacing={2}> */}
 
                 {onBoarding ? (
@@ -385,7 +379,7 @@ const FlightList = () => {
     };
 
     return (
-        <Grid container spacing={2} p={1}>
+        <Grid container spacing={2} p={{ xs: 0, sm: 0, md: 1 }}>
             <Grid
                 item
                 md={2}

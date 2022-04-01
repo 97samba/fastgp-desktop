@@ -2,7 +2,6 @@ import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import {
     Autocomplete,
     Button,
-    Chip,
     Container,
     Divider,
     Grid,
@@ -182,22 +181,24 @@ const MobileFilter = () => {
                         <Typography variant="body2">Filtres</Typography>
                     </Stack>
                 </MenuItem>
-                <MenuItem
+                <Button
                     sx={{
                         borderRadius: 2,
                         p: 0,
                         border: "1px solid lightGray",
                         px: 1,
                     }}
-                    disableGutters
+                    size="small"
                     disableTouchRipple
                     onClick={(e) => settriAnchor(e.currentTarget)}
                 >
                     <Stack direction="row" alignItems="center" spacing={1}>
-                        <Typography variant="body2">Tri : {orderBy}</Typography>
+                        <Typography variant="caption">
+                            Tri : {orderBy}
+                        </Typography>
                         <FaAngleDown />
                     </Stack>
-                </MenuItem>
+                </Button>
             </Stack>
 
             <Menu
@@ -254,22 +255,35 @@ const SearchSummaryMobile = ({
                 >
                     <Stack
                         direction="row"
-                        flex={1}
-                        alignItems="center"
-                        color="white"
                         justifyContent="space-between"
+                        alignItems="center"
                     >
                         <IconButton onClick={displaySearchingBar}>
                             <MdSearch color="white" />
                         </IconButton>
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="h6">
-                                {departure?.name}
-                            </Typography>
-                            <GoDash color={COLORS.warning} />
-                            <Typography variant="h6">
-                                {destination?.name}
-                            </Typography>
+
+                        <Stack flex={1} alignItems="center" color="white">
+                            <Stack
+                                direction="row"
+                                alignItems="center"
+                                spacing={2}
+                                fontWeight={555}
+                            >
+                                <Typography variant="body1">
+                                    {departure?.name}
+                                </Typography>
+                                <GoDash color={COLORS.warning} />
+                                <Typography variant="body1">
+                                    {destination?.name}
+                                </Typography>
+                            </Stack>
+                            <Box textAlign="center" color="whitesmoke" pb={1}>
+                                <Typography variant="body2">
+                                    {moment(departureDate).format(
+                                        "dddd, D MMMM"
+                                    )}
+                                </Typography>
+                            </Box>
                         </Stack>
                         <IconButton>
                             <AiOutlineSwap
@@ -278,11 +292,6 @@ const SearchSummaryMobile = ({
                             />
                         </IconButton>
                     </Stack>
-                    <Box flex={1} textAlign="center" color="whitesmoke" pb={1}>
-                        <Typography variant="body2">
-                            {moment(departureDate).format("dddd, D MMMM")}
-                        </Typography>
-                    </Box>
                 </Stack>
                 <MobileFilter />
             </Paper>
