@@ -21,7 +21,6 @@ import FlightSkeleton from "../FlightSkeleton";
 import {
     FaAngleLeft,
     FaAngleRight,
-    FaArrowDown,
     FaPlus,
     FaRegCalendarTimes,
 } from "react-icons/fa";

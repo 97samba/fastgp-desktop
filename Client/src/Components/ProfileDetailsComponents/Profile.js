@@ -22,7 +22,7 @@ import {
     FaUserPlus,
 } from "react-icons/fa";
 import { IoMdSave } from "react-icons/io";
-import { MdOutlineInsertPhoto } from "react-icons/md";
+import { MdEdit, MdOutlineInsertPhoto } from "react-icons/md";
 
 import { RiMedal2Line } from "react-icons/ri";
 import COLORS from "../../colors";
@@ -33,6 +33,7 @@ import FlightSkeleton from "../FlightSkeleton";
 import { useHistory, useParams } from "react-router-dom";
 import { FollowGP, getUserRecentFlights, UnFollowGP } from "../../firebase/db";
 import Flight from "../Flight";
+import { AiOutlineUserAdd } from "react-icons/ai";
 
 const StaticAnnounces = () => {
     const { id } = useParams();
@@ -98,69 +99,57 @@ const StaticAnnounces = () => {
     );
 };
 
-const Header = ({ HeaderInformations, loading, currentUser }) => {
+const HeaderNumber = ({ HeaderInformations, loading }) => {
     return (
-        <Grid container spacing={2} flex={1}>
-            {HeaderInformations.map((data) => (
-                // <Grid item xs={6} sm={6} md={3} lg={3} xl={3} key={data.key}>
-                <Grid item xs={4} sm={4} md={4} lg={4} xl={4} key={data.key}>
-                    <Paper
-                        elevation={0}
-                        sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+        <Box>
+            <Grid container spacing={2} flex={1}>
+                {HeaderInformations.map((data) => (
+                    // <Grid item xs={6} sm={6} md={3} lg={3} xl={3} key={data.key}>
+                    <Grid
+                        item
+                        xs={4}
+                        sm={4}
+                        md={4}
+                        lg={4}
+                        xl={4}
+                        key={data.key}
                     >
-                        <Box p={2} textAlign="center">
-                            <Typography variant="h6" color={COLORS.warning}>
-                                {loading ? (
-                                    <Skeleton width="100%" />
-                                ) : (
-                                    <>
-                                        {data.number >= 10
-                                            ? data.number
-                                            : "0" + data.number}
-                                    </>
-                                )}
-                            </Typography>
-                            <Typography variant="caption" color="GrayText">
-                                {data.label}
-                            </Typography>
-                        </Box>
-                    </Paper>
-                </Grid>
-            ))}
-        </Grid>
+                        <Paper
+                            elevation={0}
+                            sx={{
+                                boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+                            }}
+                        >
+                            <Box p={2} textAlign="center">
+                                <Typography variant="h6" color={COLORS.warning}>
+                                    {loading ? (
+                                        <Skeleton width="100%" />
+                                    ) : (
+                                        <>
+                                            {data.number >= 10
+                                                ? data.number
+                                                : "0" + data.number}
+                                        </>
+                                    )}
+                                </Typography>
+                                <Typography variant="caption" color="GrayText">
+                                    {loading ? (
+                                        <Skeleton width="100%" />
+                                    ) : (
+                                        data.label
+                                    )}
+                                </Typography>
+                            </Box>
+                        </Paper>
+                    </Grid>
+                ))}
+            </Grid>
+        </Box>
     );
 };
 const TopHeader = ({ user, loading, getAvatar, currentUser, setuser }) => {
-    const history = useHistory();
-    const [following, setfollowing] = useState(false);
-    const grade = useRef(user?.flights > 5 ? "AMATEUR" : "DEBUTANT");
+    const grade = user?.flights.length > 5 ? "Professionnel" : "DEBUTANT";
 
-    async function follow() {
-        if (!currentUser?.uid) {
-            history.push("/login");
-        } else {
-            setfollowing(true);
-            const followed = await FollowGP(user?.email, currentUser?.uid);
-            followed && user.followers.push(currentUser?.uid);
-            setfollowing(false);
-        }
-    }
-    async function unFollow() {
-        if (!currentUser?.uid) {
-            history.push("/login");
-        } else {
-            setfollowing(true);
-            const unfollowed = await UnFollowGP(user?.email, currentUser?.uid);
-            unfollowed &&
-                setuser({
-                    ...user,
-                    followers: user.followers.filter(
-                        (element) => (element = !currentUser?.uid)
-                    ),
-                });
-            setfollowing(false);
-        }
-    }
     return (
         <Box flex={1} mr={{ xs: 0, sm: 0, md: 2 }}>
             <Paper
@@ -203,139 +192,12 @@ const TopHeader = ({ user, loading, getAvatar, currentUser, setuser }) => {
                                 letterSpacing={1}
                                 fontWeight={300}
                             >
-                                {user?.role === "GP"
-                                    ? "GP " + grade.current
-                                    : "CLIENT"}
+                                {user?.role === "GP" ? "GP " + grade : "CLIENT"}
                             </Typography>
                             <RiMedal2Line size={18} color="goldenrod" />
                         </Box>
                     </Stack>
                 </Stack>
-                {currentUser?.uid !== user?.userId && (
-                    <Box px={{ xs: 2, sm: 2, md: 10 }} pb={2}>
-                        <Divider sx={{ px: 1 }} light />
-
-                        <Stack
-                            direction="row"
-                            my={2}
-                            flex={1}
-                            divider={
-                                <Divider
-                                    sx={{ py: 1 }}
-                                    orientation="vertical"
-                                />
-                            }
-                        >
-                            <Stack
-                                direction="column"
-                                alignItems="center"
-                                flex={1}
-                            >
-                                <Typography
-                                    variant="h6"
-                                    minWidth={20}
-                                    color={COLORS.warning}
-                                >
-                                    {loading ? (
-                                        <Skeleton width="100%" />
-                                    ) : (
-                                        user.flights?.length
-                                    )}
-                                </Typography>
-                                <Typography variant="body2" color="GrayText">
-                                    Vols
-                                </Typography>
-                            </Stack>
-                            <Stack
-                                direction="column"
-                                alignItems="center"
-                                flex={1}
-                            >
-                                <Typography
-                                    variant="h6"
-                                    minWidth={20}
-                                    color={COLORS.warning}
-                                >
-                                    {loading ? (
-                                        <Skeleton width="100%" />
-                                    ) : (
-                                        user.followers.length
-                                    )}
-                                </Typography>
-                                <Typography variant="body2" color="GrayText">
-                                    Abonné(s)
-                                </Typography>
-                            </Stack>
-                            <Stack
-                                direction="column"
-                                alignItems="center"
-                                flex={1}
-                            >
-                                <Typography
-                                    variant="h6"
-                                    minWidth={20}
-                                    color={COLORS.warning}
-                                >
-                                    {loading ? (
-                                        <Skeleton width="100%" />
-                                    ) : (
-                                        user?.packages?.length
-                                    )}
-                                </Typography>
-                                <Typography variant="body2" color="GrayText">
-                                    Colis
-                                </Typography>
-                            </Stack>
-                        </Stack>
-                        {loading ? (
-                            <Skeleton width="100%" height={40} />
-                        ) : (
-                            <>
-                                {!loading && (
-                                    <Box>
-                                        {user.userId !== currentUser?.uid ? (
-                                            <Box>
-                                                {user?.followers.length > 0 &&
-                                                user.followers.includes(
-                                                    currentUser?.uid
-                                                ) ? (
-                                                    <LoadingButton
-                                                        loading={following}
-                                                        fullWidth
-                                                        variant="outlined"
-                                                        onClick={unFollow}
-                                                    >
-                                                        se désabonner
-                                                    </LoadingButton>
-                                                ) : (
-                                                    <LoadingButton
-                                                        startIcon={
-                                                            <FaUserPlus />
-                                                        }
-                                                        loading={following}
-                                                        fullWidth
-                                                        variant="contained"
-                                                        onClick={follow}
-                                                    >
-                                                        Suivre
-                                                    </LoadingButton>
-                                                )}
-                                            </Box>
-                                        ) : (
-                                            <Button
-                                                startIcon={<FaUserEdit />}
-                                                fullWidth
-                                                variant="contained"
-                                            >
-                                                Modifier profil
-                                            </Button>
-                                        )}
-                                    </Box>
-                                )}
-                            </>
-                        )}
-                    </Box>
-                )}
             </Paper>
         </Box>
     );
@@ -529,46 +391,150 @@ const Profile = () => {
         loading,
         currentUser,
         HeaderInformations,
+        setHeaderInformations,
+        reservations,
         id,
         getAvatar,
     } = useContext(ProfileDetailsContext);
 
     const [editing, setediting] = useState(false);
 
+    const [following, setfollowing] = useState(false);
+    const history = useHistory();
+    async function follow() {
+        if (!currentUser?.uid) {
+            history.push("/login");
+        } else {
+            setfollowing(true);
+            const followed = await FollowGP(user?.email, currentUser?.uid);
+            let headers = [
+                {
+                    label: "Annonces",
+                    number: user?.flights?.length,
+                    key: "announces",
+                },
+                {
+                    label: "Abonnés",
+                    number: user?.followers?.length + 1,
+                    key: "followers",
+                },
+                {
+                    label: "Colis",
+                    number: reservations.length,
+                    key: "packages",
+                },
+            ];
+            if (followed) {
+                setHeaderInformations(headers);
+                var newFollowerState = user.followers;
+                newFollowerState.push(currentUser?.uid);
+                setuser({
+                    ...user,
+                    followers: newFollowerState,
+                });
+            }
+            setfollowing(false);
+        }
+    }
+    async function unFollow() {
+        if (!currentUser?.uid) {
+            history.push("/login");
+        } else {
+            setfollowing(true);
+            const unfollowed = await UnFollowGP(user?.email, currentUser?.uid);
+            let headers = [
+                {
+                    label: "Annonces",
+                    number: user?.flights?.length,
+                    key: "announces",
+                },
+                {
+                    label: "Abonnés",
+                    number: user?.followers?.length - 1,
+                    key: "followers",
+                },
+                {
+                    label: "Colis",
+                    number: reservations.length,
+                    key: "packages",
+                },
+            ];
+            if (unfollowed) {
+                setHeaderInformations(headers);
+                setuser({
+                    ...user,
+                    followers: user.followers.filter(
+                        (element) => element !== currentUser?.uid
+                    ),
+                });
+            }
+            setfollowing(false);
+        }
+    }
+
     useEffect(() => {
         async function fetchDatas() {}
         fetchDatas();
     }, []);
 
+    const Title = () => {
+        return (
+            <Stack direction="row" spacing={2} alignItems="center" mb={2}>
+                {profilState.icon}
+                <Typography
+                    fontWeight="bold"
+                    variant="h5"
+                    color="primary"
+                    flexGrow={1}
+                >
+                    {profilState.label}
+                </Typography>
+                {currentUser?.uid === id ? (
+                    <Button
+                        varaint="contained"
+                        color="warning"
+                        onClick={() => setediting(true)}
+                        endIcon={<MdEdit size={15} />}
+                    >
+                        Modifier
+                    </Button>
+                ) : (
+                    <Box>
+                        {user?.followers.length > 0 &&
+                        user.followers.includes(currentUser?.uid) ? (
+                            <LoadingButton
+                                loading={following}
+                                fullWidth
+                                variant="outlined"
+                                onClick={unFollow}
+                            >
+                                Se désabonner
+                            </LoadingButton>
+                        ) : (
+                            <LoadingButton
+                                endIcon={<AiOutlineUserAdd />}
+                                loading={following}
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                onClick={follow}
+                                sx={{ py: 0.5 }}
+                            >
+                                S'abonner
+                            </LoadingButton>
+                        )}
+                    </Box>
+                )}
+            </Stack>
+        );
+    };
+
     return (
         <Box>
             {!editing ? (
                 <Box py={{ xs: 0, sm: 0, md: 1 }}>
-                    {currentUser?.uid === id && (
-                        <Stack
-                            direction="row"
-                            spacing={2}
-                            alignItems="center"
-                            mb={2}
-                        >
-                            {profilState.icon}
-                            <Typography
-                                fontWeight="bold"
-                                variant="h5"
-                                color="primary"
-                                flexGrow={1}
-                            >
-                                {profilState.label}
-                            </Typography>
-                            <Button
-                                varaint="contained"
-                                color="warning"
-                                onClick={() => setediting(true)}
-                            >
-                                Modifier
-                            </Button>
-                        </Stack>
-                    )}
+                    <Title />
+
                     <Stack
                         flex={1}
                         direction={{
@@ -578,23 +544,24 @@ const Profile = () => {
                             lg: "row",
                             xl: "row",
                         }}
-                        rowGap={2}
+                        spacing={{ xs: 2, md: 0.5 }}
                     >
-                        <TopHeader
-                            user={user}
-                            loading={loading}
-                            getAvatar={getAvatar}
-                            currentUser={currentUser}
-                            setuser={setuser}
-                        />
-
-                        {currentUser?.uid === id && (
-                            <Header
+                        <Box flex={1}>
+                            <TopHeader
+                                user={user}
+                                loading={loading}
+                                getAvatar={getAvatar}
+                                currentUser={currentUser}
+                                setuser={setuser}
+                            />
+                        </Box>
+                        <Box flex={1}>
+                            <HeaderNumber
                                 HeaderInformations={HeaderInformations}
                                 loading={loading}
                                 currentUser={currentUser}
                             />
-                        )}
+                        </Box>
                     </Stack>
                     <Paper
                         elevation={0}
