@@ -191,7 +191,7 @@ const BoardingPass = ({ sender, receiver, state, currency }) => {
                                                 variant="body2"
                                                 color="GrayText"
                                             >
-                                                Gratuite
+                                                Non
                                             </Typography>{" "}
                                         </Box>
                                     </Stack>

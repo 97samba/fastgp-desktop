@@ -12,6 +12,7 @@ import {
     Typography,
     FormHelperText,
     Divider,
+    Link,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -147,7 +148,7 @@ const HeaderNumber = ({ HeaderInformations, loading }) => {
         </Box>
     );
 };
-const TopHeader = ({ user, loading, getAvatar, currentUser, setuser }) => {
+const TopHeader = ({ user, loading, getAvatar }) => {
     const grade = user?.flights.length > 5 ? "Professionnel" : "DEBUTANT";
 
     return (
@@ -383,6 +384,104 @@ const ModifyProfile = ({ setediting }) => {
         </Box>
     );
 };
+const StaticInformations = ({ loading, user, currentUser }) => {
+    return (
+        <Paper
+            elevation={0}
+            sx={{
+                boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+                mt: 4,
+            }}
+        >
+            <Box p={2}>
+                <Grid container px={2} spacing={2}>
+                    <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
+                        <Typography variant="caption" color="GrayText">
+                            Prénom
+                        </Typography>
+                        <Typography variant="body2" color={COLORS.black} noWrap>
+                            {loading ? <Skeleton /> : user.firstName}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
+                        <Typography variant="caption" color="GrayText">
+                            Nom
+                        </Typography>
+                        <Typography variant="body2" color={COLORS.black} noWrap>
+                            {loading ? <Skeleton /> : user.lastName}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
+                        <Typography variant="caption" color="GrayText">
+                            Email
+                        </Typography>
+                        {loading ? (
+                            <Skeleton width="100%" />
+                        ) : (
+                            <>
+                                {currentUser?.uid ? (
+                                    <Link href={"mailto:" + user?.email}>
+                                        <Typography
+                                            variant="body2"
+                                            color={COLORS.black}
+                                        >
+                                            {user.email}
+                                        </Typography>
+                                    </Link>
+                                ) : (
+                                    <Typography
+                                        variant="body2"
+                                        color={COLORS.black}
+                                    >
+                                        *******@*****.com
+                                    </Typography>
+                                )}
+                            </>
+                        )}
+                    </Grid>
+                    <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
+                        <Typography variant="body2" color="GrayText">
+                            Téléphone
+                        </Typography>
+                        {loading ? (
+                            <Skeleton width="100%" />
+                        ) : (
+                            <>
+                                {currentUser?.uid ? (
+                                    <Link href={"tel:" + user?.phone}>
+                                        <Typography
+                                            variant="body2"
+                                            color={COLORS.black}
+                                        >
+                                            {user.phone}
+                                        </Typography>
+                                    </Link>
+                                ) : (
+                                    <Typography
+                                        variant="body2"
+                                        color={COLORS.black}
+                                    >
+                                        06 ** ** ** **
+                                    </Typography>
+                                )}
+                            </>
+                        )}
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+                        <Typography variant="body2" color="GrayText">
+                            Adresse
+                        </Typography>
+                        <Typography variant="body2" color={COLORS.black} noWrap>
+                            {currentUser?.uid
+                                ? "171 Rue de la Ville, 75000"
+                                : "*** *** ********"}
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </Box>
+        </Paper>
+    );
+};
 const Profile = () => {
     const {
         profilState,
@@ -563,110 +662,11 @@ const Profile = () => {
                             />
                         </Box>
                     </Stack>
-                    <Paper
-                        elevation={0}
-                        sx={{
-                            boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
-                            mt: 4,
-                        }}
-                    >
-                        <Box p={2}>
-                            <Grid container px={2} spacing={2}>
-                                <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
-                                    <Typography
-                                        variant="caption"
-                                        color="GrayText"
-                                    >
-                                        Prénom
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        color={COLORS.black}
-                                        noWrap
-                                    >
-                                        {loading ? (
-                                            <Skeleton />
-                                        ) : (
-                                            user.firstName
-                                        )}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
-                                    <Typography
-                                        variant="caption"
-                                        color="GrayText"
-                                    >
-                                        Nom
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        color={COLORS.black}
-                                        noWrap
-                                    >
-                                        {loading ? <Skeleton /> : user.lastName}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
-                                    <Typography
-                                        variant="caption"
-                                        color="GrayText"
-                                    >
-                                        Email
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        color={COLORS.black}
-                                        noWrap
-                                    >
-                                        {loading ? <Skeleton /> : user.email}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
-                                    <Typography
-                                        variant="body2"
-                                        color="GrayText"
-                                    >
-                                        Téléphone
-                                    </Typography>
-                                    {loading ? (
-                                        <Skeleton width="100%" />
-                                    ) : (
-                                        <ButtonBase
-                                            onClick={() =>
-                                                console.log("object")
-                                            }
-                                        >
-                                            <Typography
-                                                variant="body2"
-                                                color={COLORS.black}
-                                            >
-                                                {currentUser?.uid
-                                                    ? user.phone
-                                                    : "06 ** ** ** **"}
-                                            </Typography>
-                                        </ButtonBase>
-                                    )}
-                                </Grid>
-                                <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-                                    <Typography
-                                        variant="body2"
-                                        color="GrayText"
-                                    >
-                                        Adresse
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        color={COLORS.black}
-                                        noWrap
-                                    >
-                                        {currentUser?.uid
-                                            ? "171 Rue de la Ville, 75000"
-                                            : "*** *** ********"}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    </Paper>
+                    <StaticInformations
+                        loading={loading}
+                        user={user}
+                        currentUser={currentUser}
+                    />
                     <StaticAnnounces />
                 </Box>
             ) : (

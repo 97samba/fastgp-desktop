@@ -2,6 +2,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    Button,
     Container,
     Grid,
     ListItem,
@@ -10,15 +11,21 @@ import {
     MenuItem,
     MenuList,
     Paper,
+    Stack,
     Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { FaPlaneDeparture, FaUserAlt } from "react-icons/fa";
+import { FaHome, FaPlaneDeparture, FaUserAlt } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
 import { IoMdHeartEmpty, IoMdPricetags } from "react-icons/io";
 import { IoDocument, IoLocationSharp } from "react-icons/io5";
-import { MdExpandMore, MdPayment } from "react-icons/md";
+import {
+    MdExpandMore,
+    MdOutlineBlock,
+    MdPayment,
+    MdPerson,
+} from "react-icons/md";
 import COLORS from "../../colors";
 import Profile from "../ProfileDetailsComponents/Profile";
 import { useHistory, useParams } from "react-router-dom";
@@ -230,6 +237,41 @@ const Right = () => {
     return <Box>{getItem()}</Box>;
 };
 
+const Unauthorized = () => {
+    const history = useHistory();
+    return (
+        <Box flex={1} m={2} p={2}>
+            <Paper
+                elevation={0}
+                sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+            >
+                <Stack alignItems="center" spacing={2} textAlign="center" p={4}>
+                    <MdOutlineBlock size={30} color="red" />
+                    <Typography variant="h5">
+                        {" "}
+                        Unauthorized ressources
+                    </Typography>
+                    <Stack direction="row" spacing={2}>
+                        <Button
+                            onClick={() => history.push("/")}
+                            endIcon={<FaHome />}
+                        >
+                            Acceuil
+                        </Button>
+                        <Button
+                            color="warning"
+                            onClick={() => history.push("/login")}
+                            endIcon={<MdPerson />}
+                        >
+                            Connexion
+                        </Button>
+                    </Stack>
+                </Stack>
+            </Paper>
+        </Box>
+    );
+};
+
 export const ProfileDetailsContext = createContext();
 
 const ProfileDetails = () => {
@@ -244,16 +286,14 @@ const ProfileDetails = () => {
 
     const [loading, setloading] = useState(true);
     const [user, setuser] = useState();
+    const [unauthorized, setunauthorized] = useState(false);
 
     async function getPage() {
         var pageInfo = dashTab.filter((tab) => tab.key === subpage);
         if (pageInfo.length === 0) {
             pageInfo = boardTab.filter((tab) => tab.key === subpage);
         }
-        if (
-            pageInfo.length === 0 ||
-            (id !== currentUser?.uid && pageInfo[0].secured)
-        ) {
+        if (pageInfo.length === 0) {
             setprofilState({ ...profilState, ...boardTab[0] });
             history.replace("/profilDetails/" + id + "/" + boardTab[0].key);
         } else {
@@ -271,7 +311,6 @@ const ProfileDetails = () => {
         // if (userType === "client") {
         results = await getUserReservations(id);
         let headers = [];
-        console.log("id :>> ", id, "currentuser", currentUser?.uid);
         if (id === currentUser?.uid) {
             headers = [
                 {
@@ -315,7 +354,6 @@ const ProfileDetails = () => {
                 // },
             ];
         }
-        console.log("headers :>> ", headers);
         setHeaderInformations(headers);
 
         setreservations(results);
@@ -408,24 +446,11 @@ const ProfileDetails = () => {
     };
 
     useEffect(() => {
-        if (currentUser !== undefined) getUser();
+        if (currentUser !== undefined) {
+            if (currentUser?.uid === id) getUser();
+            else setunauthorized(true);
+        }
     }, [currentUser]);
-
-    // useEffect(() => {
-    //   console.log(currentUser);
-    //   if (currentUser !== undefined) {
-    //     if (currentUser !== null && currentUser?.uid === id) {
-    //       return true;
-    //     } else {
-    //       return false;
-    //     }
-    //   } else {
-    //     return false;
-    //   }
-    // }, [currentUser]);
-    useEffect(() => {
-        getPage();
-    }, [subpage]);
 
     return (
         <ProfileDetailsContext.Provider
@@ -445,45 +470,49 @@ const ProfileDetails = () => {
             }}
         >
             <Container>
-                <Grid
-                    container
-                    spacing={{ xs: 2, md: 4 }}
-                    py={{ xs: 2, md: 4 }}
-                >
+                {unauthorized ? (
+                    <Unauthorized />
+                ) : (
                     <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={3}
-                        lg={3}
-                        xl={3}
-                        display={{
-                            xs: "none",
-                            sm: "none",
-                            md: "block",
-                        }}
+                        container
+                        spacing={{ xs: 2, md: 4 }}
+                        py={{ xs: 2, md: 4 }}
                     >
-                        <Left />
+                        <Grid
+                            item
+                            xs={12}
+                            sm={12}
+                            md={3}
+                            lg={3}
+                            xl={3}
+                            display={{
+                                xs: "none",
+                                sm: "none",
+                                md: "block",
+                            }}
+                        >
+                            <Left />
+                        </Grid>
+                        <Grid
+                            item
+                            xs={12}
+                            sm={12}
+                            md={3}
+                            lg={3}
+                            xl={3}
+                            display={{
+                                xs: currentUser?.uid === id ? "block" : "none",
+                                sm: "block",
+                                md: "none",
+                            }}
+                        >
+                            <MobileLeft />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
+                            <Right />
+                        </Grid>
                     </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={3}
-                        lg={3}
-                        xl={3}
-                        display={{
-                            xs: currentUser?.uid === id ? "block" : "none",
-                            sm: "block",
-                            md: "none",
-                        }}
-                    >
-                        <MobileLeft />
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
-                        <Right />
-                    </Grid>
-                </Grid>
+                )}
             </Container>
         </ProfileDetailsContext.Provider>
     );
