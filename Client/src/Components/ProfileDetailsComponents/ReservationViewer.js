@@ -7,11 +7,6 @@ import {
     Grid,
     Button,
     CircularProgress,
-    List,
-    ListSubheader,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
     Link,
     Chip,
 } from "@mui/material";
@@ -21,14 +16,11 @@ import React, { useEffect, useState } from "react";
 import { FaShippingFast, FaShoppingBag, FaUserAlt } from "react-icons/fa";
 import { GiHandTruck, GiPayMoney } from "react-icons/gi";
 import { GoPackage } from "react-icons/go";
-import { IconContext } from "react-icons/lib";
-import { MdPhone } from "react-icons/md";
-import QRCode from "react-qr-code";
+import { MdPhone, MdPhoto, MdPictureInPicture } from "react-icons/md";
 import { useHistory } from "react-router-dom";
 import COLORS from "../../colors";
 import BoardingPass from "../ViewComponents/BoardingPass";
 import { FaEuroSign, FaHandHolding, FaPlaneDeparture } from "react-icons/fa";
-import { IoMdSave } from "react-icons/io";
 import { MdTextsms } from "react-icons/md";
 
 const bagageType = [
@@ -102,7 +94,7 @@ const PackageInformations = ({ data }) => {
                         publisher: data.publisher,
                         departure: data.departure,
                         destination: data.destination,
-                        id: data.fligthId,
+                        id: data.id,
                         prices: data.prices,
                     }}
                 />
@@ -168,6 +160,15 @@ const PackageInformations = ({ data }) => {
                     information={
                         <Typography color={COLORS.warning}>
                             {getPrice()}
+                        </Typography>
+                    }
+                />
+                <InformationViewer
+                    icon={<MdPhoto size={15} color={COLORS.primary} />}
+                    label="Photo"
+                    information={
+                        <Typography color={COLORS.primary}>
+                            Voir photo
                         </Typography>
                     }
                 />
@@ -307,11 +308,19 @@ const PriceInformationsSummary = ({ data }) => {
 const DeliveryStatusInformations = ({ data, step }) => {
     function getStatus(text) {
         if (text === "ok")
-            return {
-                color: "success",
-                text: "Réservation validée",
-                textColor: "green",
-            };
+            if (moment().isSameOrAfter(data.departureDate)) {
+                return {
+                    color: "primary",
+                    text: "Transport en cours",
+                    textColor: "black",
+                };
+            } else {
+                return {
+                    color: "success",
+                    text: "Réservation validée",
+                    textColor: "green",
+                };
+            }
         if (text === "ko")
             return {
                 color: "error",

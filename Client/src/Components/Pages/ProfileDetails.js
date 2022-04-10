@@ -41,6 +41,7 @@ import { useAuth } from "../../firebase/auth";
 import MyAnnouces from "../ProfileDetailsComponents/MyAnnouces";
 import Reservations from "../ProfileDetailsComponents/Reservations";
 import Documents from "../ProfileDetailsComponents/Documents";
+import Followers from "../ProfileDetailsComponents/Followers";
 
 export const boardTab = [
     {
@@ -216,7 +217,7 @@ const Right = () => {
         },
         {
             key: "favorites",
-            item: <Location />,
+            item: <Followers />,
         },
         {
             key: "reservations",
@@ -446,8 +447,8 @@ const ProfileDetails = () => {
     };
 
     useEffect(() => {
-        if (currentUser !== undefined) {
-            if (currentUser?.uid === id) getUser();
+        if (currentUser !== undefined && subpage) {
+            if (currentUser?.uid === id || subpage === "myProfile") getUser();
             else setunauthorized(true);
         }
     }, [currentUser]);

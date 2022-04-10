@@ -65,6 +65,7 @@ const Header = () => {
                         fontWeight="bold"
                         color="GrayText"
                         noWrap
+                        textAlign="right"
                     >
                         Poids
                     </Typography>
@@ -75,6 +76,7 @@ const Header = () => {
                         fontWeight="bold"
                         color="GrayText"
                         noWrap
+                        textAlign="right"
                     >
                         Prix
                     </Typography>

@@ -358,6 +358,7 @@ export const GetAReservation = async (reservationId) => {
         .catch((error) =>
             console.log("erreur lors du get de la reservation ", error)
         );
+    console.log("result :>> ", result);
     return result;
 };
 
@@ -492,3 +493,25 @@ export const getUserRecentFlights = async (userId) => {
     });
     return flights;
 };
+
+/**
+ * followers
+ */
+
+/**
+ * Renvoit les personnes qui suivent l'utilisateur connecté
+ * @param {Array(int)} ids Tableau d'identifiants des personnes qui suivent le client
+ */
+export async function getFollowers(ids) {
+    const q = query(collection(db, "users"), where("userId", "in", ids));
+    const followers = [];
+    await getDocs(q).then((datas) =>
+        datas.forEach((data) => followers.push({ ...data.data(), id: data.id }))
+    );
+    return followers;
+}
+/**
+ * Renvoit les personnes suivies l'utilisateur connecté
+ * @param {int} id Identifiant de la personne qui suit
+ */
+export async function getFollowedPeople(id) {}
