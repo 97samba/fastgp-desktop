@@ -1,17 +1,30 @@
-import { Divider, Grid, Paper, Stack, Typography } from "@mui/material";
+import {
+    ButtonBase,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Divider,
+    Grid,
+    Paper,
+    Stack,
+    Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import { FaPlane, FaPlaneDeparture } from "react-icons/fa";
 import Qrcode from "react-qr-code";
 
 import COLORS from "../../colors";
 
 const BoardingPass = ({ sender, receiver, state, currency }) => {
-    const QrCodePass = () => {
-        const url = "https://fir-c69a6.firebaseapp.com/reservationDetails/";
+    const [open, setopen] = useState(false);
+    const QrCodePass = ({ big }) => {
+        // const url = "https://fir-c69a6.firebaseapp.com/reservationDetails/";
+        const url = "http://192.168.1.23:3000/reservationDetails/";
         function getQRCodeValue() {
             // return url+state.id + ", " + sender?.firstName + ", " + sender?.lastName;
-            return url + state.id;
+            return url + state.id + "?c=" + state.clientID + "&g=" + state.GPId;
         }
         return (
             <Stack direction="row" justifyContent="center">
@@ -19,12 +32,41 @@ const BoardingPass = ({ sender, receiver, state, currency }) => {
                     value={getQRCodeValue()}
                     bgColor="#F2F2F2F2"
                     fgColor={COLORS.primary}
-                    size={80}
+                    size={big ? 220 : 120}
                 />
             </Stack>
         );
     };
+    const QRCOdeDialog = () => {
+        return (
+            <Dialog
+                open={open}
+                onClose={closeQrcodeDialog}
+                fullWidth={true}
+                maxWidth="xl"
+            >
+                <DialogTitle>A flasher par votre transporteur</DialogTitle>
 
+                <DialogContent>
+                    <DialogContentText>
+                        Montrer ce qrcode pour que votre transporteur accéde
+                        rapidement à votre colis.
+                    </DialogContentText>
+                    <Box py={2}>
+                        <QrCodePass big={true} />
+                    </Box>
+                    <Typography textAlign="center">E-ticket</Typography>
+                </DialogContent>
+            </Dialog>
+        );
+    };
+
+    function showQrCodeDialog() {
+        setopen(true);
+    }
+    function closeQrcodeDialog() {
+        setopen(false);
+    }
     return (
         <Box>
             <Box my={2}>
@@ -51,17 +93,26 @@ const BoardingPass = ({ sender, receiver, state, currency }) => {
                                 }}
                                 order={{ xs: 1, sm: 0, md: 0 }}
                             >
-                                <Box py={1} textAlign="center" color="GrayText">
-                                    <Typography variant="body2">
-                                        E - Ticket
-                                    </Typography>
-                                    <Box my={2}>
-                                        <QrCodePass />
+                                <ButtonBase
+                                    sx={{ width: "100%" }}
+                                    onClick={showQrCodeDialog}
+                                >
+                                    <Box
+                                        py={0.5}
+                                        textAlign="center"
+                                        color="GrayText"
+                                    >
+                                        <Typography variant="body2">
+                                            Cliquer
+                                        </Typography>
+                                        <Box my={1}>
+                                            <QrCodePass />
+                                        </Box>
+                                        <Typography variant="caption">
+                                            Traçable{" "}
+                                        </Typography>
                                     </Box>
-                                    <Typography variant="caption">
-                                        Traçable{" "}
-                                    </Typography>
-                                </Box>
+                                </ButtonBase>
                             </Grid>
                             <Grid
                                 item
@@ -308,6 +359,7 @@ const BoardingPass = ({ sender, receiver, state, currency }) => {
                         </Grid>
                     </Box>
                 </Paper>
+                <QRCOdeDialog />
             </Box>
         </Box>
     );

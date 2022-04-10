@@ -13,10 +13,15 @@ import {
 import { Box } from "@mui/system";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { FaShippingFast, FaShoppingBag, FaUserAlt } from "react-icons/fa";
+import {
+    FaHandHoldingUsd,
+    FaShippingFast,
+    FaShoppingBag,
+    FaUserAlt,
+} from "react-icons/fa";
 import { GiHandTruck, GiPayMoney } from "react-icons/gi";
 import { GoPackage } from "react-icons/go";
-import { MdPhone, MdPhoto, MdPictureInPicture } from "react-icons/md";
+import { MdPhone, MdPhoto } from "react-icons/md";
 import { useHistory } from "react-router-dom";
 import COLORS from "../../colors";
 import BoardingPass from "../ViewComponents/BoardingPass";
@@ -96,6 +101,8 @@ const PackageInformations = ({ data }) => {
                         destination: data.destination,
                         id: data.id,
                         prices: data.prices,
+                        clientID: data.owner,
+                        GPId: data.gpId,
                     }}
                 />
             </Stack>
@@ -297,9 +304,18 @@ const PriceInformationsSummary = ({ data }) => {
                         </Typography>
                     </Stack>
                 </Stack>
-                <Typography variant="body1" fontWeight={500}>
-                    Payé en liquide
-                </Typography>
+                <Button
+                    variant="contained"
+                    color="success"
+                    endIcon={<FaHandHoldingUsd />}
+                >
+                    Confirmer le paiement
+                </Button>
+                {data?.payed && (
+                    <Typography variant="caption" fontWeight={500}>
+                        Payé en liquide
+                    </Typography>
+                )}
             </Stack>
         </Paper>
     );
