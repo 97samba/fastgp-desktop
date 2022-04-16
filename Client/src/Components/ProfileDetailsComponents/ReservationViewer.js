@@ -41,6 +41,146 @@ const bagageType = [
     { label: "Alimentaire", value: "food" },
 ];
 
+const LoadingSkeleton = () => {
+    return (
+        <Paper
+            sx={{
+                flex: 1,
+                boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+                borderRadius: 3,
+                textAlign: "center",
+            }}
+            elevation={0}
+        >
+            <Stack
+                p={5}
+                flex={1}
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+            >
+                <CircularProgress size={30} />
+                <Typography variant="body2" color={COLORS.black}>
+                    Chargement des informations
+                </Typography>
+            </Stack>
+        </Paper>
+    );
+};
+
+const DeliveryStatusInformations = ({ data, step }) => {
+    function getStatus(text) {
+        if (text === "ok")
+            if (moment().isSameOrAfter(data.departureDate)) {
+                return {
+                    color: "primary",
+                    text: "Transport en cours",
+                    textColor: "black",
+                };
+            } else {
+                return {
+                    color: "success",
+                    text: "Réservation validée",
+                    textColor: "green",
+                };
+            }
+        if (text === "ko")
+            return {
+                color: "error",
+                text: "Réservation annulée",
+                textColor: "red",
+            };
+        if (text === "pending")
+            return {
+                color: "warning",
+                text: "Validation en cours",
+                textColor: "orange",
+            };
+    }
+    return (
+        <Paper
+            sx={{
+                flex: 1,
+                boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+                borderRadius: 3,
+            }}
+            elevation={0}
+        >
+            <Box px={3} py={3}>
+                <Stack direction="row" spacing={2} mb={2} alignItems="center">
+                    <Typography>Etat :</Typography>
+                    <Chip
+                        label={getStatus(data.status).text}
+                        // color={getStatus(data.status).color}
+                        sx={{
+                            color: getStatus(data.status).textColor,
+                            backgroundColor: getStatus(data.status).color,
+                        }}
+                    />
+                </Stack>
+                <Stack direction="row" flex={1} alignItems="center">
+                    <Box
+                        borderRadius={10}
+                        bgcolor={COLORS.warning}
+                        p={{ xs: 1.5, md: 2 }}
+                    >
+                        <GoPackage size={30} color="white" />
+                    </Box>
+                    <Divider
+                        sx={{
+                            flex: 1,
+                            borderBottomWidth: 5,
+                            borderColor:
+                                step >= 1 ? COLORS.warning : "lightgray",
+                        }}
+                    />
+                    <Box
+                        borderRadius={10}
+                        bgcolor={step >= 2 ? COLORS.warning : "lightGray"}
+                        p={{ xs: 1.5, md: 2 }}
+                    >
+                        <FaShippingFast size={30} color="white" />
+                    </Box>
+                    <Divider
+                        sx={{
+                            flex: 1,
+                            borderBottomWidth: 5,
+                            borderColor:
+                                step >= 3 ? COLORS.warning : "lightgray",
+                        }}
+                    />
+                    <Box
+                        borderRadius={10}
+                        bgcolor={step >= 3 ? COLORS.warning : "lightGray"}
+                        p={{ xs: 1.5, md: 2 }}
+                    >
+                        <GiHandTruck size={30} color="white" />
+                    </Box>
+                </Stack>
+                <Stack direction="row" mt={3} display="flex">
+                    <Stack
+                        direction="row"
+                        p={1}
+                        bgcolor="#e76f513d"
+                        alignItems="center"
+                        borderRadius={4}
+                        color={COLORS.black}
+                        spacing={1}
+                        px={2}
+                    >
+                        <Typography variant="body1">
+                            Date de livraison estimée :{" "}
+                        </Typography>
+                        <Typography fontWeight={555} variant="body1">
+                            {moment(data.distributionDate).format("D MMMM")}
+                        </Typography>
+                    </Stack>
+                </Stack>
+            </Box>
+        </Paper>
+    );
+};
+
 const PackageInformations = ({ data }) => {
     function getPrice() {
         if (data?.prices) {
@@ -172,7 +312,7 @@ const PackageInformations = ({ data }) => {
                 />
                 <InformationViewer
                     icon={<MdPhoto size={15} color={COLORS.primary} />}
-                    label="Photo"
+                    label="Photo du colis"
                     information={
                         <Typography color={COLORS.primary}>
                             Voir photo
@@ -210,6 +350,7 @@ const ClientInformationsSummary = ({ data }) => {
                         pt={1}
                     >
                         <InformationViewer
+                            full={true}
                             icon={
                                 <GiPayMoney size={18} color={COLORS.primary} />
                             }
@@ -233,6 +374,7 @@ const ClientInformationsSummary = ({ data }) => {
                             }
                         />
                         <InformationViewer
+                            full={true}
                             icon={
                                 <FaHandHolding
                                     size={16}
@@ -275,7 +417,7 @@ const PriceInformationsSummary = ({ data }) => {
                             Prix d'envoi:
                         </Typography>
                         <Typography variant="body1" fontWeight={555}>
-                            12 {data.currency}
+                            {data.prices.pricePerKG + " " + data.currency}
                         </Typography>
                     </Stack>
                     <Stack direction="row" justifyContent="space-between">
@@ -291,7 +433,7 @@ const PriceInformationsSummary = ({ data }) => {
                             Réduction:
                         </Typography>
                         <Typography variant="body1" fontWeight={555}>
-                            0 {data.currency}
+                            {"- 0 " + data.currency}
                         </Typography>
                     </Stack>
                     <Divider />
@@ -300,10 +442,13 @@ const PriceInformationsSummary = ({ data }) => {
                             Total:
                         </Typography>
                         <Typography variant="body1" fontWeight={500}>
-                            12 {data.currency}
+                            {data.prices.pricePerKG + " " + data.currency}
                         </Typography>
                     </Stack>
                 </Stack>
+                <Button variant="outlined" color="warning">
+                    Changer le prix
+                </Button>
                 <Button
                     variant="contained"
                     color="success"
@@ -317,119 +462,6 @@ const PriceInformationsSummary = ({ data }) => {
                     </Typography>
                 )}
             </Stack>
-        </Paper>
-    );
-};
-
-const DeliveryStatusInformations = ({ data, step }) => {
-    function getStatus(text) {
-        if (text === "ok")
-            if (moment().isSameOrAfter(data.departureDate)) {
-                return {
-                    color: "primary",
-                    text: "Transport en cours",
-                    textColor: "black",
-                };
-            } else {
-                return {
-                    color: "success",
-                    text: "Réservation validée",
-                    textColor: "green",
-                };
-            }
-        if (text === "ko")
-            return {
-                color: "error",
-                text: "Réservation annulée",
-                textColor: "red",
-            };
-        if (text === "pending")
-            return {
-                color: "warning",
-                text: "Validation en cours",
-                textColor: "orange",
-            };
-    }
-    return (
-        <Paper
-            sx={{
-                flex: 1,
-                boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
-                borderRadius: 3,
-            }}
-            elevation={0}
-        >
-            <Box px={3} py={3}>
-                <Stack direction="row" spacing={2} mb={2} alignItems="center">
-                    <Typography>Etat :</Typography>
-                    <Chip
-                        label={getStatus(data.status).text}
-                        // color={getStatus(data.status).color}
-                        sx={{
-                            color: getStatus(data.status).textColor,
-                            backgroundColor: getStatus(data.status).color,
-                        }}
-                    />
-                </Stack>
-                <Stack direction="row" flex={1} alignItems="center">
-                    <Box
-                        borderRadius={10}
-                        bgcolor={COLORS.warning}
-                        p={{ xs: 1.5, md: 2 }}
-                    >
-                        <GoPackage size={30} color="white" />
-                    </Box>
-                    <Divider
-                        sx={{
-                            flex: 1,
-                            borderBottomWidth: 5,
-                            borderColor:
-                                step >= 1 ? COLORS.warning : "lightgray",
-                        }}
-                    />
-                    <Box
-                        borderRadius={10}
-                        bgcolor={step >= 2 ? COLORS.warning : "lightGray"}
-                        p={{ xs: 1.5, md: 2 }}
-                    >
-                        <FaShippingFast size={30} color="white" />
-                    </Box>
-                    <Divider
-                        sx={{
-                            flex: 1,
-                            borderBottomWidth: 5,
-                            borderColor:
-                                step >= 3 ? COLORS.warning : "lightgray",
-                        }}
-                    />
-                    <Box
-                        borderRadius={10}
-                        bgcolor={step >= 3 ? COLORS.warning : "lightGray"}
-                        p={{ xs: 1.5, md: 2 }}
-                    >
-                        <GiHandTruck size={30} color="white" />
-                    </Box>
-                </Stack>
-                <Stack direction="row" mt={3} display="flex">
-                    <Stack
-                        direction="row"
-                        p={1}
-                        bgcolor="#e76f513d"
-                        alignItems="center"
-                        borderRadius={4}
-                        color={COLORS.black}
-                        spacing={1}
-                        px={2}
-                    >
-                        <Typography variant="body1">
-                            Date de livraison estimée :{" "}
-                        </Typography>
-                        <Typography fontWeight={555} variant="body1">
-                            {moment(data.distributionDate).format("d MMMM")}
-                        </Typography>
-                    </Stack>
-                </Stack>
-            </Box>
         </Paper>
     );
 };
@@ -457,36 +489,16 @@ const Title = () => {
     );
 };
 
-const LoadingSkeleton = () => {
+const InformationViewer = ({ icon, label, information, full = false }) => {
     return (
-        <Paper
-            sx={{
-                flex: 1,
-                boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
-                borderRadius: 3,
-                textAlign: "center",
-            }}
-            elevation={0}
+        <Grid
+            item
+            xs={12}
+            sm={12}
+            md={full ? 12 : 6}
+            lg={full ? 12 : 6}
+            xl={full ? 12 : 6}
         >
-            <Stack
-                p={5}
-                flex={1}
-                justifyContent="center"
-                alignItems="center"
-                spacing={2}
-            >
-                <CircularProgress size={30} />
-                <Typography variant="body2" color={COLORS.black}>
-                    Chargement des informations
-                </Typography>
-            </Stack>
-        </Paper>
-    );
-};
-
-const InformationViewer = ({ icon, label, information }) => {
-    return (
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
             <Stack direction="row" spacing={1}>
                 <IconButton>{icon}</IconButton>
 

@@ -462,6 +462,7 @@ const ProfileDetails = () => {
                 setuser,
                 goToPage,
                 loading,
+                setloading,
                 currentUser,
                 id,
                 getAvatar,

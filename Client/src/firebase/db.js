@@ -504,7 +504,7 @@ export const getUserRecentFlights = async (userId) => {
  */
 export async function getFollowers(ids) {
     const q = query(collection(db, "users"), where("userId", "in", ids));
-    const followers = [];
+    let followers = [];
     await getDocs(q).then((datas) =>
         datas.forEach((data) => followers.push({ ...data.data(), id: data.id }))
     );
@@ -514,4 +514,14 @@ export async function getFollowers(ids) {
  * Renvoit les personnes suivies l'utilisateur connecté
  * @param {int} id Identifiant de la personne qui suit
  */
-export async function getFollowedPeople(id) {}
+export async function getFollowedPeople(id) {
+    const q = query(
+        collection(db, "users"),
+        where("followers", "array-contains", id)
+    );
+    let results = [];
+    await getDocs(q).then((datas) =>
+        datas.forEach((data) => results.push({ ...data.data(), id: data.id }))
+    );
+    return results;
+}

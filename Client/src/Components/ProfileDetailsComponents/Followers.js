@@ -6,6 +6,7 @@ import {
     Paper,
     Button,
     Link,
+    Divider,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useEffect, useState } from "react";
@@ -16,90 +17,171 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import COLORS from "../../colors";
-import { getFollowers } from "../../firebase/db";
+import { getFollowedPeople, getFollowers } from "../../firebase/db";
 import { BsPatchCheckFill } from "react-icons/bs";
+import { IoAdd } from "react-icons/io5";
 
-const FollowersTab = ({ followed, followers }) => {
+const FollowersTab = ({ followed, followers, loading, userId }) => {
     const [value, setvalue] = useState(1);
-    const [loading, setloading] = useState(true);
     function handleChange(e, newValue) {
         setvalue(newValue);
     }
     const AFollower = ({ person }) => {
         return (
-            <Stack direction="row" spacing={2} alignItems="center" py={2}>
-                <Avatar src={person.photoUrl} />
-                <Stack flexGrow={1}>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                        <Link
-                            underline="hover"
-                            href={`/profilDetails/${person.userId}/myProfile`}
-                        >
-                            <Typography
-                                variant="body1"
-                                color={COLORS.black}
-                                fontWeight={555}
-                            >
-                                {person.firstName + " " + person.lastName}
-                            </Typography>
-                        </Link>
-                        {person.documentVerified && (
-                            <BsPatchCheckFill color={COLORS.primary} />
-                        )}
-                    </Stack>
-                    <Stack
-                        direction={{ xs: "column", md: "row" }}
-                        // alignItems="center"
-                        spacing={{ xs: 0, md: 1 }}
+            <>
+                <Stack direction="row" spacing={2} alignItems="center" py={2}>
+                    <Link
+                        href={"/profilDetails/" + person.userId + "/myProfile"}
                     >
-                        <Typography variant="body2" color={COLORS.black}>
-                            {person.country + ", "}
-                        </Typography>
-                        <Typography variant="body2" color={COLORS.black}>
-                            {person.flights.length + " annonce(s)"}
-                        </Typography>
+                        <Avatar
+                            src={person.photoUrl}
+                            alt={"fast-gp-" + person.firstname}
+                        />
+                    </Link>
+                    <Stack flexGrow={1}>
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                            <Link
+                                underline="hover"
+                                href={`/profilDetails/${person.userId}/myProfile`}
+                            >
+                                <Typography
+                                    variant="body1"
+                                    color={COLORS.black}
+                                    fontWeight={555}
+                                >
+                                    {person.firstName + " " + person.lastName}
+                                </Typography>
+                            </Link>
+                            {person.documentVerified && (
+                                <BsPatchCheckFill color={COLORS.primary} />
+                            )}
+                        </Stack>
+                        <Stack
+                            direction={{ xs: "column", md: "row" }}
+                            // alignItems="center"
+                            spacing={{ xs: 0, md: 1 }}
+                        >
+                            <Typography variant="body2" color={COLORS.black}>
+                                {person.country + ", "}
+                            </Typography>
+                            <Typography variant="body2" color={COLORS.black}>
+                                {person.flights.length + " annonce(s)"}
+                            </Typography>
+                        </Stack>
                     </Stack>
+                    {person.followers.includes(userId) ? (
+                        <Button size="small" variant="outlined">
+                            Se désabonner
+                        </Button>
+                    ) : (
+                        <Button
+                            size="small"
+                            variant="contained"
+                            endIcon={<IoAdd />}
+                        >
+                            S'abonner
+                        </Button>
+                    )}
                 </Stack>
-                <Button size="small">Se désabonner</Button>
-            </Stack>
+                <Divider />
+            </>
+        );
+    };
+    const AFollowerSkeleton = () => {
+        return (
+            <>
+                <Stack direction="row" spacing={2} alignItems="center" py={2}>
+                    <Skeleton
+                        variant="circular"
+                        width={50}
+                        height={50}
+                    ></Skeleton>
+                    <Stack flexGrow={1}>
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                            <Skeleton variant="text" width={100} />
+                        </Stack>
+                        <Stack
+                            direction={{ xs: "column", md: "row" }}
+                            // alignItems="center"
+                            spacing={{ xs: 0, md: 1 }}
+                        >
+                            <Skeleton variant="text" width={50} />
+                        </Stack>
+                    </Stack>
+                    <Skeleton variant="text" width={80} height={40} />
+                </Stack>
+                <Divider />
+            </>
         );
     };
     const TabFollow = ({ value }) => {
         return (
-            <>
-                {value === 1 && (
-                    <Box role="tabpanel" p={2}>
-                        {followers.map((value, index) => (
-                            <AFollower person={value} key={index} />
-                        ))}
+            <Box display={value === 2 ? true : "none"}>
+                {loading ? (
+                    [1, 2, 3].map((index) => <AFollowerSkeleton key={index} />)
+                ) : (
+                    <Box>
+                        {followers.length > 0 ? (
+                            <Box role="tabpanel" p={2}>
+                                {followers.map((value, index) => (
+                                    <AFollower person={value} key={index} />
+                                ))}
+                            </Box>
+                        ) : (
+                            <Box>
+                                <Typography>
+                                    Vous n'avez pas d'abonné
+                                </Typography>
+                            </Box>
+                        )}
                     </Box>
                 )}
-            </>
+            </Box>
         );
     };
     const TabFollowed = ({ value }) => {
         return (
-            <>
-                {value === 2 && (
-                    <Box role="tabpanel">
-                        <Typography>qui me suivent</Typography>
+            <Box display={value === 1 ? true : "none"}>
+                {loading ? (
+                    [1, 2, 3].map((index) => <AFollowerSkeleton key={index} />)
+                ) : (
+                    <Box>
+                        {followed.length > 0 ? (
+                            <Box role="tabpanel" p={2}>
+                                {followed.map((value, index) => (
+                                    <AFollower person={value} key={index} />
+                                ))}
+                            </Box>
+                        ) : (
+                            <Box py={4} px={2} textAlign="center">
+                                <Typography>
+                                    Vous ne suivez aucun GP.
+                                </Typography>
+                            </Box>
+                        )}
                     </Box>
                 )}
-            </>
+            </Box>
         );
     };
     return (
         <Box sx={{ width: "100%", typography: "body1" }} my={2}>
             <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <Stack
+                    sx={{
+                        borderBottom: 1,
+                        borderColor: "divider",
+                    }}
+                    alignItems="center"
+                >
                     <TabList
                         onChange={handleChange}
                         aria-label="lab API tabs example"
                     >
-                        <Tab label="Mes GP (transporteurs)" value={1} />
+                        <Tab label="Mes transporteurs" value={1} />
                         <Tab label="Mes abonnés" value={2} />
                     </TabList>
-                </Box>
+                </Stack>
                 <TabFollow value={value} />
                 <TabFollowed value={value} />
             </TabContext>
@@ -142,7 +224,7 @@ const Followers = () => {
                     }}
                 >
                     <Stack p={3} direction="row" spacing={2} flex={1}>
-                        <Avatar sx={{ width: 50, height: 50 }}>S</Avatar>
+                        <Avatar alt={user?.photoUrl} src={user?.photoUrl} />
                         <Stack
                             direction="row"
                             alignItems="center"
@@ -184,18 +266,24 @@ const Followers = () => {
 
     async function fetchDatas() {
         const results = await getFollowers(user?.followers);
-        console.log("results :>> ", results);
+        const followedResult = await getFollowedPeople(user?.userId);
         setfollowers(results);
+        setfollowed(followedResult);
     }
     useEffect(() => {
-        fetchDatas();
-    }, []);
+        if (user?.userId) fetchDatas();
+    }, [user]);
 
     return (
         <Box>
             <Title />
             <Header />
-            <FollowersTab followers={followers} followed={followed} />
+            <FollowersTab
+                followers={followers}
+                followed={followed}
+                loading={loading}
+                userId={user?.userId}
+            />
         </Box>
     );
 };
