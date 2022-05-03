@@ -22,14 +22,17 @@ import COLORS from "../../colors";
 
 const Left = () => {
   return (
-    <Paper sx={{ m: 1, p: 5, background: COLORS.secondary, color: "gray" }} elevation={0}>
+    <Paper
+      sx={{ m: 1, p: 5, background: COLORS.secondary, color: "white" }}
+      elevation={0}
+    >
       <Box>
         <Typography gutterBottom variant="h6" fontWeight="bold">
           Informations de contact
         </Typography>
         <Typography variant="body2">
-          Vous pouvez nous contacter par mail ou par téléphone directement via whatsapp ou par
-          appel.
+          Vous pouvez nous contacter par mail ou par téléphone directement via
+          whatsapp ou par appel.
         </Typography>
       </Box>
       <Stack spacing={4} mt={2} py={2}>
@@ -114,14 +117,25 @@ const Right = ({ state, setstate, handleSubmit }) => {
     </Box>
   );
 };
-const SuccesDialog = ({ dialogOpen, loading, handleClose, handleBackToHome }) => {
+const SuccesDialog = ({
+  dialogOpen,
+  loading,
+  handleClose,
+  handleBackToHome,
+}) => {
   return (
     <Box>
       <Dialog open={dialogOpen}>
         <DialogTitle>Merci pour votre message</DialogTitle>
         <DialogContent>
           {loading ? (
-            <Stack direction="row" alignItems="center" justifyContent="center" spacing={2} mx={5}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="center"
+              spacing={2}
+              mx={5}
+            >
               <Typography>Envoi en cours !</Typography>
 
               <CircularProgress />
@@ -129,7 +143,8 @@ const SuccesDialog = ({ dialogOpen, loading, handleClose, handleBackToHome }) =>
           ) : (
             <Stack direction="row" spacing={2}>
               <Typography>
-                Message envoyé, un agent vous répondra dans les plus bref délais.
+                Message envoyé, un agent vous répondra dans les plus bref
+                délais.
               </Typography>
               <FaCheck color="green" size={20} />
             </Stack>
@@ -156,7 +171,12 @@ const ContactUs = () => {
   });
   function handleSubmit() {
     setstate({ ...state, error: false });
-    if (state.name === "" || state.email === "" || state.message === "" || state.object === "") {
+    if (
+      state.name === "" ||
+      state.email === "" ||
+      state.message === "" ||
+      state.object === ""
+    ) {
       setstate({ ...state, error: true });
       return;
     }
@@ -175,23 +195,27 @@ const ContactUs = () => {
       <Box marginTop={-40}>
         <Container>
           <Stack direction="column" py={5} px={2}>
-            <Box flex={1} textAlign="center" my={5}>
-              <Typography variant="h5" fontWeight="bold">
+            <Box flex={1} textAlign="center" my={2} color={COLORS.black}>
+              <Typography variant="h5" gutterBottom fontWeight="bold">
                 Gardons contact !
               </Typography>
-              <Typography>
-                Posez-nous n'importe quelle question ou envoyez nous vos suggestions pour améliorer
-                le site.
+              <Typography variant="body1">
+                Posez-nous n'importe quelle question ou envoyez nous vos
+                suggestions pour améliorer le site.
               </Typography>
             </Box>
             <Box flex={1} m={2}>
               <Paper>
-                <Grid container>
+                <Grid container p={1}>
                   <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
                     <Left />
                   </Grid>
                   <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
-                    <Right state={state} setstate={setstate} handleSubmit={handleSubmit} />
+                    <Right
+                      state={state}
+                      setstate={setstate}
+                      handleSubmit={handleSubmit}
+                    />
                   </Grid>
                 </Grid>
               </Paper>
