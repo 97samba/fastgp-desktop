@@ -38,20 +38,20 @@ const FlightInformations = ({ state, context, label }) => {
           </Typography>
         </Box>
         <Grid container rowSpacing={3} columnSpacing={6}>
-          <Grid item xs={5} sm={4} md={4} xl={4} mb={1} textAlign="start">
-            <Typography variant="h4" color="primary">
+          <Grid item xs={5} sm={5} md={5} xl={5} mb={1} textAlign="start">
+            <Typography variant="h5" color="primary">
               {loading ? <Skeleton height={60} /> : state.departure.name}
             </Typography>
             <Typography variant="body2" color="GrayText">
               {loading ? <Skeleton /> : state.departure.country}
             </Typography>
           </Grid>
-          <Grid item xs={2} sm={4} md={4} xl={4} pt={3} textAlign="center">
+          <Grid item xs={2} sm={2} md={2} xl={2} pt={3} textAlign="center">
             <Box py={0.5}></Box>
             <IoAirplaneSharp size={22} color={COLORS.warning} />
           </Grid>
-          <Grid item xs={5} sm={4} md={4} xl={4} textAlign="end">
-            <Typography variant="h4" color="primary">
+          <Grid item xs={5} sm={5} md={5} xl={5} textAlign="end">
+            <Typography variant="h5" color="primary">
               {loading ? <Skeleton height={60} /> : state.destination.name}
             </Typography>
             <Typography variant="body2" color="GrayText">
@@ -62,7 +62,7 @@ const FlightInformations = ({ state, context, label }) => {
             {loading ? (
               <Skeleton height={60} />
             ) : (
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={1} alignItems="center">
                 <IconButton>
                   <BsCalendarWeek color="#494aa2" />
                 </IconButton>
@@ -82,7 +82,7 @@ const FlightInformations = ({ state, context, label }) => {
             {loading ? (
               <Skeleton height={60} />
             ) : (
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={1} alignItems="center">
                 <IconButton>
                   <BsCalendar2X color={COLORS.primary} />
                 </IconButton>
@@ -102,7 +102,7 @@ const FlightInformations = ({ state, context, label }) => {
             {loading ? (
               <Skeleton height={60} />
             ) : (
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={1} alignItems="center">
                 <IconButton>
                   <GoPackage color={COLORS.primary} />
                 </IconButton>
@@ -126,7 +126,7 @@ const FlightInformations = ({ state, context, label }) => {
             {loading ? (
               <Skeleton height={60} />
             ) : (
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={1} alignItems="center">
                 <IconButton>
                   <GoPackage color={COLORS.primary} />
                 </IconButton>
@@ -150,7 +150,7 @@ const FlightInformations = ({ state, context, label }) => {
             {loading ? (
               <Skeleton height={60} />
             ) : (
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={1} alignItems="center">
                 <IconButton>
                   <RiSuitcase2Line color={COLORS.primary} />
                 </IconButton>
@@ -182,7 +182,7 @@ const FlightInformations = ({ state, context, label }) => {
             {loading ? (
               <Skeleton height={60} />
             ) : (
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={1} alignItems="center">
                 <IconButton>
                   <IoPricetagsOutline size={20} color={COLORS.primary} />
                 </IconButton>
@@ -232,7 +232,7 @@ const FlightInformations = ({ state, context, label }) => {
             {loading ? (
               <Skeleton height={60} />
             ) : (
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={1} alignItems="center">
                 <IconButton>
                   <FaInfo color="#494aa2" />
                 </IconButton>

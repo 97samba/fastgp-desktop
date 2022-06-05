@@ -1,7 +1,21 @@
-import { Button, Divider, Paper, Skeleton, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Paper,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext } from "react";
-import { FaCheckCircle, FaCommentDots, FaStar, FaStarHalfAlt, FaUser } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaCommentDots,
+  FaStar,
+  FaStarHalfAlt,
+  FaUser,
+} from "react-icons/fa";
+import COLORS from "../../colors";
 
 import ProfilPic from "../../Images/profile.svg";
 import { ViewContext } from "../Pages/View";
@@ -20,7 +34,10 @@ const ProfilDescriptorSkeleton = () => {
 const ProfilDescriptor = ({ state }) => {
   const { visitProfil, loading } = useContext(ViewContext);
   return (
-    <Paper sx={{ p: 3, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
+    <Paper
+      sx={{ p: 3, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+      elevation={0}
+    >
       {loading ? (
         <ProfilDescriptorSkeleton />
       ) : (
@@ -38,28 +55,44 @@ const ProfilDescriptor = ({ state }) => {
               >
                 <img
                   width="100%"
-                  alt={state.publisher?.photoURL ? state.publisher.photoURL : ProfilPic}
-                  src={state.publisher?.photoURL ? state.publisher.photoURL : ProfilPic}
+                  alt={
+                    state.publisher?.photoURL
+                      ? state.publisher.photoURL
+                      : ProfilPic
+                  }
+                  src={
+                    state.publisher?.photoURL
+                      ? state.publisher.photoURL
+                      : ProfilPic
+                  }
                   style={{ borderRadius: 5 }}
                 />
                 <Typography variant="body2">
                   {state.publisher.firstName + " " + state.publisher.lastName}
                 </Typography>
               </Stack>
-              <Stack direction="row" spacing={0.5} justifyContent="center">
+              {/* <Stack direction="row" spacing={0.5} justifyContent="center">
                 <FaStar color="goldenrod" />
                 <FaStar color="goldenrod" />
                 <FaStar color="goldenrod" />
                 <FaStar color="goldenrod" />
                 <FaStarHalfAlt color="goldenrod" />
                 <Typography variant="body2">(12)</Typography>
-              </Stack>
+              </Stack> */}
             </Box>
             <Box flex={{ xs: 3, sm: 1 }}>
               {/* <Divider sx={{ my: 1 }} /> */}
               <Stack spacing={2} my={2}>
                 <Button
-                  variant="contained"
+                  variant="outlined"
+                  fullWidth
+                  color="primary"
+                  endIcon={<FaCommentDots />}
+                >
+                  Contacter
+                </Button>
+                <Button
+                  variant="outlined"
                   fullWidth
                   color="warning"
                   endIcon={<FaUser />}
@@ -67,20 +100,19 @@ const ProfilDescriptor = ({ state }) => {
                 >
                   Voir profil
                 </Button>
-                <Button variant="contained" fullWidth color="primary" endIcon={<FaCommentDots />}>
-                  Contacter
-                </Button>
               </Stack>
               {/* <Divider sx={{ my: 2 }} /> */}
-              <Box>
-                <Typography>Informations confirmées</Typography>
+              <Box color={COLORS.black}>
+                <Typography variant="body1">Informations confirmées</Typography>
                 <Box my={1}>
-                  {["Email", "Passeport", "billet d'avion"].map((info, index) => (
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      <FaCheckCircle size={12} color="green" />
-                      <Typography>{info}</Typography>
-                    </Stack>
-                  ))}
+                  {["Email", "Passeport", "billet d'avion"].map(
+                    (info, index) => (
+                      <Stack direction="row" spacing={2} alignItems="center">
+                        <FaCheckCircle size={12} color="green" />
+                        <Typography>{info}</Typography>
+                      </Stack>
+                    )
+                  )}
                 </Box>
               </Box>{" "}
             </Box>

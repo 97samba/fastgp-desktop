@@ -18,11 +18,21 @@ import { FaAward, FaCoins, FaSuitcase, FaUserAlt } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import { SearchPageContext } from "./Search";
 import COLORS from "../../colors";
-import { MdOutlineDeliveryDining, MdSecurity } from "react-icons/md";
+import {
+  MdFilterAlt,
+  MdOutlineDeliveryDining,
+  MdSearch,
+  MdSecurity,
+} from "react-icons/md";
 import { getFeaturedFlight } from "../../firebase/db";
 import Flight from "../Flight";
 import FlightSkeleton from "../FlightSkeleton";
 import Carousel from "react-elastic-carousel";
+import sendFirstStep from "../../Images/Home/sendFirstStep.png";
+import sendSecondStep from "../../Images/Home/sendSecondStep.png";
+import sendThirdStep from "../../Images/Home/sendThirdStep.png";
+import sendFourthStep from "../../Images/Home/sendFourthStep.png";
+import { GoPackage } from "react-icons/go";
 
 const PresentationImage =
   "https://firebasestorage.googleapis.com/v0/b/fir-c69a6.appspot.com/o/websiteImage%2FHomeImage.svg?alt=media&token=6ed815ca-143a-48bf-a3eb-69d1ed86f2ba";
@@ -224,9 +234,9 @@ const OurValues = () => {
       icon: <GiTakeMyMoney size={60} color={COLORS.warning} />,
     },
     {
-      label: "2 Livraisons gratuites",
+      label: "Un envoi gratuit",
       description:
-        "Apres votre inscription, vous gagnez deux livraisons gratuites* et aprés la livraison est égale à 3 euros ou 4 dollard ou 1000 fCFA.",
+        "Apres votre 5 éme envoi, vous gagnez un envoi gratuit d'une valeur d'un kilo vers votre destination préférée.",
       icon: <MdOutlineDeliveryDining size={60} color={COLORS.warning} />,
     },
     {
@@ -297,6 +307,49 @@ const FeaturedFlight = () => {
         )}
       </Box>
     </Box>
+  );
+};
+
+const HowTo = ({ image, step, title, description, button, flip = 1 }) => {
+  return (
+    <Grid container p={2} spacing={2}>
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={6}
+        lg={6}
+        xl={6}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        py={2}
+      >
+        <img src={image} alt="presentation" width="90%" />
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={6}
+        lg={6}
+        xl={6}
+        order={{ xs: -1, sm: -1, md: flip }}
+      >
+        <Stack spacing={2} my={4}>
+          <Typography variant="body1" color={COLORS.warning}>
+            {step}
+          </Typography>
+          <Typography variant="h4" fontWeight="bold" color="primary">
+            {title}
+          </Typography>
+          <Typography variant="body2" color={COLORS.black}>
+            {description}
+          </Typography>
+        </Stack>
+        {button}
+      </Grid>
+    </Grid>
   );
 };
 
@@ -374,10 +427,93 @@ const Home = () => {
             <OurValues />
           </Container>
         </Box>
-        <Box bgcolor="white">
+        {/* <Box bgcolor="white">
           <Container>
             <FeaturedFlight />
-            {/* <PopularDestinations /> */}
+         
+          </Container>
+        </Box> */}
+        <Box bgcolor="white">
+          <Container>
+            <HowTo
+              image={sendFirstStep}
+              step="- Première étape"
+              title="Renseigner le départ et la destination"
+              description="Vous pouvez effectuer votre recherche sur plusieurs villes du monde
+              ou taper le nom du pays et les villes vous seront proposées."
+              button={
+                <Button
+                  variant="contained"
+                  href="/search"
+                  endIcon={<MdSearch />}
+                >
+                  Commencer la recherche
+                </Button>
+              }
+            />
+          </Container>
+        </Box>
+        <Box bgcolor="#F5F5F5">
+          <Container>
+            <HowTo
+              image={sendSecondStep}
+              step="- Deuxième étape"
+              title="Trier et filtrer les résultats"
+              description="Vous pouvez filtrer vos résultats pour trouver la date et le prix
+              qui vous arrange. Mais aussi, vous pouvez selectionner les
+              Transporteurs certifiés ou en fonction de leur expérience."
+              button={
+                <Button
+                  variant="contained"
+                  href="/search"
+                  endIcon={<MdFilterAlt />}
+                >
+                  Appliquer les filtres
+                </Button>
+              }
+              flip={-1}
+            />
+          </Container>
+        </Box>
+        <Box bgcolor="white">
+          <Container>
+            <HowTo
+              image={sendThirdStep}
+              step="- Troisième étape"
+              title="Réserver en ligne ou appeler le directement"
+              description="Vous avez le choix entre créer un compte pour réserver et suivre
+              votre colis ou bien appeler le transporteur directement."
+              button={
+                <Button
+                  variant="contained"
+                  href="/profilDetails"
+                  endIcon={<GoPackage />}
+                >
+                  Voir mes colis
+                </Button>
+              }
+            />
+          </Container>
+        </Box>
+        <Box bgcolor="#F5F5F5">
+          <Container>
+            <HowTo
+              image={sendFourthStep}
+              step="- Dernière étape"
+              title="Suivre le colis"
+              description="Apres validation de la part du transporteur, vous avez une page
+              dédiée pour suivre l'évolution du statut de votre colis."
+              button={
+                <Button
+                  variant="contained"
+                  href="/profilDetails"
+                  endIcon={<MdOutlineDeliveryDining />}
+                >
+                  Suivre un colis
+                </Button>
+              }
+              flip={-1}
+            />
           </Container>
         </Box>
       </Box>
