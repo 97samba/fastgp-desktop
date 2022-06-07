@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import paris from "../../Images/paris.jpg";
 import { GiAirplaneDeparture, GiTakeMyMoney } from "react-icons/gi";
 import { FaAward, FaCoins, FaSuitcase, FaUserAlt } from "react-icons/fa";
@@ -33,6 +33,8 @@ import sendSecondStep from "../../Images/Home/sendSecondStep.png";
 import sendThirdStep from "../../Images/Home/sendThirdStep.png";
 import sendFourthStep from "../../Images/Home/sendFourthStep.png";
 import { GoPackage } from "react-icons/go";
+import { AuthContext } from "../../Providers/AuthProvider";
+import { useAuth } from "../../firebase/auth";
 
 const PresentationImage =
   "https://firebasestorage.googleapis.com/v0/b/fir-c69a6.appspot.com/o/websiteImage%2FHomeImage.svg?alt=media&token=6ed815ca-143a-48bf-a3eb-69d1ed86f2ba";
@@ -325,7 +327,9 @@ const HowTo = ({ image, step, title, description, button, flip = 1 }) => {
         justifyContent="center"
         py={2}
       >
-        <img src={image} alt="presentation" width="90%" />
+        <Stack width={320}>
+          <img src={image} alt="presentation" width="90%" />
+        </Stack>
       </Grid>
       <Grid
         item
@@ -355,6 +359,8 @@ const HowTo = ({ image, step, title, description, button, flip = 1 }) => {
 
 const Home = () => {
   const [flights, setflights] = useState([]);
+  const currentUser = useAuth();
+
   return (
     <SearchPageContext.Provider value={{ flights, setflights }}>
       <Box bgcolor="white">
@@ -385,23 +391,36 @@ const Home = () => {
                     Fast Gp est un grand réseau de covaliseurs inscrits et
                     identifiés, plus des annonces pris partout dans le web.
                   </Typography>
-                  <Stack direction="row" spacing={1} mt={3}>
+                  {!currentUser?.uid ? (
+                    <Stack direction="row" spacing={1} mt={3}>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        href="/register/gp"
+                        endIcon={<FaSuitcase size={15} />}
+                      >
+                        Compte GP
+                      </Button>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        color="warning"
+                        href="/register/client"
+                        endIcon={<FaUserAlt size={15} />}
+                      >
+                        Compte Client
+                      </Button>
+                    </Stack>
+                  ) : (
                     <Button
-                      fullWidth
+                      sx={{ mt: 2 }}
                       variant="contained"
+                      href="/register/becomeGp"
                       endIcon={<FaSuitcase size={15} />}
                     >
-                      Compte GP
+                      Devenir un GP
                     </Button>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      color="warning"
-                      endIcon={<FaUserAlt size={15} />}
-                    >
-                      Compte Client
-                    </Button>
-                  </Stack>
+                  )}
                 </Box>
               </Stack>
             </Grid>
