@@ -53,9 +53,7 @@ const ReservationDetails = () => {
   async function fetchDatas() {
     let result = await GetAReservation(id);
     setreservation(result);
-    currentUser?.uid === reservation?.gpId
-      ? setIsClient(false)
-      : setIsClient(true);
+    currentUser?.uid === result?.gpId ? setIsClient(false) : setIsClient(true);
     result = undefined;
     setloading(false);
   }
@@ -81,16 +79,19 @@ const ReservationDetails = () => {
     }
   }, [currentUser]);
   return (
-    <Container sx={{ mt: -1, py: 2 }}>
-      {unauthorized ? (
-        <UnauthorizedComponent />
-      ) : (
-        <ReservationViewer
-          data={reservation}
-          loading={loading}
-          isClient={isClient}
-        />
-      )}
+    <Container sx={{ mt: -2, py: 1, px: { xs: 2, md: 4 } }}>
+      <Box sx={{ py: 2, px: { xs: 0, md: 4 } }}>
+        {unauthorized ? (
+          <UnauthorizedComponent />
+        ) : (
+          <ReservationViewer
+            data={reservation}
+            setdata={setreservation}
+            loading={loading}
+            isClient={isClient}
+          />
+        )}
+      </Box>
     </Container>
   );
 };

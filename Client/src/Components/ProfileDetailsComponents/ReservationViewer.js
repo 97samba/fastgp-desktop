@@ -27,6 +27,8 @@ import COLORS from "../../colors";
 import BoardingPass from "../ViewComponents/BoardingPass";
 import { FaEuroSign, FaHandHolding, FaPlaneDeparture } from "react-icons/fa";
 import { MdTextsms } from "react-icons/md";
+import { EditReservationPrice } from "../../firebase/db";
+import { LoadingButton } from "@mui/lab";
 
 const bagageType = [
   { label: "Colis pesé", value: "thing" },
@@ -368,7 +370,12 @@ const ClientInformationsSummary = ({ data }) => {
   );
 };
 
-const PriceInformationsSummary = ({ data, isClient }) => {
+const PriceInformationsSummary = ({
+  data,
+  isClient,
+  changePrice,
+  confirmPayment,
+}) => {
   return (
     <Paper
       sx={{
@@ -388,7 +395,8 @@ const PriceInformationsSummary = ({ data, isClient }) => {
               Prix d'envoi:
             </Typography>
             <Typography variant="body1" fontWeight={555}>
-              {data.prices.pricePerKG + " " + data.currency}
+              {data?.finalPrice + " " + data.currency ||
+                data.prices.pricePerKG + " " + data.currency}
             </Typography>
           </Stack>
           <Stack direction="row" justifyContent="space-between">
@@ -413,25 +421,32 @@ const PriceInformationsSummary = ({ data, isClient }) => {
               Total:
             </Typography>
             <Typography variant="body1" fontWeight={500}>
-              {data.prices.pricePerKG + " " + data.currency}
+              {data?.finalPrice + " " + data.currency ||
+                data.prices.pricePerKG + " " + data.currency}
             </Typography>
           </Stack>
         </Stack>
-        {isClient === false && (
+        {!data?.paid && isClient === false && (
           <>
-            <Button variant="outlined" color="warning">
+            <LoadingButton
+              loading={true}
+              variant="outlined"
+              color="warning"
+              onClick={() => changePrice()}
+            >
               Changer le prix
-            </Button>
-            <Button
+            </LoadingButton>
+            <LoadingButton
               variant="contained"
               color="success"
               endIcon={<FaHandHoldingUsd />}
+              onClick={() => confirmPayment()}
             >
               Confirmer le paiement
-            </Button>
+            </LoadingButton>
           </>
         )}
-        {data?.payed && (
+        {data?.paid && (
           <Typography variant="caption" fontWeight={500}>
             Payé en liquide
           </Typography>
@@ -490,10 +505,11 @@ const InformationViewer = ({ icon, label, information, full = false }) => {
   );
 };
 
-const ReservationViewer = ({ data, loading, isClient }) => {
+const ReservationViewer = ({ data, setdata, loading, isClient }) => {
   const history = useHistory();
   //3 etapes, validation, voyage,liraison
   const [step, setstep] = useState(getStep());
+  const [price, setprice] = useState(55);
 
   function getStep() {
     if (data?.id) {
@@ -517,6 +533,17 @@ const ReservationViewer = ({ data, loading, isClient }) => {
     setstep(getStep());
   }, [data]);
 
+  async function changePrice() {
+    await EditReservationPrice(price, data.id, false).then(() =>
+      setdata({ ...data, finalPrice: price })
+    );
+  }
+  async function confirmPayment() {
+    await EditReservationPrice(price, data.id, true).then(() =>
+      setdata({ ...data, finalPrice: price, paid: true })
+    );
+  }
+
   return (
     <>
       <Title />
@@ -533,7 +560,12 @@ const ReservationViewer = ({ data, loading, isClient }) => {
               <ClientInformationsSummary data={data} />
             </Grid>
             <Grid item xs={12} sm={12} md={6} xl={6} lg={6}>
-              <PriceInformationsSummary data={data} isClient={isClient} />
+              <PriceInformationsSummary
+                data={data}
+                isClient={isClient}
+                changePrice={changePrice}
+                confirmPayment={confirmPayment}
+              />
             </Grid>
           </Grid>
         </Box>

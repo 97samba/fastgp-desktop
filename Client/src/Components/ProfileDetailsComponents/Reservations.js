@@ -10,12 +10,19 @@ import {
   TextField,
   Typography,
   Link,
+  Skeleton,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useEffect, useState } from "react";
 import { FaPhone, FaUserAlt, FaWhatsapp } from "react-icons/fa";
 import { IoMdPricetag, IoMdSave } from "react-icons/io";
-import { MdCancel, MdCheck, MdExpandMore, MdPhone } from "react-icons/md";
+import {
+  MdArrowRight,
+  MdCancel,
+  MdCheck,
+  MdExpandMore,
+  MdPhone,
+} from "react-icons/md";
 
 import { RiMedal2Line } from "react-icons/ri";
 import COLORS from "../../colors";
@@ -37,6 +44,31 @@ const bagageType = [
   { label: "Bijoux", value: "jewel" },
   { label: "Alimentaire", value: "food" },
 ];
+
+const ReservationSkeleton = () => {
+  return (
+    <Paper
+      sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+      elevation={0}
+    >
+      <Grid container spacing={1} display="flex" color={COLORS.black} p={1}>
+        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+          <Typography></Typography>
+          <Skeleton height={18} width="50%" />
+        </Grid>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+          <Skeleton height={15} width="50%" />
+        </Grid>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+          <Skeleton height={15} width="50%" />
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+          <Skeleton height={15} width="50%" />
+        </Grid>
+      </Grid>
+    </Paper>
+  );
+};
 
 const Header = () => {
   return (
@@ -288,7 +320,7 @@ const Package = ({ data, validatePackage, rejectPackage }) => {
             </Stack>
           )}
           {data.status === "ok" && (
-            <Stack direction="row" spacing={2} mt={3}>
+            <Stack direction={{ xs: "column", md: "row" }} spacing={2} mt={3}>
               <Button
                 variant="outlined"
                 href={`tel:${data.sender.phoneNumber}`}
@@ -306,6 +338,15 @@ const Package = ({ data, validatePackage, rejectPackage }) => {
               >
                 whatsapp
               </Button>
+              <Button
+                variant="outlined"
+                color="warning"
+                href={`/reservationDetails/${data.id}?c=${data.owner}&g=${data.gpId}`}
+                fullWidth
+                endIcon={<MdArrowRight />}
+              >
+                détails
+              </Button>
             </Stack>
           )}
         </AccordionDetails>
@@ -315,18 +356,20 @@ const Package = ({ data, validatePackage, rejectPackage }) => {
 };
 
 const Reservations = () => {
-  const { profilState, user, loading, currentUser } = useContext(
+  const { profilState, user, loading, setloading, currentUser } = useContext(
     ProfileDetailsContext
   );
-  const { id, subpage, subID } = useParams();
+  const { id } = useParams();
 
   const [Reservations, setReservations] = useState([]);
 
   const [editing, setediting] = useState(false);
 
   async function getReservations() {
+    setloading(true);
     const results = await getGPReservations(id);
     setReservations(results);
+    setloading(false);
   }
   async function rejectPackage(id) {
     await changeReservationStatus(id, "ko", currentUser?.email);
@@ -373,33 +416,44 @@ const Reservations = () => {
       <Typography color={COLORS.black} variant="body2">
         Les colis que vous devez transporter pour vos clients.
       </Typography>
-      {Reservations.length > 0 ? (
-        <Stack spacing={2} my={3}>
+      {loading ? (
+        <Stack spacing={2}>
           <Header />
-          {Reservations.map((reservation, index) => (
-            <Package
-              data={reservation}
-              validatePackage={validatePackage}
-              rejectPackage={rejectPackage}
-              key={index}
-            />
+          {["1", "2", "3", "4"].map((item) => (
+            <ReservationSkeleton key={item} />
           ))}
         </Stack>
       ) : (
-        <Paper
-          sx={{
-            flex: 1,
-            boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
-            p: 2,
-            my: 4,
-            textAlign: "center",
-          }}
-          elevation={0}
-        >
-          <Typography color="GrayText">
-            Vous n'avez pas de réservations.
-          </Typography>
-        </Paper>
+        <>
+          {Reservations.length > 0 ? (
+            <Stack spacing={2} my={3}>
+              <Header />
+              {Reservations.map((reservation, index) => (
+                <Package
+                  data={reservation}
+                  validatePackage={validatePackage}
+                  rejectPackage={rejectPackage}
+                  key={index}
+                />
+              ))}
+            </Stack>
+          ) : (
+            <Paper
+              sx={{
+                flex: 1,
+                boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+                p: 2,
+                my: 4,
+                textAlign: "center",
+              }}
+              elevation={0}
+            >
+              <Typography color="GrayText">
+                Vous n'avez pas de réservations.
+              </Typography>
+            </Paper>
+          )}
+        </>
       )}
     </Box>
   );
