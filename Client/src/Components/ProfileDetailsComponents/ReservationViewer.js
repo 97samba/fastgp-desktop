@@ -9,6 +9,12 @@ import {
   CircularProgress,
   Link,
   Chip,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import moment from "moment";
@@ -21,14 +27,16 @@ import {
 } from "react-icons/fa";
 import { GiHandTruck, GiPayMoney } from "react-icons/gi";
 import { GoPackage } from "react-icons/go";
-import { MdPhone, MdPhoto } from "react-icons/md";
+import { MdOutlineDeleteForever, MdPhone, MdPhoto } from "react-icons/md";
 import { useHistory } from "react-router-dom";
 import COLORS from "../../colors";
 import BoardingPass from "../ViewComponents/BoardingPass";
 import { FaEuroSign, FaHandHolding, FaPlaneDeparture } from "react-icons/fa";
 import { MdTextsms } from "react-icons/md";
-import { EditReservationPrice } from "../../firebase/db";
+import { deleteUserReservation, EditReservationPrice } from "../../firebase/db";
 import { LoadingButton } from "@mui/lab";
+import { RiHandCoinLine } from "react-icons/ri";
+import { useAuth } from "../../firebase/auth";
 
 const bagageType = [
   { label: "Colis pesé", value: "thing" },
@@ -375,7 +383,21 @@ const PriceInformationsSummary = ({
   isClient,
   changePrice,
   confirmPayment,
+  paying,
+  changingPrice,
+  price,
+  setprice,
+  setOpenDialog,
 }) => {
+  const [editing, setediting] = useState(false);
+  function handlePriceChanging() {
+    changePrice();
+    setediting(false);
+  }
+
+  function handlePaying() {
+    confirmPayment();
+  }
   return (
     <Paper
       sx={{
@@ -389,61 +411,86 @@ const PriceInformationsSummary = ({
         <Typography fontSize={18} fontWeight={555}>
           Résumé
         </Typography>
-        <Stack spacing={1}>
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body1" color="GrayText">
-              Prix d'envoi:
-            </Typography>
-            <Typography variant="body1" fontWeight={555}>
-              {data?.finalPrice + " " + data.currency ||
-                data.prices.pricePerKG + " " + data.currency}
-            </Typography>
+        {editing ? (
+          <TextField
+            size="small"
+            label={"Prix final en " + data.currency}
+            value={price}
+            onChange={(e) => setprice(e.target.value)}
+            type="number"
+            helperText="Assurez vous que le client est au courant"
+          />
+        ) : (
+          <Stack spacing={1}>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body1" color="GrayText">
+                Prix d'envoi:
+              </Typography>
+              <Typography variant="body1" fontWeight={555}>
+                {data?.finalPrice
+                  ? data?.finalPrice + " " + data.currency
+                  : data.prices.pricePerKG + " " + data.currency}
+              </Typography>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body1" color="GrayText">
+                Livraison:
+              </Typography>
+              <Typography variant="body1" fontWeight={555}>
+                0 {data.currency}
+              </Typography>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body1" color="GrayText">
+                Réduction:
+              </Typography>
+              <Typography variant="body1" fontWeight={555}>
+                {"- 0 " + data.currency}
+              </Typography>
+            </Stack>
+            <Divider />
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body1" fontWeight={500}>
+                Total:
+              </Typography>
+              <Typography variant="body1" fontWeight={500}>
+                {data?.finalPrice
+                  ? data?.finalPrice + " " + data.currency
+                  : data.prices.pricePerKG + " " + data.currency}
+              </Typography>
+            </Stack>
           </Stack>
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body1" color="GrayText">
-              Livraison:
-            </Typography>
-            <Typography variant="body1" fontWeight={555}>
-              0 {data.currency}
-            </Typography>
-          </Stack>
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body1" color="GrayText">
-              Réduction:
-            </Typography>
-            <Typography variant="body1" fontWeight={555}>
-              {"- 0 " + data.currency}
-            </Typography>
-          </Stack>
-          <Divider />
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body1" fontWeight={500}>
-              Total:
-            </Typography>
-            <Typography variant="body1" fontWeight={500}>
-              {data?.finalPrice + " " + data.currency ||
-                data.prices.pricePerKG + " " + data.currency}
-            </Typography>
-          </Stack>
-        </Stack>
+        )}
         {!data?.paid && isClient === false && (
           <>
-            <LoadingButton
-              loading={true}
-              variant="outlined"
-              color="warning"
-              onClick={() => changePrice()}
-            >
-              Changer le prix
-            </LoadingButton>
-            <LoadingButton
+            {editing ? (
+              <LoadingButton
+                loading={changingPrice}
+                variant="outlined"
+                color="warning"
+                onClick={() => handlePriceChanging(false)}
+              >
+                Confirmer le prix
+              </LoadingButton>
+            ) : (
+              <Button
+                variant="outlined"
+                color="warning"
+                onClick={() => setediting(true)}
+              >
+                Changer le prix
+              </Button>
+            )}
+            <Button
+              fullWidth
+              size="medium"
               variant="contained"
               color="success"
               endIcon={<FaHandHoldingUsd />}
-              onClick={() => confirmPayment()}
+              onClick={() => setOpenDialog(true)}
             >
               Confirmer le paiement
-            </LoadingButton>
+            </Button>
           </>
         )}
         {data?.paid && (
@@ -456,21 +503,131 @@ const PriceInformationsSummary = ({
   );
 };
 
-const Title = () => {
+const Title = ({ data }) => {
+  const [deleteDialog, setdeleteDialog] = useState(false);
+  const history = useHistory();
+  const currentUser = useAuth();
+
+  async function handleDeleteReservation() {
+    await deleteUserReservation(data.id)
+      .then(() => setdeleteDialog(false))
+      .then(() => history.push("/profilDetails/" + currentUser?.uid));
+  }
+
+  const SuppressionDialog = () => {
+    return (
+      <Dialog open={deleteDialog} onClose={() => setdeleteDialog(false)}>
+        <DialogTitle>Confirmer la suppression</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Voulez-vous réellement supprimer la réservation ?
+          </DialogContentText>
+          <Stack flex={1} alignItems="center" my={2}>
+            <MdOutlineDeleteForever size={60} color={COLORS.black} />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            fullWidth
+            variant="outlined"
+            size="medium"
+            onClick={() => setdeleteDialog(false)}
+          >
+            Fermer
+          </Button>
+          <LoadingButton
+            fullWidth
+            variant="contained"
+            color="error"
+            size="medium"
+            onClick={handleDeleteReservation}
+          >
+            Supprimer
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
+    );
+  };
   return (
     <Stack
       direction="row"
       spacing={2}
       alignItems="center"
-      display={{ xs: "none", sm: "none", md: "flex" }}
+      // display={{ xs: "none", sm: "none", md: "flex" }}
       mb={2}
     >
       <FaShoppingBag color={COLORS.warning} />
-      <Typography fontWeight="bold" variant="h5" color="primary" flexGrow={1}>
+
+      <Typography
+        display={{ xs: "none", sm: "none", md: "flex" }}
+        fontWeight="bold"
+        variant="h5"
+        color="primary"
+        flexGrow={1}
+      >
         Détails de la réservation
       </Typography>
-      <Button color="error"> Supprimer</Button>
+      <Typography
+        display={{ xs: "flex", sm: "flex", md: "none" }}
+        fontWeight="bold"
+        variant="h6"
+        color="primary"
+        flexGrow={1}
+      >
+        Réservation
+      </Typography>
+      <Button
+        color="error"
+        onClick={() => setdeleteDialog(true)}
+        endIcon={<MdOutlineDeleteForever />}
+      >
+        {" "}
+        Supprimer
+      </Button>
+      <SuppressionDialog />
     </Stack>
+  );
+};
+
+const PaymentValidationDialog = ({
+  open,
+  handleClose,
+  confirmPayment,
+  paying,
+}) => {
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle color="primary">Confirmer le paiement</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          En cliquant sur oui, vous confirmez avoir reçu le paiment du client
+        </DialogContentText>
+        <Stack flex={1} alignItems="center" my={2}>
+          <RiHandCoinLine size={70} color={COLORS.primary} />
+        </Stack>
+      </DialogContent>
+      <DialogActions sx={{ my: 1 }}>
+        <Button
+          fullWidth
+          size="medium"
+          variant="outlined"
+          color="error"
+          onClick={handleClose}
+        >
+          Fermer
+        </Button>
+
+        <LoadingButton
+          fullWidth
+          loading={paying}
+          variant="contained"
+          color="success"
+          onClick={() => confirmPayment}
+        >
+          Confirmer
+        </LoadingButton>
+      </DialogActions>
+    </Dialog>
   );
 };
 
@@ -506,10 +663,14 @@ const InformationViewer = ({ icon, label, information, full = false }) => {
 };
 
 const ReservationViewer = ({ data, setdata, loading, isClient }) => {
-  const history = useHistory();
   //3 etapes, validation, voyage,liraison
   const [step, setstep] = useState(getStep());
-  const [price, setprice] = useState(55);
+  const [price, setprice] = useState(
+    data?.finalPrice || data?.prices?.pricePerKG || 55
+  );
+  const [changingPrice, setchangingPrice] = useState(false);
+  const [paying, setpaying] = useState(true);
+  const [paymentDialog, setpaymentDialog] = useState(false);
 
   function getStep() {
     if (data?.id) {
@@ -534,19 +695,27 @@ const ReservationViewer = ({ data, setdata, loading, isClient }) => {
   }, [data]);
 
   async function changePrice() {
+    setchangingPrice(true);
     await EditReservationPrice(price, data.id, false).then(() =>
       setdata({ ...data, finalPrice: price })
     );
+    setchangingPrice(false);
   }
   async function confirmPayment() {
+    setpaying(true);
     await EditReservationPrice(price, data.id, true).then(() =>
       setdata({ ...data, finalPrice: price, paid: true })
     );
+    setpaying(false);
+  }
+
+  function handleClose() {
+    setpaymentDialog(false);
   }
 
   return (
     <>
-      <Title />
+      <Title data={data} />
       {loading ? (
         <LoadingSkeleton />
       ) : (
@@ -563,8 +732,17 @@ const ReservationViewer = ({ data, setdata, loading, isClient }) => {
               <PriceInformationsSummary
                 data={data}
                 isClient={isClient}
+                price={price}
                 changePrice={changePrice}
                 confirmPayment={confirmPayment}
+                paying={paying}
+                setprice={setprice}
+                setOpenDialog={setpaymentDialog}
+              />
+              <PaymentValidationDialog
+                open={paymentDialog}
+                handleClose={handleClose}
+                paying={paying}
               />
             </Grid>
           </Grid>

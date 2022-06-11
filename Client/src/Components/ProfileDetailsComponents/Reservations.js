@@ -107,7 +107,7 @@ const Header = () => {
   );
 };
 
-const Package = ({ data, validatePackage, rejectPackage }) => {
+const Reservation = ({ data, validatePackage, rejectPackage }) => {
   const Status = ({ text }) => {
     const [state, setstate] = useState(text);
     function getColor() {
@@ -141,7 +141,9 @@ const Package = ({ data, validatePackage, rejectPackage }) => {
   function getPrice() {
     if (data?.prices) {
       if (data.itemType === "thing")
-        return `${data.prices.pricePerKG} ${data.currency}/Kg`;
+        return data?.finalPrice
+          ? `${data?.finalPrice} ${data.currency}`
+          : data.prices.pricePerKG + " " + data.currency + " /kg";
       else return "à déterminer";
     } else {
       return "à déterminer";
@@ -354,6 +356,205 @@ const Package = ({ data, validatePackage, rejectPackage }) => {
     </Paper>
   );
 };
+const DeletedReservation = ({ data }) => {
+  const Status = ({ text }) => {
+    const [state, setstate] = useState(text);
+    function getColor() {
+      if (state === "ok")
+        return { color: "#e7f9ed", text: "Validée", textColor: "green" };
+      if (state === "ko")
+        return { color: "#ffeae9", text: "Refusée", textColor: "red" };
+      if (state === "pending")
+        return { color: "#f9f6e7", text: "En attente", textColor: "orange" };
+      if (state === "deleted")
+        return { color: "#ffeae9", text: "Supprimée", textColor: "red" };
+    }
+    return (
+      <Typography
+        sx={{
+          px: 1,
+          py: 0.5,
+          backgroundColor: getColor().color,
+          borderRadius: 5,
+        }}
+        color={getColor().textColor}
+        textAlign="center"
+        variant="caption"
+        noWrap
+      >
+        {getColor().text}
+      </Typography>
+    );
+  };
+  function getitemType() {
+    return bagageType.filter((element) => element.value === data.itemType)[0];
+  }
+  function getPrice() {
+    if (data?.prices) {
+      if (data.itemType === "thing")
+        return data?.finalPrice
+          ? `${data?.finalPrice} ${data.currency}`
+          : data.prices.pricePerKG + " " + data.currency + " /kg";
+      else return "à déterminer";
+    } else {
+      return "à déterminer";
+    }
+  }
+  return (
+    <Paper
+      sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+      elevation={0}
+    >
+      <Accordion elevation={0} disabled>
+        <AccordionSummary
+          expandIcon={<MdExpandMore />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Grid container spacing={1} display="flex" color={COLORS.black}>
+            <Grid item xs={6} sm={6} md={4} lg={4} xl={4}>
+              <Typography
+                variant="body1"
+                fontWeight={600}
+                color="primary"
+                noWrap
+              >
+                {data?.departure.name + " - " + data?.destination.name}
+              </Typography>
+            </Grid>
+            <Grid item xs={3} sm={3} md={2} lg={2} xl={2}>
+              <Status text="deleted" />
+            </Grid>
+            <Grid
+              item
+              xs={0}
+              sm={0}
+              md={3}
+              lg={3}
+              xl={3}
+              display={{ xs: "none", sm: "none", md: "block" }}
+            >
+              <Typography variant="body2" fontWeight={500} noWrap>
+                {data.sender.firstName + " " + data.sender.lastName}
+              </Typography>
+            </Grid>
+            <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+              <Typography
+                variant="body2"
+                fontWeight={500}
+                noWrap
+                color={COLORS.warning}
+              >
+                {getPrice()}
+              </Typography>
+            </Grid>
+          </Grid>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Stack direction="row" spacing={2}>
+            <Stack spacing={1}>
+              <Typography
+                fontWeight="bold"
+                variant="body1"
+                color={COLORS.black}
+              >
+                Client :{" "}
+              </Typography>
+
+              <Typography
+                fontWeight="bold"
+                variant="body1"
+                color={COLORS.black}
+              >
+                Vol :{" "}
+              </Typography>
+
+              <Typography
+                fontWeight="bold"
+                variant="body1"
+                color={COLORS.black}
+              >
+                Description :
+              </Typography>
+
+              <Typography
+                fontWeight="bold"
+                variant="body1"
+                color={COLORS.black}
+              >
+                Receveur :{" "}
+              </Typography>
+              <Typography
+                fontWeight="bold"
+                variant="body1"
+                color={COLORS.black}
+              >
+                Payeur :{" "}
+              </Typography>
+              <Typography
+                fontWeight="bold"
+                variant="body1"
+                color={COLORS.black}
+              >
+                Type de produit :{" "}
+              </Typography>
+              <Typography
+                fontWeight="bold"
+                variant="body1"
+                color={COLORS.black}
+              >
+                Prix par Kilo :{" "}
+              </Typography>
+            </Stack>
+            <Stack spacing={1}>
+              <Link
+                href={"/profilDetails/" + data.owner + "/myProfile"}
+                underline="hover"
+              >
+                <Typography>
+                  {data.sender.firstName + " " + data.sender.lastName}
+                </Typography>
+              </Link>
+              <Link href={"/view/" + data.flightId} underline="hover">
+                <Typography>Cliquer ici</Typography>
+              </Link>
+
+              <Typography>{data.itemDescription}</Typography>
+
+              <Link href={"tel:" + data.reciever.phoneNumber} underline="hover">
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Typography>
+                    {data.reciever.firstName + " " + data.reciever.lastName}
+                  </Typography>
+                  <FaPhone size={13} />
+                </Stack>
+              </Link>
+              <Typography>
+                {data.payer === "Envoyeur"
+                  ? data.sender.firstName +
+                    " " +
+                    data.sender.lastName +
+                    " (" +
+                    data.payer +
+                    ")"
+                  : data.reciever.firstName +
+                    " " +
+                    data.reciever.lastName +
+                    " (" +
+                    data.payer +
+                    ")"}
+              </Typography>
+              <Typography color={COLORS.black}>
+                {getitemType().label}
+              </Typography>
+              <Typography color={COLORS.warning}>{getPrice()}</Typography>
+            </Stack>
+          </Stack>
+        </AccordionDetails>
+      </Accordion>
+    </Paper>
+  );
+};
 
 const Reservations = () => {
   const { profilState, user, loading, setloading, currentUser } = useContext(
@@ -429,12 +630,18 @@ const Reservations = () => {
             <Stack spacing={2} my={3}>
               <Header />
               {Reservations.map((reservation, index) => (
-                <Package
-                  data={reservation}
-                  validatePackage={validatePackage}
-                  rejectPackage={rejectPackage}
-                  key={index}
-                />
+                <>
+                  {reservation?.deleted ? (
+                    <DeletedReservation data={reservation} />
+                  ) : (
+                    <Reservation
+                      data={reservation}
+                      validatePackage={validatePackage}
+                      rejectPackage={rejectPackage}
+                      key={index}
+                    />
+                  )}
+                </>
               ))}
             </Stack>
           ) : (

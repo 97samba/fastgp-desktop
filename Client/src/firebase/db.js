@@ -15,6 +15,7 @@ import {
   arrayRemove,
   startAfter,
   setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import moment from "moment";
 import { app } from "./config";
@@ -436,6 +437,12 @@ export const postUserReservation = async (
 
   return next;
 };
+
+export async function deleteUserReservation(reservationId) {
+  const docRef = doc(db, "reservations", reservationId);
+
+  await updateDoc(docRef, { deleted: true });
+}
 
 export const changeReservationStatus = async (id, status, email) => {
   const docRef = doc(db, "reservations", id);

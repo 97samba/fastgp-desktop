@@ -12,6 +12,7 @@ const MobileAdvertisement = () => {
           md: "none",
         },
         mb: 2,
+        display: { xs: "flex", md: "none" },
       }}
       flex={1}
     >
