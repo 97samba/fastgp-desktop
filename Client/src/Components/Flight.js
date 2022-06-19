@@ -238,6 +238,7 @@ const Flight = ({ data, size = "100%" }) => {
       </Box>
     );
   };
+
   const Ticket = () => {
     return (
       <Box>
@@ -323,7 +324,7 @@ const Flight = ({ data, size = "100%" }) => {
             xl: "none",
           }}
         >
-          <MenuItem disableGutters onClick={() => viewFlight(data)}>
+          <MenuItem disableGutters onClick={(e) => viewFlight(e, data)}>
             <Grid p={2} container flex={1} alignItems="center">
               <Grid item xs={4} sm={4} md={4} lg={3} xl={3}>
                 <Left />

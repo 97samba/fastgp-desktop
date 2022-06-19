@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { IoLogOut, IoPersonSharp, IoSettings } from "react-icons/io5";
+import { IoLogOut, IoPersonSharp } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
 import {
   Avatar,
@@ -21,12 +21,8 @@ import {
   MenuItem,
   Stack,
 } from "@mui/material";
-import {
-  FaPlaneDeparture,
-  FaShippingFast,
-  FaShoppingBasket,
-  FaUserAlt,
-} from "react-icons/fa";
+import { FaPlaneDeparture, FaShippingFast, FaUserAlt } from "react-icons/fa";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { logout, useAuth } from "../firebase/auth";
 import { IoMdHome } from "react-icons/io";
 import { GoPackage } from "react-icons/go";
@@ -169,11 +165,11 @@ export default function NavBar() {
       path: "/",
       icon: <IoMdHome color={COLORS.warning} size={18} />,
     },
-    {
-      label: "Shop",
-      path: "/shop",
-      icon: <FaShoppingBasket color={COLORS.warning} size={18} />,
-    },
+    // {
+    //   label: "Shop",
+    //   path: "/shop",
+    //   icon: <FaShoppingBasket color={COLORS.warning} size={18} />,
+    // },
     {
       label: "Envoyer",
       path: "/search",
@@ -183,6 +179,11 @@ export default function NavBar() {
       label: "Transporter",
       path: "/create",
       icon: <FaPlaneDeparture color={COLORS.warning} size={18} />,
+    },
+    {
+      label: "Comment ça marche?",
+      path: "/howTo",
+      icon: <AiOutlineQuestionCircle color={COLORS.warning} size={18} />,
     },
   ];
   const [drawerOpen, setDrawerOpen] = useState(false);

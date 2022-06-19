@@ -20,8 +20,8 @@ import COLORS from "../../colors";
 const BoardingPass = ({ sender, receiver, state, currency }) => {
   const [open, setopen] = useState(false);
   const QrCodePass = ({ big }) => {
-    // const url = "https://fir-c69a6.firebaseapp.com/reservationDetails/";
-    const url = "http://192.168.1.23:3000/reservationDetails/";
+    const url = "https://fir-c69a6.firebaseapp.com/reservationDetails/";
+    // const url = "http://192.168.1.23:3000/reservationDetails/";
     function getQRCodeValue() {
       // return url+state.id + ", " + sender?.firstName + ", " + sender?.lastName;
       return url + state.id + "?c=" + state.clientID + "&g=" + state.GPId;

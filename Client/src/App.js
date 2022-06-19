@@ -24,6 +24,7 @@ import Verification from "./Components/Pages/Verification";
 import ViewTransit from "./Components/Pages/ViewTransit";
 import ReservationViewer from "./Components/ProfileDetailsComponents/ReservationViewer";
 import ReservationDetails from "./Components/Pages/ReservationDetails";
+import HowTo from "./Components/Pages/HowTo";
 moment.locale("fr", {
   months:
     "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
@@ -175,6 +176,7 @@ const App = () => {
                     path="/verification/__/auth/"
                     component={Verification}
                   />
+                  <Route path="/howTo" component={HowTo} />
                   <Route path="*" component={NotFound} />
                 </Switch>
               </AuthProvider>

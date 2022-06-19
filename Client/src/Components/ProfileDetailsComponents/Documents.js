@@ -5,12 +5,55 @@ import {
   Grid,
   Paper,
   Skeleton,
+  Avatar,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useState } from "react";
 import { ProfileDetailsContext } from "../Pages/ProfileDetails";
 import COLORS from "../../colors";
 import { resendEmailVerification } from "../../firebase/auth";
+import { RiMedal2Line } from "react-icons/ri";
+
+const UserHeader = () => {
+  const { user, loading } = useContext(ProfileDetailsContext);
+
+  return (
+    <Box flex={1} mb={2}>
+      <Paper
+        elevation={0}
+        sx={{
+          boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+          height: "100%",
+        }}
+      >
+        <Stack p={2} direction="row" spacing={2} flex={1}>
+          <Avatar alt={user?.photoUrl} src={user?.photoUrl} />
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            flex={1}
+          >
+            <Box>
+              <Typography variant="h6" color="#2B3445" fontWeight={500}>
+                {loading ? <Skeleton /> : user.firstName + " " + user.lastName}
+              </Typography>
+              <Typography variant="body2" color="primary">
+                {loading ? <Skeleton /> : user.country}
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="center">
+              <Typography color="GrayText" letterSpacing={1} fontWeight={300}>
+                GP DEBUTANT
+              </Typography>
+              <RiMedal2Line size={18} color="goldenrod" />
+            </Box>
+          </Stack>
+        </Stack>
+      </Paper>
+    </Box>
+  );
+};
 
 const Header = () => {
   return (
@@ -158,6 +201,8 @@ const Documents = () => {
       </Stack>
 
       {/* body */}
+      <UserHeader />
+
       <Header />
       {loading ? (
         <Stack spacing={2}>

@@ -9,6 +9,7 @@ import {
   Grid,
   IconButton,
   Link,
+  MenuItem,
   Paper,
   Skeleton,
   Stack,
@@ -16,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   FaEuroSign,
   FaHandHolding,
@@ -25,17 +26,10 @@ import {
   FaUserAlt,
 } from "react-icons/fa";
 import { IoMdSave } from "react-icons/io";
-import {
-  MdArrowRight,
-  MdExpandMore,
-  MdOutlineTextsms,
-  MdPhone,
-  MdTextsms,
-} from "react-icons/md";
+import { MdArrowRight, MdExpandMore, MdPhone, MdTextsms } from "react-icons/md";
 import COLORS from "../../colors";
 import { ProfileDetailsContext } from "../Pages/ProfileDetails";
 import moment from "moment";
-import BoardingPass from "../ViewComponents/BoardingPass";
 import { useHistory, useParams } from "react-router-dom";
 import ReservationViewer from "./ReservationViewer";
 import { GiPayMoney } from "react-icons/gi";
@@ -693,6 +687,7 @@ const Packages = () => {
   const { profilState, user, reservations, loading } = useContext(
     ProfileDetailsContext
   );
+  const [AppliedFilter, setAppliedFilter] = useState("all");
 
   const { id, subpage, subID } = useParams();
 
@@ -703,6 +698,14 @@ const Packages = () => {
   function goToReservation(data) {
     history.push(`/profilDetails/${user.userId}/packages/${data.id}`, data);
   }
+
+  const filters = [
+    { label: "Tout", value: "all" },
+    { label: "Confirmés", value: "ok" },
+    { label: "Refusés", value: "ko" },
+    { label: "Supprimées", value: "deleted" },
+    { label: "En validation", value: "pending" },
+  ];
 
   return (
     <Box>
@@ -728,6 +731,17 @@ const Packages = () => {
                 >
                   {profilState.label}
                 </Typography>
+                <TextField
+                  select
+                  label="Filtres"
+                  size="small"
+                  value={AppliedFilter}
+                  onChange={(e) => setAppliedFilter(e.target.value)}
+                >
+                  {filters.map((filter, index) => (
+                    <MenuItem value={filter.value}>{filter.label}</MenuItem>
+                  ))}
+                </TextField>
               </Stack>
               <Typography color={COLORS.black} variant="body2">
                 Les colis que vous avez envoyés.
