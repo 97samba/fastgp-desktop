@@ -101,7 +101,7 @@ const PriceInformationsSummary = ({
               <Typography variant="body1" fontWeight={500}>
                 {data?.finalPrice
                   ? data?.finalPrice + " " + data.currency
-                  : data.prices.pricePerKG + " " + data.currency}
+                  : data.prices?.pricePerKG + " " + data.currency}
               </Typography>
             </Stack>
           </Stack>
