@@ -20,7 +20,6 @@ import {
   FaPlaneArrival,
   FaPlaneDeparture,
   FaRegDotCircle,
-  FaShippingFast,
   FaSuitcase,
   FaSuitcaseRolling,
 } from "react-icons/fa";

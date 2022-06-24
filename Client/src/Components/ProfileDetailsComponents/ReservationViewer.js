@@ -1,6 +1,5 @@
 import { Stack, Grid } from "@mui/material";
 import { Box } from "@mui/system";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { EditReservationPrice } from "../../firebase/db";
 import LoadingSkeleton from "../ReservationDetailsComponents/LoadingSkeleton";

@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FaEuroSign,
   FaHandHolding,
@@ -76,10 +76,7 @@ const AddReservation = ({ setediting }) => {
           Retour
         </Button>
       </Stack>
-      <Paper
-        elevation={0}
-        sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
-      >
+      <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
         <Box p={2} my={1}>
           <Grid container spacing={3} pb={1}>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -136,11 +133,7 @@ const AddReservation = ({ setediting }) => {
               />
             </Grid>
           </Grid>
-          <Button
-            endIcon={<IoMdSave />}
-            variant="contained"
-            onClick={handleSave}
-          >
+          <Button endIcon={<IoMdSave />} variant="contained" onClick={handleSave}>
             Enregister
           </Button>
         </Box>
@@ -150,10 +143,7 @@ const AddReservation = ({ setediting }) => {
 };
 const PackageSkeleton = () => {
   return (
-    <Paper
-      sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
-      elevation={0}
-    >
+    <Paper sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
       <Grid container spacing={1} display="flex" color={COLORS.black} p={1}>
         <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
           <Typography></Typography>
@@ -178,8 +168,7 @@ const DeletedPackage = ({ data }) => {
     function getColor() {
       if (state === "ok")
         return { color: "#e7f9ed", text: "Validée", textColor: "green" };
-      if (state === "ko")
-        return { color: "#ffeae9", text: "Refusée", textColor: "red" };
+      if (state === "ko") return { color: "#ffeae9", text: "Refusée", textColor: "red" };
       if (state === "pending")
         return { color: "#f9f6e7", text: "En attente", textColor: "orange" };
       if (state === "deleted")
@@ -217,10 +206,7 @@ const DeletedPackage = ({ data }) => {
     }
   }
   return (
-    <Paper
-      sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
-      elevation={0}
-    >
+    <Paper sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
       <Accordion elevation={0} disabled>
         <AccordionSummary
           expandIcon={<MdExpandMore />}
@@ -229,12 +215,7 @@ const DeletedPackage = ({ data }) => {
         >
           <Grid container spacing={1} display="flex" color={COLORS.black}>
             <Grid item xs={6} sm={6} md={4} lg={4} xl={4}>
-              <Typography
-                variant="body1"
-                fontWeight={600}
-                color={COLORS.black}
-                noWrap
-              >
+              <Typography variant="body1" fontWeight={600} color={COLORS.black} noWrap>
                 {data?.departure.name + " - " + data?.destination.name}
               </Typography>
             </Grid>
@@ -285,56 +266,28 @@ const DeletedPackage = ({ data }) => {
         <AccordionDetails>
           <Stack direction="row" spacing={2}>
             <Stack spacing={1}>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Client :{" "}
               </Typography>
 
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Vol :{" "}
               </Typography>
 
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Description :
               </Typography>
 
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Receveur :{" "}
               </Typography>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Payeur :{" "}
               </Typography>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Type de produit :{" "}
               </Typography>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Prix par Kilo :{" "}
               </Typography>
             </Stack>
@@ -376,9 +329,7 @@ const DeletedPackage = ({ data }) => {
                     data.payer +
                     ")"}
               </Typography>
-              <Typography color={COLORS.black}>
-                {getitemType().label}
-              </Typography>
+              <Typography color={COLORS.black}>{getitemType().label}</Typography>
               <Typography color={COLORS.warning}>{getPrice()}</Typography>
             </Stack>
           </Stack>
@@ -457,8 +408,7 @@ const Package = ({ data, goToReservation }) => {
           text: "Validée",
           textColor: "green",
         };
-      if (text === "ko")
-        return { color: "#ffeae9", text: "Annulée", textColor: "red" };
+      if (text === "ko") return { color: "#ffeae9", text: "Annulée", textColor: "red" };
       if (text === "pending")
         return {
           color: "#f9f6e7",
@@ -500,10 +450,7 @@ const Package = ({ data, goToReservation }) => {
   }
 
   return (
-    <Paper
-      sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
-      elevation={0}
-    >
+    <Paper sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
       <Accordion elevation={0}>
         <AccordionSummary
           expandIcon={<MdExpandMore />}
@@ -512,12 +459,7 @@ const Package = ({ data, goToReservation }) => {
         >
           <Grid container spacing={1} display="flex" color={COLORS.black}>
             <Grid item xs={6} sm={6} md={4} lg={4} xl={4}>
-              <Typography
-                variant="body1"
-                fontWeight={600}
-                color="primary"
-                noWrap
-              >
+              <Typography variant="body1" fontWeight={600} color="primary" noWrap>
                 {data?.departure.name + " - " + data?.destination.name}
               </Typography>
             </Grid>
@@ -643,17 +585,13 @@ const Package = ({ data, goToReservation }) => {
               icon={<MdTextsms size={15} color={COLORS.primary} />}
               label="Type de produit"
               information={
-                <Typography color={COLORS.primary}>
-                  {getitemType().label}
-                </Typography>
+                <Typography color={COLORS.primary}>{getitemType().label}</Typography>
               }
             />
             <InformationViewer
               icon={<FaEuroSign size={15} color={COLORS.primary} />}
               label="Prix par kilo"
-              information={
-                <Typography color={COLORS.warning}>{getPrice()}</Typography>
-              }
+              information={<Typography color={COLORS.warning}>{getPrice()}</Typography>}
             />
           </Grid>
 
@@ -670,10 +608,7 @@ const Package = ({ data, goToReservation }) => {
                         }}
                     /> */}
           <Stack direction="row" justifyContent="center" spacing={1} mt={1}>
-            <Button
-              onClick={() => goToReservation(data)}
-              endIcon={<MdArrowRight />}
-            >
+            <Button onClick={() => goToReservation(data)} endIcon={<MdArrowRight />}>
               Voir en détails
             </Button>
           </Stack>
@@ -684,9 +619,7 @@ const Package = ({ data, goToReservation }) => {
 };
 
 const Packages = () => {
-  const { profilState, user, reservations, loading } = useContext(
-    ProfileDetailsContext
-  );
+  const { profilState, user, reservations, loading } = useContext(ProfileDetailsContext);
   const [AppliedFilter, setAppliedFilter] = useState("all");
 
   const { id, subpage, subID } = useParams();
@@ -699,14 +632,42 @@ const Packages = () => {
     history.push(`/profilDetails/${user.userId}/packages/${data.id}`, data);
   }
 
+  const [FilteredReservations, setFilteredReservations] = useState(reservations);
+  const [reservationFilter, setreservationFilter] = useState("all");
+
   const filters = [
-    { label: "Tout", value: "all" },
-    { label: "Confirmés", value: "ok" },
-    { label: "Refusés", value: "ko" },
-    { label: "Supprimées", value: "deleted" },
-    { label: "En validation", value: "pending" },
+    { label: "Toutes", value: "all" },
+    { label: "Validée", value: "ok" },
+    { label: "Refusée", value: "ko" },
+    { label: "Validation", value: "pending" },
+    { label: "Délivrée", value: "delivered" },
+    { label: "Arrivé", value: "arrived" },
+    { label: "Supprimée", value: "deleted" },
+    { label: "Actives", value: "active" },
   ];
 
+  function handleFilter(status) {
+    setreservationFilter(status);
+
+    if (status === "deleted" || status === "active") {
+      return;
+    }
+
+    if (status === "all") {
+      setFilteredReservations(reservations);
+    } else {
+      let newState = [];
+      newState = reservations.filter((reservation) => reservation.status === status);
+      setFilteredReservations(newState);
+    }
+  }
+
+  useEffect(() => {
+    reservationFilter === "deleted" &&
+      setFilteredReservations(reservations.filter((reservation) => reservation.deleted));
+    reservationFilter === "active" &&
+      setFilteredReservations(reservations.filter((reservation) => !reservation.deleted));
+  }, [reservationFilter]);
   return (
     <Box>
       {subID ? (
@@ -723,12 +684,7 @@ const Packages = () => {
                 display={{ xs: "none", sm: "none", md: "flex" }}
               >
                 {profilState.icon}
-                <Typography
-                  fontWeight="bold"
-                  variant="h5"
-                  color="primary"
-                  flexGrow={1}
-                >
+                <Typography fontWeight="bold" variant="h5" color="primary" flexGrow={1}>
                   {profilState.label}
                 </Typography>
                 <TextField
@@ -739,13 +695,36 @@ const Packages = () => {
                   onChange={(e) => setAppliedFilter(e.target.value)}
                 >
                   {filters.map((filter, index) => (
-                    <MenuItem value={filter.value}>{filter.label}</MenuItem>
+                    <MenuItem value={filter.value} key={index}>
+                      {filter.label}
+                    </MenuItem>
                   ))}
                 </TextField>
               </Stack>
-              <Typography color={COLORS.black} variant="body2">
-                Les colis que vous avez envoyés.
-              </Typography>
+
+              <Stack
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography color={COLORS.black} variant="body2">
+                  Les colis que vous avez envoyés.
+                </Typography>
+                <TextField
+                  size="small"
+                  value={reservationFilter}
+                  select
+                  label="Filtres"
+                  onChange={(e) => handleFilter(e.target.value)}
+                >
+                  {filters.map((filter, index) => (
+                    <MenuItem value={filter.value} key={index}>
+                      {filter.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Stack>
               {loading ? (
                 <Stack spacing={2}>
                   <Header />
@@ -756,10 +735,10 @@ const Packages = () => {
                 </Stack>
               ) : (
                 <>
-                  {reservations?.length > 0 ? (
+                  {FilteredReservations?.length > 0 ? (
                     <Stack spacing={2} my={3}>
                       <Header />
-                      {reservations.map((reservation, index) => (
+                      {FilteredReservations.map((reservation, index) => (
                         <>
                           {reservation?.deleted ? (
                             <DeletedPackage data={reservation} />
@@ -785,7 +764,9 @@ const Packages = () => {
                       elevation={0}
                     >
                       <Typography color="GrayText">
-                        Vous n'avez pas de réservations.
+                        {reservationFilter === "all"
+                          ? "Vous n'avez pas de réservations."
+                          : "Pas de reservation pour ce filtre"}
                       </Typography>
                     </Paper>
                   )}

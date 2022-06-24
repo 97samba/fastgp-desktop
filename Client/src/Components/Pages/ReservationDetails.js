@@ -78,6 +78,7 @@ const ReservationDetails = () => {
       }
     }
   }, [currentUser]);
+
   return (
     <Container sx={{ mt: -2, py: 1, px: { xs: 2, md: 4 } }}>
       <Box sx={{ py: 2, px: { xs: 0, md: 4 } }}>

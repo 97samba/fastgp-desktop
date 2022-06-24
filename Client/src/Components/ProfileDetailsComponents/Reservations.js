@@ -2,35 +2,25 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Avatar,
   Button,
   Grid,
   Paper,
   Stack,
-  TextField,
   Typography,
   Link,
   Skeleton,
+  TextField,
+  MenuItem,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useEffect, useState } from "react";
-import { FaPhone, FaUserAlt, FaWhatsapp } from "react-icons/fa";
-import { IoMdPricetag, IoMdSave } from "react-icons/io";
-import {
-  MdArrowRight,
-  MdCancel,
-  MdCheck,
-  MdExpandMore,
-  MdPhone,
-} from "react-icons/md";
+import { FaPhone, FaWhatsapp } from "react-icons/fa";
+import { MdArrowRight, MdCancel, MdCheck, MdExpandMore, MdPhone } from "react-icons/md";
 
-import { RiMedal2Line } from "react-icons/ri";
 import COLORS from "../../colors";
 import { ProfileDetailsContext } from "../Pages/ProfileDetails";
 import { changeReservationStatus, getGPReservations } from "../../firebase/db";
 import { useParams } from "react-router-dom";
-import moment from "moment";
-import BoardingPass from "../ViewComponents/BoardingPass";
 
 const bagageType = [
   { label: "Colis pesé", value: "thing" },
@@ -48,7 +38,10 @@ const bagageType = [
 const ReservationSkeleton = () => {
   return (
     <Paper
-      sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+      sx={{
+        flex: 1,
+        boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+      }}
       elevation={0}
     >
       <Grid container spacing={1} display="flex" color={COLORS.black} p={1}>
@@ -112,11 +105,23 @@ const Reservation = ({ data, validatePackage, rejectPackage }) => {
     const [state, setstate] = useState(text);
     function getColor() {
       if (state === "ok")
-        return { color: "#e7f9ed", text: "Validée", textColor: "green" };
+        return {
+          color: "#e7f9ed",
+          text: "Validée",
+          textColor: "green",
+        };
       if (state === "ko")
-        return { color: "#ffeae9", text: "Refusée", textColor: "red" };
+        return {
+          color: "#ffeae9",
+          text: "Refusée",
+          textColor: "red",
+        };
       if (state === "pending")
-        return { color: "#f9f6e7", text: "En attente", textColor: "orange" };
+        return {
+          color: "#f9f6e7",
+          text: "En attente",
+          textColor: "orange",
+        };
     }
     return (
       <Typography
@@ -151,7 +156,10 @@ const Reservation = ({ data, validatePackage, rejectPackage }) => {
   }
   return (
     <Paper
-      sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+      sx={{
+        flex: 1,
+        boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+      }}
       elevation={0}
     >
       <Accordion elevation={0}>
@@ -162,12 +170,7 @@ const Reservation = ({ data, validatePackage, rejectPackage }) => {
         >
           <Grid container spacing={1} display="flex" color={COLORS.black}>
             <Grid item xs={6} sm={6} md={4} lg={4} xl={4}>
-              <Typography
-                variant="body1"
-                fontWeight={600}
-                color="primary"
-                noWrap
-              >
+              <Typography variant="body1" fontWeight={600} color="primary" noWrap>
                 {data?.departure.name + " - " + data?.destination.name}
               </Typography>
             </Grid>
@@ -181,19 +184,18 @@ const Reservation = ({ data, validatePackage, rejectPackage }) => {
               md={3}
               lg={3}
               xl={3}
-              display={{ xs: "none", sm: "none", md: "block" }}
+              display={{
+                xs: "none",
+                sm: "none",
+                md: "block",
+              }}
             >
               <Typography variant="body2" fontWeight={500} noWrap>
                 {data.sender.firstName + " " + data.sender.lastName}
               </Typography>
             </Grid>
             <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-              <Typography
-                variant="body2"
-                fontWeight={500}
-                noWrap
-                color={COLORS.warning}
-              >
+              <Typography variant="body2" fontWeight={500} noWrap color={COLORS.warning}>
                 {getPrice()}
               </Typography>
             </Grid>
@@ -202,56 +204,28 @@ const Reservation = ({ data, validatePackage, rejectPackage }) => {
         <AccordionDetails>
           <Stack direction="row" spacing={2}>
             <Stack spacing={1}>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Client :{" "}
               </Typography>
 
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Vol :{" "}
               </Typography>
 
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Description :
               </Typography>
 
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Receveur :{" "}
               </Typography>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Payeur :{" "}
               </Typography>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Type de produit :{" "}
               </Typography>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Prix par Kilo :{" "}
               </Typography>
             </Stack>
@@ -293,9 +267,7 @@ const Reservation = ({ data, validatePackage, rejectPackage }) => {
                     data.payer +
                     ")"}
               </Typography>
-              <Typography color={COLORS.black}>
-                {getitemType().label}
-              </Typography>
+              <Typography color={COLORS.black}>{getitemType().label}</Typography>
               <Typography color={COLORS.warning}>{getPrice()}</Typography>
             </Stack>
           </Stack>
@@ -361,13 +333,29 @@ const DeletedReservation = ({ data }) => {
     const [state, setstate] = useState(text);
     function getColor() {
       if (state === "ok")
-        return { color: "#e7f9ed", text: "Validée", textColor: "green" };
+        return {
+          color: "#e7f9ed",
+          text: "Validée",
+          textColor: "green",
+        };
       if (state === "ko")
-        return { color: "#ffeae9", text: "Refusée", textColor: "red" };
+        return {
+          color: "#ffeae9",
+          text: "Refusée",
+          textColor: "red",
+        };
       if (state === "pending")
-        return { color: "#f9f6e7", text: "En attente", textColor: "orange" };
+        return {
+          color: "#f9f6e7",
+          text: "En attente",
+          textColor: "orange",
+        };
       if (state === "deleted")
-        return { color: "#ffeae9", text: "Supprimée", textColor: "red" };
+        return {
+          color: "#ffeae9",
+          text: "Supprimée",
+          textColor: "red",
+        };
     }
     return (
       <Typography
@@ -402,7 +390,10 @@ const DeletedReservation = ({ data }) => {
   }
   return (
     <Paper
-      sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
+      sx={{
+        flex: 1,
+        boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+      }}
       elevation={0}
     >
       <Accordion elevation={0} disabled>
@@ -413,12 +404,7 @@ const DeletedReservation = ({ data }) => {
         >
           <Grid container spacing={1} display="flex" color={COLORS.black}>
             <Grid item xs={6} sm={6} md={4} lg={4} xl={4}>
-              <Typography
-                variant="body1"
-                fontWeight={600}
-                color="primary"
-                noWrap
-              >
+              <Typography variant="body1" fontWeight={600} color="primary" noWrap>
                 {data?.departure.name + " - " + data?.destination.name}
               </Typography>
             </Grid>
@@ -432,19 +418,18 @@ const DeletedReservation = ({ data }) => {
               md={3}
               lg={3}
               xl={3}
-              display={{ xs: "none", sm: "none", md: "block" }}
+              display={{
+                xs: "none",
+                sm: "none",
+                md: "block",
+              }}
             >
               <Typography variant="body2" fontWeight={500} noWrap>
                 {data.sender.firstName + " " + data.sender.lastName}
               </Typography>
             </Grid>
             <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-              <Typography
-                variant="body2"
-                fontWeight={500}
-                noWrap
-                color={COLORS.warning}
-              >
+              <Typography variant="body2" fontWeight={500} noWrap color={COLORS.warning}>
                 {getPrice()}
               </Typography>
             </Grid>
@@ -453,56 +438,28 @@ const DeletedReservation = ({ data }) => {
         <AccordionDetails>
           <Stack direction="row" spacing={2}>
             <Stack spacing={1}>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Client :{" "}
               </Typography>
 
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Vol :{" "}
               </Typography>
 
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Description :
               </Typography>
 
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Receveur :{" "}
               </Typography>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Payeur :{" "}
               </Typography>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Type de produit :{" "}
               </Typography>
-              <Typography
-                fontWeight="bold"
-                variant="body1"
-                color={COLORS.black}
-              >
+              <Typography fontWeight="bold" variant="body1" color={COLORS.black}>
                 Prix par Kilo :{" "}
               </Typography>
             </Stack>
@@ -544,9 +501,7 @@ const DeletedReservation = ({ data }) => {
                     data.payer +
                     ")"}
               </Typography>
-              <Typography color={COLORS.black}>
-                {getitemType().label}
-              </Typography>
+              <Typography color={COLORS.black}>{getitemType().label}</Typography>
               <Typography color={COLORS.warning}>{getPrice()}</Typography>
             </Stack>
           </Stack>
@@ -557,19 +512,19 @@ const DeletedReservation = ({ data }) => {
 };
 
 const Reservations = () => {
-  const { profilState, user, loading, setloading, currentUser } = useContext(
-    ProfileDetailsContext
-  );
+  const { profilState, user, loading, setloading, currentUser } =
+    useContext(ProfileDetailsContext);
   const { id } = useParams();
 
   const [Reservations, setReservations] = useState([]);
-
-  const [editing, setediting] = useState(false);
+  const [FilteredReservations, setFilteredReservations] = useState([]);
+  const [reservationFilter, setreservationFilter] = useState("all");
 
   async function getReservations() {
     setloading(true);
     const results = await getGPReservations(id);
     setReservations(results);
+    setFilteredReservations(results);
     setloading(false);
   }
   async function rejectPackage(id) {
@@ -595,10 +550,40 @@ const Reservations = () => {
     setReservations(newState);
   }
 
+  const filters = [
+    { label: "Toutes", value: "all" },
+    { label: "Validée", value: "ok" },
+    { label: "Refusée", value: "ko" },
+    { label: "Validation", value: "pending" },
+    { label: "Délivrée", value: "delivered" },
+    { label: "Arrivé", value: "arrived" },
+    { label: "Supprimée", value: "deleted" },
+  ];
+
+  function handleFilter(status) {
+    setreservationFilter(status);
+    if (status === "deleted" || status === "active") {
+      return;
+    }
+    if (status === "all") {
+      setFilteredReservations(Reservations);
+    } else {
+      let newState = Reservations.filter((reservation) => reservation.status === status);
+      setFilteredReservations(newState);
+    }
+  }
+
   useEffect(() => {
     const subscribe = getReservations();
     return subscribe;
   }, []);
+
+  useEffect(() => {
+    reservationFilter === "deleted" &&
+      setFilteredReservations(Reservations.filter((reservation) => reservation.deleted));
+    reservationFilter === "active" &&
+      setFilteredReservations(Reservations.filter((reservation) => !reservation.deleted));
+  }, [reservationFilter]);
 
   return (
     <Box>
@@ -614,9 +599,29 @@ const Reservations = () => {
           {profilState.label}
         </Typography>
       </Stack>
-      <Typography color={COLORS.black} variant="body2">
-        Les colis que vous devez transporter pour vos clients.
-      </Typography>
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Typography color={COLORS.black} variant="body2">
+          Les colis que vous devez transporter pour vos clients.
+        </Typography>
+        <TextField
+          size="small"
+          value={reservationFilter}
+          select
+          label="Filtres"
+          onChange={(e) => handleFilter(e.target.value)}
+        >
+          {filters.map((filter, index) => (
+            <MenuItem value={filter.value} key={index}>
+              {filter.label}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Stack>
       {loading ? (
         <Stack spacing={2}>
           <Header />
@@ -626,10 +631,10 @@ const Reservations = () => {
         </Stack>
       ) : (
         <>
-          {Reservations.length > 0 ? (
+          {FilteredReservations.length > 0 ? (
             <Stack spacing={2} my={3}>
               <Header />
-              {Reservations.map((reservation, index) => (
+              {FilteredReservations.map((reservation, index) => (
                 <>
                   {reservation?.deleted ? (
                     <DeletedReservation data={reservation} />
@@ -656,7 +661,9 @@ const Reservations = () => {
               elevation={0}
             >
               <Typography color="GrayText">
-                Vous n'avez pas de réservations.
+                {reservationFilter === "all"
+                  ? "Vous n'avez pas de réservations."
+                  : "Pas de reservation pour ce filtre"}
               </Typography>
             </Paper>
           )}
