@@ -21,6 +21,7 @@ import COLORS from "../../colors";
 import { ProfileDetailsContext } from "../Pages/ProfileDetails";
 import { changeReservationStatus, getGPReservations } from "../../firebase/db";
 import { useParams } from "react-router-dom";
+import { LoadingButton } from "@mui/lab";
 
 const bagageType = [
   { label: "Colis pesé", value: "thing" },
@@ -101,6 +102,8 @@ const Header = () => {
 };
 
 const Reservation = ({ data, validatePackage, rejectPackage }) => {
+  const [state, setstate] = useState({ loading: false, action: "" });
+
   const Status = ({ text }) => {
     const [state, setstate] = useState(text);
     function getColor() {
@@ -144,15 +147,24 @@ const Reservation = ({ data, validatePackage, rejectPackage }) => {
     return bagageType.filter((element) => element.value === data.itemType)[0];
   }
   function getPrice() {
-    if (data?.prices) {
-      if (data.itemType === "thing")
-        return data?.finalPrice
-          ? `${data?.finalPrice} ${data.currency}`
-          : data.prices.pricePerKG + " " + data.currency + " /kg";
-      else return "à déterminer";
-    } else {
-      return "à déterminer";
-    }
+    return data?.finalPrice
+      ? `${data?.finalPrice} ${data.currency}`
+      : data.prices.pricePerKG + " " + data.currency + " /kg";
+  }
+
+  async function handleValidate() {
+    setstate({ loading: true, action: "validate" });
+    await validatePackage(data?.id);
+    await setTimeout(() => {
+      setstate({ loading: false, action: "" });
+    }, 2000);
+  }
+  async function handleReject() {
+    setstate({ loading: true, action: "reject" });
+    await rejectPackage(data?.id);
+    await setTimeout(() => {
+      setstate({ loading: false, action: "" });
+    }, 2000);
   }
   return (
     <Paper
@@ -272,26 +284,41 @@ const Reservation = ({ data, validatePackage, rejectPackage }) => {
             </Stack>
           </Stack>
           {data.status === "pending" && (
-            <Stack direction="row" spacing={1} mt={4} justifyContent="center">
+            <>
+              <Stack direction="row" spacing={1} mb={2} mt={4} justifyContent="center">
+                <LoadingButton
+                  loading={state.loading && state.action === "reject"}
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  endIcon={<MdCancel />}
+                  onClick={() => handleReject()}
+                  fullWidth
+                >
+                  Refuser
+                </LoadingButton>
+                <LoadingButton
+                  loading={state.loading && state.action === "validate"}
+                  size="small"
+                  color="success"
+                  variant="contained"
+                  endIcon={<MdCheck />}
+                  onClick={() => handleValidate()}
+                  fullWidth
+                >
+                  Valider
+                </LoadingButton>
+              </Stack>
               <Button
-                size="small"
-                color="success"
-                variant="contained"
-                endIcon={<MdCheck />}
-                onClick={() => validatePackage(data.id)}
+                variant="outlined"
+                color="warning"
+                href={`/reservationDetails/${data.id}?c=${data.owner}&g=${data.gpId}`}
+                fullWidth
+                endIcon={<MdArrowRight />}
               >
-                Valider
+                détails
               </Button>
-              <Button
-                size="small"
-                color="error"
-                variant="contained"
-                endIcon={<MdCancel />}
-                onClick={() => rejectPackage(data.id)}
-              >
-                Refuser
-              </Button>
-            </Stack>
+            </>
           )}
           {data.status === "ok" && (
             <Stack direction={{ xs: "column", md: "row" }} spacing={2} mt={3}>
@@ -378,15 +405,9 @@ const DeletedReservation = ({ data }) => {
     return bagageType.filter((element) => element.value === data.itemType)[0];
   }
   function getPrice() {
-    if (data?.prices) {
-      if (data.itemType === "thing")
-        return data?.finalPrice
-          ? `${data?.finalPrice} ${data.currency}`
-          : data.prices.pricePerKG + " " + data.currency + " /kg";
-      else return "à déterminer";
-    } else {
-      return "à déterminer";
-    }
+    return data?.finalPrice
+      ? `${data?.finalPrice} ${data.currency}`
+      : data.prices.pricePerKG + " " + data.currency + " /kg";
   }
   return (
     <Paper
@@ -558,6 +579,7 @@ const Reservations = () => {
     { label: "Délivrée", value: "delivered" },
     { label: "Arrivé", value: "arrived" },
     { label: "Supprimée", value: "deleted" },
+    { label: "Actives", value: "active" },
   ];
 
   function handleFilter(status) {
@@ -613,6 +635,7 @@ const Reservations = () => {
           value={reservationFilter}
           select
           label="Filtres"
+          sx={{ minWidth: 110 }}
           onChange={(e) => handleFilter(e.target.value)}
         >
           {filters.map((filter, index) => (

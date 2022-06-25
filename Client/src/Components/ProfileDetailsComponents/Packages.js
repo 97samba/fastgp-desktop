@@ -195,15 +195,9 @@ const DeletedPackage = ({ data }) => {
     return bagageType.filter((element) => element.value === data.itemType)[0];
   }
   function getPrice() {
-    if (data?.prices) {
-      if (data.itemType === "thing")
-        return data?.finalPrice
-          ? `${data?.finalPrice} ${data.currency}`
-          : data.prices.pricePerKG + " " + data.currency + " /kg";
-      else return "à déterminer";
-    } else {
-      return "à déterminer";
-    }
+    return data?.finalPrice
+      ? `${data?.finalPrice} ${data.currency}`
+      : data.prices.pricePerKG + " " + data.currency + " /kg";
   }
   return (
     <Paper sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
@@ -435,15 +429,9 @@ const Package = ({ data, goToReservation }) => {
   };
 
   function getPrice() {
-    if (data?.prices) {
-      if (data.itemType === "thing")
-        return data?.finalPrice
-          ? `${data?.finalPrice} ${data.currency}`
-          : data.prices.pricePerKG + " " + data.currency + " /kg";
-      else return "à déterminer";
-    } else {
-      return "à déterminer";
-    }
+    return data?.finalPrice
+      ? `${data?.finalPrice} ${data.currency}`
+      : data.prices.pricePerKG + " " + data.currency + " /kg";
   }
   function getitemType() {
     return bagageType.filter((element) => element.value === data.itemType)[0];
@@ -608,7 +596,12 @@ const Package = ({ data, goToReservation }) => {
                         }}
                     /> */}
           <Stack direction="row" justifyContent="center" spacing={1} mt={1}>
-            <Button onClick={() => goToReservation(data)} endIcon={<MdArrowRight />}>
+            <Button
+              onClick={() => goToReservation(data)}
+              variant="outlined"
+              color="warning"
+              endIcon={<MdArrowRight />}
+            >
               Voir en détails
             </Button>
           </Stack>
@@ -668,6 +661,12 @@ const Packages = () => {
     reservationFilter === "active" &&
       setFilteredReservations(reservations.filter((reservation) => !reservation.deleted));
   }, [reservationFilter]);
+
+  useEffect(() => {
+    console.log("reservations has changed ", reservations);
+    setFilteredReservations(reservations);
+  }, [reservations]);
+
   return (
     <Box>
       {subID ? (
@@ -687,19 +686,6 @@ const Packages = () => {
                 <Typography fontWeight="bold" variant="h5" color="primary" flexGrow={1}>
                   {profilState.label}
                 </Typography>
-                <TextField
-                  select
-                  label="Filtres"
-                  size="small"
-                  value={AppliedFilter}
-                  onChange={(e) => setAppliedFilter(e.target.value)}
-                >
-                  {filters.map((filter, index) => (
-                    <MenuItem value={filter.value} key={index}>
-                      {filter.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
               </Stack>
 
               <Stack
@@ -741,7 +727,7 @@ const Packages = () => {
                       {FilteredReservations.map((reservation, index) => (
                         <>
                           {reservation?.deleted ? (
-                            <DeletedPackage data={reservation} />
+                            <DeletedPackage data={reservation} key={index} />
                           ) : (
                             <Package
                               data={reservation}

@@ -35,18 +35,13 @@ const Middle = ({ currentUser }) => {
   };
 
   async function connectWithGoogle() {
-    const result = await AuthenticateWithGoogle(state.email, state.password);
+    await AuthenticateWithGoogle(state.email, state.password);
   }
 
   return (
     <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
       <Box px={5} pt={1}>
-        <Stack
-          direction="row"
-          justifyContent="center"
-          m={1}
-          alignItems="center"
-        >
+        <Stack direction="row" justifyContent="center" m={1} alignItems="center">
           <img src={loginImage} alt="login" width="70%" />
         </Stack>
         <Typography gutterBottom variant="h4" fontWeight="bold" color="primary">
@@ -106,7 +101,10 @@ const Middle = ({ currentUser }) => {
           </LoadingButton>
         </Grid>
         <Box width="100%" py={3}>
-          <Divider>ou</Divider>
+          <Divider>
+            ou
+            <Link href="/register/start"> Inscrivez-vous</Link>
+          </Divider>
         </Box>
         <Grid container spacing={1}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -152,8 +150,8 @@ const Middle = ({ currentUser }) => {
         </Grid>
         <Box mt={1}>
           <Typography variant="caption">
-            En vous inscrivant, vous acceptez nos conditions d'utilisation et
-            notre Politique de confidentialité.
+            En vous inscrivant, vous acceptez nos conditions d'utilisation et notre
+            Politique de confidentialité.
           </Typography>
         </Box>
       </Box>
@@ -188,10 +186,7 @@ const Login = () => {
           <Middle currentUser={currentUser} />
         </Grid>
         <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-          <Paper
-            elevation={0}
-            sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
-          >
+          <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
             <Box p={2}>
               <Typography>
                 Pas de compte ?{" "}

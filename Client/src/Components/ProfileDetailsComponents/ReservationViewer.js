@@ -14,9 +14,7 @@ import { Tracker } from "./Tracker";
 const ReservationViewer = ({ data, setdata, loading, isClient }) => {
   //3 etapes, validation, voyage,liraison
   const [step, setstep] = useState(Tracker.getStep(data));
-  const [price, setprice] = useState(
-    data?.finalPrice || data?.prices?.pricePerKG || 55
-  );
+  const [price, setprice] = useState(data?.finalPrice || data?.prices?.pricePerKG);
   const [changingPrice, setchangingPrice] = useState(false);
   const [paying, setpaying] = useState(false);
   const [paymentDialog, setpaymentDialog] = useState(false);

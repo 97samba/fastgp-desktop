@@ -39,18 +39,12 @@ const BoardingPass = ({ sender, receiver, state, currency }) => {
   };
   const QRCOdeDialog = () => {
     return (
-      <Dialog
-        open={open}
-        onClose={closeQrcodeDialog}
-        fullWidth={true}
-        maxWidth="xl"
-      >
+      <Dialog open={open} onClose={closeQrcodeDialog} fullWidth={true} maxWidth="xl">
         <DialogTitle>A flasher par votre transporteur</DialogTitle>
 
         <DialogContent>
           <DialogContentText>
-            Montrer ce qrcode pour que votre transporteur accéde rapidement à
-            votre colis.
+            Montrer ce qrcode pour que votre transporteur accéde rapidement à votre colis.
           </DialogContentText>
           <Box py={2}>
             <QrCodePass big={true} />
@@ -66,6 +60,18 @@ const BoardingPass = ({ sender, receiver, state, currency }) => {
   }
   function closeQrcodeDialog() {
     setopen(false);
+  }
+  function getPrice() {
+    if (state?.finalPrice) {
+      return state.finalPrice + " " + state?.currency;
+    }
+    if (state?.prices) {
+      if (state.itemType === "thing")
+        return `${state.prices.pricePerKG} ${state.currency} /Kg`;
+      else return "à déterminer";
+    } else {
+      return "à déterminer";
+    }
   }
   return (
     <Box>
@@ -136,25 +142,12 @@ const BoardingPass = ({ sender, receiver, state, currency }) => {
               >
                 <Box flex={1} p={2} mr={1}>
                   <Stack direction="row" spacing={1} mb={1}>
-                    <Typography variant="body2">
-                      Colis transporté par{" "}
-                    </Typography>
-                    <Typography
-                      fontWeight="bold"
-                      variant="body2"
-                      color="primary"
-                    >
-                      {state.publisher.firstName +
-                        " " +
-                        state.publisher.lastName}
+                    <Typography variant="body2">Colis transporté par </Typography>
+                    <Typography fontWeight="bold" variant="body2" color="primary">
+                      {state.publisher.firstName + " " + state.publisher.lastName}
                     </Typography>
                   </Stack>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    my={1}
-                    flex={1}
-                  >
+                  <Stack direction="row" justifyContent="space-between" my={1} flex={1}>
                     <Box>
                       <Typography variant="h6" fontWeight={600} color="primary">
                         {state.departure.name.toUpperCase()}
@@ -252,18 +245,10 @@ const BoardingPass = ({ sender, receiver, state, currency }) => {
                         {receiver.lastName ? receiver.lastName : "Nom"}
                       </Typography>
                     </Box>
-                    <Stack
-                      direction="row"
-                      my={1}
-                      justifyContent="space-between"
-                    >
+                    <Stack direction="row" my={1} justifyContent="space-between">
                       <Box>
                         <Typography variant="caption">Prix :</Typography>
-                        <Typography>
-                          {state?.prices
-                            ? state.prices.pricePerKG + " " + currency
-                            : "N/A"}{" "}
-                        </Typography>
+                        <Typography>{getPrice()}</Typography>
                       </Box>
                       <Box>
                         <Typography variant="caption">Payé :</Typography>

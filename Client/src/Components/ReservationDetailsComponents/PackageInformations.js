@@ -24,6 +24,9 @@ const bagageType = [
 
 const PackageInformations = ({ data }) => {
   function getPrice() {
+    if (data?.finalPrice) {
+      return data.finalPrice + " " + data?.currency;
+    }
     if (data?.prices) {
       if (data.itemType === "thing")
         return `${data.prices.pricePerKG} ${data.currency} /Kg`;
@@ -82,6 +85,8 @@ const PackageInformations = ({ data }) => {
             prices: data.prices,
             clientID: data.owner,
             GPId: data.gpId,
+            finalPrice: data?.finalPrice,
+            currency: data.currency,
           }}
         />
       </Stack>
@@ -90,10 +95,7 @@ const PackageInformations = ({ data }) => {
           icon={<FaUserAlt size={15} color={COLORS.primary} />}
           label="Transporteur"
           information={
-            <Link
-              href={"/profilDetails/" + data.gpId + "/myProfile"}
-              underline="hover"
-            >
+            <Link href={"/profilDetails/" + data.gpId + "/myProfile"} underline="hover">
               <Typography>
                 {data.publisher.firstName + " " + data.publisher.lastName}
               </Typography>
@@ -128,24 +130,19 @@ const PackageInformations = ({ data }) => {
           icon={<MdTextsms size={15} color={COLORS.primary} />}
           label="Type de produit"
           information={
-            <Typography color={COLORS.primary}>
-              {getitemType().label}
-            </Typography>
+            <Typography color={COLORS.primary}>{getitemType().label}</Typography>
           }
         />
         <InformationViewer
           icon={<FaEuroSign size={15} color={COLORS.primary} />}
           label="Prix par kilo"
-          information={
-            <Typography color={COLORS.warning}>{getPrice()}</Typography>
-          }
+          information={<Typography color={COLORS.warning}>{getPrice()}</Typography>}
         />
         <InformationViewer
           icon={<MdPhoto size={15} color={COLORS.primary} />}
           label="Photo du colis"
-          information={
-            <Typography color={COLORS.primary}>Voir photo</Typography>
-          }
+          information={<Typography color={COLORS.primary}>Voir photo</Typography>}
+          showDivider={false}
         />
       </Grid>
     </Paper>

@@ -2,16 +2,15 @@ import { Stack, Typography, IconButton, Divider, Grid } from "@mui/material";
 import React from "react";
 import COLORS from "../../colors";
 
-const InformationViewer = ({ icon, label, information, full = false }) => {
+const InformationViewer = ({
+  icon,
+  label,
+  information,
+  full = false,
+  showDivider = true,
+}) => {
   return (
-    <Grid
-      item
-      xs={12}
-      sm={12}
-      md={full ? 12 : 6}
-      lg={full ? 12 : 6}
-      xl={full ? 12 : 6}
-    >
+    <Grid item xs={12} sm={12} md={full ? 12 : 6} lg={full ? 12 : 6} xl={full ? 12 : 6}>
       <Stack direction="row" spacing={1}>
         <IconButton>{icon}</IconButton>
 
@@ -28,7 +27,7 @@ const InformationViewer = ({ icon, label, information, full = false }) => {
           {information}
         </Typography>
       </Stack>
-      <Divider sx={{ my: 0.5 }} />
+      {showDivider && <Divider sx={{ my: 0.5 }} />}
     </Grid>
   );
 };

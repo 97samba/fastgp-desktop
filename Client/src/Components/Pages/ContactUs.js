@@ -31,8 +31,8 @@ const Left = () => {
           Informations de contact
         </Typography>
         <Typography variant="body2">
-          Vous pouvez nous contacter par mail ou par téléphone directement via
-          whatsapp ou par appel.
+          Vous pouvez nous contacter par mail ou par téléphone directement via whatsapp ou
+          par appel.
         </Typography>
       </Box>
       <Stack spacing={4} mt={2} py={2}>
@@ -117,12 +117,7 @@ const Right = ({ state, setstate, handleSubmit }) => {
     </Box>
   );
 };
-const SuccesDialog = ({
-  dialogOpen,
-  loading,
-  handleClose,
-  handleBackToHome,
-}) => {
+const SuccesDialog = ({ dialogOpen, loading, handleClose, handleBackToHome }) => {
   return (
     <Box>
       <Dialog open={dialogOpen}>
@@ -143,8 +138,7 @@ const SuccesDialog = ({
           ) : (
             <Stack direction="row" spacing={2}>
               <Typography>
-                Message envoyé, un agent vous répondra dans les plus bref
-                délais.
+                Message envoyé, un agent vous répondra dans les plus bref délais.
               </Typography>
               <FaCheck color="green" size={20} />
             </Stack>
@@ -200,14 +194,22 @@ const ContactUs = () => {
                 Gardons contact !
               </Typography>
               <Typography variant="body1">
-                Posez-nous n'importe quelle question ou envoyez nous vos
-                suggestions pour améliorer le site.
+                Posez-nous n'importe quelle question ou envoyez nous vos suggestions pour
+                améliorer le site.
               </Typography>
             </Box>
             <Box flex={1} m={2}>
               <Paper>
                 <Grid container p={1}>
-                  <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    md={4}
+                    lg={4}
+                    xl={4}
+                    order={{ xs: 1, sm: 1, md: 0 }}
+                  >
                     <Left />
                   </Grid>
                   <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>

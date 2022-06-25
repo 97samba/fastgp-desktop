@@ -1,4 +1,4 @@
-import { Divider, Grid, Stack, Typography, Link } from "@mui/material";
+import { Divider, Grid, Stack, Typography, Link, Icon, IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import {
@@ -12,16 +12,22 @@ import COLORS from "../colors";
 
 const Footer = () => {
   const socials = [
-    { icon: <FaFacebook size={20} />, link: "http://www.facebook.fr" },
-    { icon: <FaInstagram size={20} />, link: "http://www.instagram.fr" },
+    {
+      icon: <FaFacebook size={20} />,
+      link: "https://www.facebook.com/profile.php?id=100082678031026",
+    },
+    {
+      icon: <FaInstagram size={20} />,
+      link: "https://www.instagram.com/fast.gp.colis/?hl=fr",
+    },
     { icon: <FaYoutube size={20} />, link: "http://www.youtube.fr" },
-    { icon: <FaTwitter size={20} />, link: "http://www.twitter.fr" },
+    { icon: <FaTwitter size={20} />, link: "https://twitter.com/samband35813072" },
   ];
   const utilLinks = [
     { label: "Contactez-nous", page: "/contactUs" },
     { label: "A propos", page: "/aboutUs" },
     { label: "Conditions", page: "/conditionsAndPolitics" },
-    { label: "Blog", page: "/blog" },
+    // { label: "Blog", page: "/blog" },
   ];
 
   const pages = [
@@ -45,12 +51,16 @@ const Footer = () => {
               Fast GP
             </Typography>
             <Typography variant="body2">
-              Fast GP est un site professionnel de livraison à international qui
-              recense toutes les annonces de covalisage du net.
+              Fast GP est un site professionnel de livraison à international qui recense
+              toutes les annonces de covalisage du net.
             </Typography>
             <Stack direction="row" spacing={2} my={2}>
               {socials.map((social, index) => (
-                <Box key={index}>{social.icon}</Box>
+                <Box key={index}>
+                  <IconButton color="inherit" target="_blank" href={social.link}>
+                    {social.icon}
+                  </IconButton>
+                </Box>
               ))}
             </Stack>
           </Grid>
@@ -123,17 +133,12 @@ const Footer = () => {
               ))}
             </Stack>
           </Grid>
-          <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+          {/* <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
             <Typography fontWeight={500}>Télecharger sur mobile</Typography>
-          </Grid>
+          </Grid> */}
         </Grid>
         <Divider sx={{ my: 5, background: "white" }} />
-        <Stack
-          direction="row"
-          spacing={2}
-          pb={5}
-          justifyContent="space-between"
-        >
+        <Stack direction="row" spacing={2} pb={5} justifyContent="space-between">
           <Typography flex={1} variant="caption">
             © 2021 Sangomar, Fast GP. Tous droits réservés
           </Typography>

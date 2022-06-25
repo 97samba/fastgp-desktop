@@ -6,6 +6,7 @@ import {
   DialogTitle,
   Divider,
   Grid,
+  Link,
   Stack,
   TextField,
   Typography,
@@ -16,7 +17,7 @@ import { FaApple, FaFacebookSquare, FaLock, FaPhoneAlt } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { IoMailSharp } from "react-icons/io5";
 import { MdCheck } from "react-icons/md";
-import { login, useAuth } from "../firebase/auth";
+import { AuthenticateWithGoogle, login, useAuth } from "../firebase/auth";
 // import loginImage from "../Images/undraw_login_re_4vu2.svg";
 import loginImage from "../Images/undraw_stranded_traveler_pdbw.svg";
 import { AuthContext } from "../Providers/AuthProvider";
@@ -30,6 +31,10 @@ const SignUpDialog = () => {
   async function handleLogin() {
     error === true && seterror(false);
     await login(state.email, state.password, seterror);
+  }
+
+  async function connectWithGoogle() {
+    await AuthenticateWithGoogle(state.email, state.password);
   }
 
   return (
@@ -59,8 +64,8 @@ const SignUpDialog = () => {
         ) : (
           <>
             <DialogContentText>
-              Avec Fast Gp, trouvez les meilleurs covaliseurs du monde entier et profiter de la
-              livraison gratuite*.
+              Avec Fast Gp, trouvez les meilleurs covaliseurs du monde entier et profiter
+              de la livraison gratuite*.
             </DialogContentText>
             {error && (
               <Box pt={2}>
@@ -103,70 +108,57 @@ const SignUpDialog = () => {
               </Button>
             </Grid>
             <Box width="100%" py={3}>
-              <Divider>ou</Divider>
+              <Divider>
+                ou
+                <Link href="/register/start"> Inscrivez-vous</Link>
+              </Divider>{" "}
             </Box>
             <Grid container spacing={1}>
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Stack
-                  direction="row"
-                  border={1}
-                  justifyContent="center"
-                  p={0.5}
-                  borderRadius={1}
-                  borderColor="#C5C5C5"
-                  spacing={1}
+                <Button
+                  startIcon={<FaFacebookSquare size={20} color="#3b5998" />}
+                  disabled
+                  fullWidth
+                  variant="outlined"
                 >
-                  <FaFacebookSquare size={20} color="#3b5998" />
                   <Typography>Facebook</Typography>
-                </Stack>
+                </Button>
               </Grid>
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Stack
-                  direction="row"
-                  border={1}
-                  justifyContent="center"
-                  p={0.5}
-                  borderRadius={1}
-                  borderColor="#C5C5C5"
-                  spacing={1}
+                <Button
+                  startIcon={<FcGoogle size={20} />}
+                  fullWidth
+                  variant="outlined"
+                  onClick={connectWithGoogle}
                 >
-                  <FcGoogle size={20} />
                   <Typography>Google</Typography>
-                </Stack>
+                </Button>
               </Grid>
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Stack
-                  direction="row"
-                  border={1}
-                  justifyContent="center"
-                  p={0.5}
-                  borderRadius={1}
-                  borderColor="#C5C5C5"
-                  spacing={1}
+                <Button
+                  startIcon={<FaPhoneAlt size={18} color="gray" />}
+                  fullWidth
+                  variant="outlined"
+                  disabled
                 >
-                  <FaPhoneAlt size={18} color="gray" />
                   <Typography>Téléphone</Typography>
-                </Stack>
+                </Button>
               </Grid>
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Stack
-                  direction="row"
-                  border={1}
-                  justifyContent="center"
-                  p={0.5}
-                  borderRadius={1}
-                  borderColor="#C5C5C5"
-                  spacing={1}
+                <Button
+                  startIcon={<FaApple size={20} />}
+                  fullWidth
+                  variant="outlined"
+                  disabled
                 >
-                  <FaApple size={20} />
                   <Typography>Apple</Typography>
-                </Stack>
+                </Button>
               </Grid>
             </Grid>
             <Box mt={1}>
               <Typography variant="caption">
-                En vous inscrivant, vous acceptez nos conditions d'utilisation et notre Politique de
-                confidentialité.
+                En vous inscrivant, vous acceptez nos conditions d'utilisation et notre
+                Politique de confidentialité.
               </Typography>
             </Box>
           </>
