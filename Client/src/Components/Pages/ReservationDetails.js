@@ -5,10 +5,10 @@ import { MdBlock } from "react-icons/md";
 import { useParams, useHistory } from "react-router-dom";
 import COLORS from "../../colors";
 import { useAuth } from "../../firebase/auth";
-import { GetAReservation } from "../../firebase/db";
+import { GetAReservation, GetFeedbackFromReservation } from "../../firebase/db";
 import ReservationViewer from "../ProfileDetailsComponents/ReservationViewer";
 
-const UnauthorizedComponent = () => {
+export const UnauthorizedComponent = () => {
   return (
     <Paper
       sx={{
@@ -32,8 +32,8 @@ const UnauthorizedComponent = () => {
           Unauthorized informations
         </Typography>
         <Typography variant="caption" color="GrayText">
-          Vous n'etes ni transporteur ni client de ce colis, votre compte peut
-          être banni pour ces actions.
+          Vous n'etes ni transporteur ni client de ce colis, votre compte peut être banni pour ces
+          actions.
         </Typography>
       </Stack>
     </Paper>
@@ -49,6 +49,7 @@ const ReservationDetails = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const [unauthorized, setunauthorized] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [feedback, setfeedback] = useState({});
 
   async function fetchDatas() {
     let result = await GetAReservation(id);
@@ -56,21 +57,23 @@ const ReservationDetails = () => {
     currentUser?.uid === result?.gpId ? setIsClient(false) : setIsClient(true);
     result = undefined;
     setloading(false);
+    let feed = await GetFeedbackFromReservation(id);
+    setfeedback(feed);
+    feed = undefined;
   }
+
   function showUnauthorized() {
     setunauthorized(true);
     setloading(false);
   }
+
   useEffect(() => {
     if (currentUser === null) {
       history.push("/login");
     }
     if (currentUser?.uid) {
       if (id) {
-        if (
-          queryParams.get("c") === currentUser?.uid ||
-          queryParams.get("g") === currentUser?.uid
-        )
+        if (queryParams.get("c") === currentUser?.uid || queryParams.get("g") === currentUser?.uid)
           fetchDatas();
         else showUnauthorized();
       } else {
@@ -90,6 +93,7 @@ const ReservationDetails = () => {
             setdata={setreservation}
             loading={loading}
             isClient={isClient}
+            feedback={feedback}
           />
         )}
       </Box>

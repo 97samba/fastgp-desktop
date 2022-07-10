@@ -5,6 +5,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
+  Chip,
   Divider,
   Grid,
   IconButton,
@@ -18,13 +19,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useEffect, useState } from "react";
-import {
-  FaEuroSign,
-  FaHandHolding,
-  FaPhone,
-  FaPlaneDeparture,
-  FaUserAlt,
-} from "react-icons/fa";
+import { FaEuroSign, FaHandHolding, FaPhone, FaPlaneDeparture, FaUserAlt } from "react-icons/fa";
 import { IoMdSave } from "react-icons/io";
 import { MdArrowRight, MdExpandMore, MdPhone, MdTextsms } from "react-icons/md";
 import COLORS from "../../colors";
@@ -33,6 +28,7 @@ import moment from "moment";
 import { useHistory, useParams } from "react-router-dom";
 import ReservationViewer from "./ReservationViewer";
 import { GiPayMoney } from "react-icons/gi";
+import { Tracker } from "./Tracker";
 
 const bagageType = [
   { label: "Colis pesé", value: "thing" },
@@ -166,13 +162,10 @@ const DeletedPackage = ({ data }) => {
   const Status = ({ text }) => {
     const [state, setstate] = useState(text);
     function getColor() {
-      if (state === "ok")
-        return { color: "#e7f9ed", text: "Validée", textColor: "green" };
+      if (state === "ok") return { color: "#e7f9ed", text: "Validée", textColor: "green" };
       if (state === "ko") return { color: "#ffeae9", text: "Refusée", textColor: "red" };
-      if (state === "pending")
-        return { color: "#f9f6e7", text: "En attente", textColor: "orange" };
-      if (state === "deleted")
-        return { color: "#ffeae9", text: "Supprimée", textColor: "red" };
+      if (state === "pending") return { color: "#f9f6e7", text: "En attente", textColor: "orange" };
+      if (state === "deleted") return { color: "#ffeae9", text: "Supprimée", textColor: "red" };
     }
     return (
       <Typography
@@ -286,13 +279,8 @@ const DeletedPackage = ({ data }) => {
               </Typography>
             </Stack>
             <Stack spacing={1}>
-              <Link
-                href={"/profilDetails/" + data.owner + "/myProfile"}
-                underline="hover"
-              >
-                <Typography>
-                  {data.sender.firstName + " " + data.sender.lastName}
-                </Typography>
+              <Link href={"/profilDetails/" + data.owner + "/myProfile"} underline="hover">
+                <Typography>{data.sender.firstName + " " + data.sender.lastName}</Typography>
               </Link>
               <Link href={"/view/" + data.flightId} underline="hover">
                 <Typography>Cliquer ici</Typography>
@@ -302,20 +290,13 @@ const DeletedPackage = ({ data }) => {
 
               <Link href={"tel:" + data.reciever.phoneNumber} underline="hover">
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <Typography>
-                    {data.reciever.firstName + " " + data.reciever.lastName}
-                  </Typography>
+                  <Typography>{data.reciever.firstName + " " + data.reciever.lastName}</Typography>
                   <FaPhone size={13} />
                 </Stack>
               </Link>
               <Typography>
                 {data.payer === "Envoyeur"
-                  ? data.sender.firstName +
-                    " " +
-                    data.sender.lastName +
-                    " (" +
-                    data.payer +
-                    ")"
+                  ? data.sender.firstName + " " + data.sender.lastName + " (" + data.payer + ")"
                   : data.reciever.firstName +
                     " " +
                     data.reciever.lastName +
@@ -375,13 +356,7 @@ const InformationViewer = ({ icon, label, information }) => {
       <Stack direction="row" spacing={1}>
         <IconButton>{icon}</IconButton>
 
-        <Typography
-          gutterBottom
-          color={COLORS.black}
-          fontWeight={555}
-          variant="body1"
-          flexGrow={1}
-        >
+        <Typography gutterBottom color={COLORS.black} fontWeight={555} variant="body1" flexGrow={1}>
           {label}
         </Typography>
         <Typography variant="body1" color="GrayText">
@@ -401,6 +376,12 @@ const Package = ({ data, goToReservation }) => {
           color: "#e7f9ed",
           text: "Validée",
           textColor: "green",
+        };
+      if (text === "delivered")
+        return {
+          color: "green",
+          text: "Délivré",
+          textColor: "white",
         };
       if (text === "ko") return { color: "#ffeae9", text: "Annulée", textColor: "red" };
       if (text === "pending")
@@ -452,7 +433,7 @@ const Package = ({ data, goToReservation }) => {
               </Typography>
             </Grid>
             <Grid item xs={3} sm={3} md={2} lg={2} xl={2}>
-              <Status text={data.status} />
+              <Status text={data?.status} />
             </Grid>
             <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
               <Typography
@@ -506,10 +487,7 @@ const Package = ({ data, goToReservation }) => {
               icon={<FaUserAlt size={13} color={COLORS.primary} />}
               label="Transporteur"
               information={
-                <Link
-                  href={"/profilDetails/" + data.gpId + "/myProfile"}
-                  underline="hover"
-                >
+                <Link href={"/profilDetails/" + data.gpId + "/myProfile"} underline="hover">
                   <Typography>
                     {data.publisher.firstName + " " + data.publisher.lastName}
                   </Typography>
@@ -543,9 +521,7 @@ const Package = ({ data, goToReservation }) => {
               icon={<FaHandHolding size={16} color={COLORS.primary} />}
               label="Receveur"
               information={
-                <Typography>
-                  {data.reciever.firstName + " " + data.reciever.lastName}
-                </Typography>
+                <Typography>{data.reciever.firstName + " " + data.reciever.lastName}</Typography>
               }
             />
             <InformationViewer
@@ -554,12 +530,7 @@ const Package = ({ data, goToReservation }) => {
               information={
                 <Typography>
                   {data.payer === "Envoyeur"
-                    ? data.sender.firstName +
-                      " " +
-                      data.sender.lastName +
-                      " (" +
-                      data.payer +
-                      ")"
+                    ? data.sender.firstName + " " + data.sender.lastName + " (" + data.payer + ")"
                     : data.reciever.firstName +
                       " " +
                       data.reciever.lastName +
@@ -572,9 +543,7 @@ const Package = ({ data, goToReservation }) => {
             <InformationViewer
               icon={<MdTextsms size={15} color={COLORS.primary} />}
               label="Type de produit"
-              information={
-                <Typography color={COLORS.primary}>{getitemType().label}</Typography>
-              }
+              information={<Typography color={COLORS.primary}>{getitemType().label}</Typography>}
             />
             <InformationViewer
               icon={<FaEuroSign size={15} color={COLORS.primary} />}
@@ -622,7 +591,7 @@ const Packages = () => {
   const history = useHistory();
 
   function goToReservation(data) {
-    history.push(`/profilDetails/${user.userId}/packages/${data.id}`, data);
+    history.push(`/reservationDetails/${data.id}?c=${data.owner}&g=${data.gpId}`);
   }
 
   const [FilteredReservations, setFilteredReservations] = useState(reservations);
@@ -663,7 +632,6 @@ const Packages = () => {
   }, [reservationFilter]);
 
   useEffect(() => {
-    console.log("reservations has changed ", reservations);
     setFilteredReservations(reservations);
   }, [reservations]);
 
@@ -688,12 +656,7 @@ const Packages = () => {
                 </Typography>
               </Stack>
 
-              <Stack
-                direction="row"
-                spacing={2}
-                alignItems="center"
-                justifyContent="space-between"
-              >
+              <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
                 <Typography color={COLORS.black} variant="body2">
                   Les colis que vous avez envoyés.
                 </Typography>

@@ -113,6 +113,14 @@ const Reservation = ({ data, validatePackage, rejectPackage }) => {
           text: "Validée",
           textColor: "green",
         };
+
+      if (text === "delivered")
+        return {
+          color: "green",
+          text: "Délivré",
+          textColor: "white",
+        };
+
       if (state === "ko")
         return {
           color: "#ffeae9",
@@ -242,13 +250,8 @@ const Reservation = ({ data, validatePackage, rejectPackage }) => {
               </Typography>
             </Stack>
             <Stack spacing={1}>
-              <Link
-                href={"/profilDetails/" + data.owner + "/myProfile"}
-                underline="hover"
-              >
-                <Typography>
-                  {data.sender.firstName + " " + data.sender.lastName}
-                </Typography>
+              <Link href={"/profilDetails/" + data.owner + "/myProfile"} underline="hover">
+                <Typography>{data.sender.firstName + " " + data.sender.lastName}</Typography>
               </Link>
               <Link href={"/view/" + data.flightId} underline="hover">
                 <Typography>Cliquer ici</Typography>
@@ -258,20 +261,13 @@ const Reservation = ({ data, validatePackage, rejectPackage }) => {
 
               <Link href={"tel:" + data.reciever.phoneNumber} underline="hover">
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <Typography>
-                    {data.reciever.firstName + " " + data.reciever.lastName}
-                  </Typography>
+                  <Typography>{data.reciever.firstName + " " + data.reciever.lastName}</Typography>
                   <FaPhone size={13} />
                 </Stack>
               </Link>
               <Typography>
                 {data.payer === "Envoyeur"
-                  ? data.sender.firstName +
-                    " " +
-                    data.sender.lastName +
-                    " (" +
-                    data.payer +
-                    ")"
+                  ? data.sender.firstName + " " + data.sender.lastName + " (" + data.payer + ")"
                   : data.reciever.firstName +
                     " " +
                     data.reciever.lastName +
@@ -485,13 +481,8 @@ const DeletedReservation = ({ data }) => {
               </Typography>
             </Stack>
             <Stack spacing={1}>
-              <Link
-                href={"/profilDetails/" + data.owner + "/myProfile"}
-                underline="hover"
-              >
-                <Typography>
-                  {data.sender.firstName + " " + data.sender.lastName}
-                </Typography>
+              <Link href={"/profilDetails/" + data.owner + "/myProfile"} underline="hover">
+                <Typography>{data.sender.firstName + " " + data.sender.lastName}</Typography>
               </Link>
               <Link href={"/view/" + data.flightId} underline="hover">
                 <Typography>Cliquer ici</Typography>
@@ -501,20 +492,13 @@ const DeletedReservation = ({ data }) => {
 
               <Link href={"tel:" + data.reciever.phoneNumber} underline="hover">
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <Typography>
-                    {data.reciever.firstName + " " + data.reciever.lastName}
-                  </Typography>
+                  <Typography>{data.reciever.firstName + " " + data.reciever.lastName}</Typography>
                   <FaPhone size={13} />
                 </Stack>
               </Link>
               <Typography>
                 {data.payer === "Envoyeur"
-                  ? data.sender.firstName +
-                    " " +
-                    data.sender.lastName +
-                    " (" +
-                    data.payer +
-                    ")"
+                  ? data.sender.firstName + " " + data.sender.lastName + " (" + data.payer + ")"
                   : data.reciever.firstName +
                     " " +
                     data.reciever.lastName +
@@ -533,8 +517,7 @@ const DeletedReservation = ({ data }) => {
 };
 
 const Reservations = () => {
-  const { profilState, user, loading, setloading, currentUser } =
-    useContext(ProfileDetailsContext);
+  const { profilState, user, loading, setloading, currentUser } = useContext(ProfileDetailsContext);
   const { id } = useParams();
 
   const [Reservations, setReservations] = useState([]);
@@ -621,12 +604,7 @@ const Reservations = () => {
           {profilState.label}
         </Typography>
       </Stack>
-      <Stack
-        direction="row"
-        spacing={2}
-        alignItems="center"
-        justifyContent="space-between"
-      >
+      <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
         <Typography color={COLORS.black} variant="body2">
           Les colis que vous devez transporter pour vos clients.
         </Typography>

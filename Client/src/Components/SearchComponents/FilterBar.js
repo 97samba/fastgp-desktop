@@ -18,14 +18,41 @@ import { Box } from "@mui/system";
 
 import { SearchPageContext } from "../Pages/Search";
 
-const FilterBar = () => {
+export const PriceFilter = () => {
+  const { filters, setfilters } = useContext(SearchPageContext);
+  const changePriceRange = (e, newValue) => {
+    setfilters({ ...filters, price: newValue });
+  };
+  return (
+    <Box py={1}>
+      <Typography fontWeight="bold" fontSize={13}>
+        Prix
+      </Typography>
+      <Box pt={1}>
+        <Stack direction="row" justifyContent="space-between">
+          <Typography fontSize={11}>{filters.minPrice} € </Typography>
+          <Typography fontSize={11}>{filters.maxPrice} € </Typography>
+        </Stack>
+        <Box px={1}>
+          <Slider
+            color="secondary"
+            min={filters.minPrice}
+            value={filters.price}
+            max={filters.maxPrice}
+            marks
+            step={1}
+            valueLabelDisplay="auto"
+            onChange={changePriceRange}
+          />
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export const PaymentFilter = () => {
   const { orderBy, setorderBy, filters, setfilters, filteredFlight } =
     useContext(SearchPageContext);
-
-  const handleOderChange = (e) => {
-    setorderBy(e.target.value);
-  };
-
   const handlePaymentChange = (e) => {
     if (e.target.value === "money") {
       setfilters({ ...filters, money: e.target.checked });
@@ -44,6 +71,56 @@ const FilterBar = () => {
       return;
     }
   };
+  return (
+    <Box py={1}>
+      <Typography fontWeight="bold" fontSize={13}>
+        Paiements acceptés
+      </Typography>
+      <FormGroup sx={{ pt: 1 }}>
+        <FormControlLabel
+          onClick={handlePaymentChange}
+          sx={{ height: 25 }}
+          checked={filters.money}
+          value="money"
+          control={<Checkbox disableRipple size="small" />}
+          label={<Typography fontSize={13}>Espéces</Typography>}
+        />
+        <FormControlLabel
+          onClick={handlePaymentChange}
+          sx={{ height: 25 }}
+          checked={filters.paypal}
+          value="paypal"
+          control={<Checkbox disableRipple size="small" />}
+          label={<Typography fontSize={13}>Paypal</Typography>}
+        />
+        <FormControlLabel
+          onClick={handlePaymentChange}
+          sx={{ height: 25 }}
+          checked={filters.card}
+          value="card"
+          control={<Checkbox disableRipple size="small" />}
+          label={<Typography fontSize={13}>Carte</Typography>}
+        />
+        <FormControlLabel
+          onClick={handlePaymentChange}
+          sx={{ height: 25 }}
+          checked={filters.wave}
+          value="wave"
+          control={<Checkbox disableRipple size="small" />}
+          label={<Typography fontSize={13}>Wave</Typography>}
+        />
+      </FormGroup>
+    </Box>
+  );
+};
+
+const FilterBar = () => {
+  const { orderBy, setorderBy, filters, setfilters, filteredFlight } =
+    useContext(SearchPageContext);
+
+  const handleOderChange = (e) => {
+    setorderBy(e.target.value);
+  };
 
   const handleShipping = (e) => {
     if (e.target.value) {
@@ -51,9 +128,6 @@ const FilterBar = () => {
     }
   };
 
-  const changePriceRange = (e, newValue) => {
-    setfilters({ ...filters, price: newValue });
-  };
   return (
     <Paper
       elevation={0}
@@ -107,68 +181,8 @@ const FilterBar = () => {
             />
           </FormGroup>
         </Box>
-        <Box py={1}>
-          <Typography fontWeight="bold" fontSize={13}>
-            Prix
-          </Typography>
-          <Box pt={1}>
-            <Stack direction="row" justifyContent="space-between">
-              <Typography fontSize={11}>{filters.minPrice} € </Typography>
-              <Typography fontSize={11}>{filters.maxPrice} € </Typography>
-            </Stack>
-            <Box px={1}>
-              <Slider
-                color="secondary"
-                min={filters.minPrice}
-                value={filters.price}
-                max={filters.maxPrice}
-                marks
-                step={1}
-                valueLabelDisplay="auto"
-                onChange={changePriceRange}
-              />
-            </Box>
-          </Box>
-        </Box>
-        <Box py={1}>
-          <Typography fontWeight="bold" fontSize={13}>
-            Paiements acceptés
-          </Typography>
-          <FormGroup sx={{ pt: 1 }}>
-            <FormControlLabel
-              onClick={handlePaymentChange}
-              sx={{ height: 25 }}
-              checked={filters.money}
-              value="money"
-              control={<Checkbox disableRipple size="small" />}
-              label={<Typography fontSize={13}>Espéces</Typography>}
-            />
-            <FormControlLabel
-              onClick={handlePaymentChange}
-              sx={{ height: 25 }}
-              checked={filters.paypal}
-              value="paypal"
-              control={<Checkbox disableRipple size="small" />}
-              label={<Typography fontSize={13}>Paypal</Typography>}
-            />
-            <FormControlLabel
-              onClick={handlePaymentChange}
-              sx={{ height: 25 }}
-              checked={filters.card}
-              value="card"
-              control={<Checkbox disableRipple size="small" />}
-              label={<Typography fontSize={13}>Carte</Typography>}
-            />
-            <FormControlLabel
-              onClick={handlePaymentChange}
-              sx={{ height: 25 }}
-              checked={filters.wave}
-              value="wave"
-              control={<Checkbox disableRipple size="small" />}
-              label={<Typography fontSize={13}>Wave</Typography>}
-            />
-          </FormGroup>
-        </Box>
+        <PriceFilter />
+        <PaymentFilter />
         <Box py={1}>
           <Typography fontWeight="bold" fontSize={13}>
             Livraison

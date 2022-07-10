@@ -1,11 +1,14 @@
 import { Paper, Stack, Typography, Divider, Button, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import COLORS from "../../colors";
 import { LoadingButton } from "@mui/lab";
 import { Tracker } from "../ProfileDetailsComponents/Tracker";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import { MdCancel, MdCheck } from "react-icons/md";
+import { MdOutlineReportProblem, MdPhone } from "react-icons/md";
+import { IoStar } from "react-icons/io5";
+import { useHistory } from "react-router-dom";
+import { ReservationContext } from "../ProfileDetailsComponents/ReservationViewer";
 
 const Summary = ({ data }) => {
   return (
@@ -88,51 +91,60 @@ const GpPriceHandle = ({
   );
 };
 
-const AfterPaidActions = ({ data }) => {
+const AfterPaidActions = () => {
+  const { data, isClient, setdeliveryDialog } = useContext(ReservationContext);
   return (
     <>
-      {Tracker.getStep(data) === 3 ? (
-        <Button
-          fullWidth
-          size="medium"
-          variant="contained"
-          color="success"
-          endIcon={<IoMdCheckmarkCircleOutline />}
-          // onClick={() => setOpenDialog(true)}
-        >
-          Confirmer la réception
-        </Button>
+      {Tracker.getStep(data) >= 3 && Tracker.getStep(data) < 4 ? (
+        <>
+          {isClient ? (
+            <>
+              <Button
+                fullWidth
+                size="medium"
+                variant="contained"
+                color="success"
+                endIcon={<IoMdCheckmarkCircleOutline />}
+                onClick={() => setdeliveryDialog(true)}
+              >
+                Confirmer la réception
+              </Button>
+            </>
+          ) : (
+            <Button
+              href={"tel:" + data?.reciever?.phoneNumber}
+              variant="contained"
+              color="success"
+              endIcon={<MdPhone />}
+            >
+              Appeller le client
+            </Button>
+          )}
+        </>
       ) : (
         <Button
           fullWidth
           size="medium"
           variant="contained"
           color="success"
-          endIcon={<FaHandHoldingUsd />}
+          href="/contactUs"
+          endIcon={<MdOutlineReportProblem />}
           // onClick={() => setOpenDialog(true)}
         >
           Signaler un probléme
         </Button>
       )}
-      <Typography variant="caption" fontWeight={500}>
-        Payé en liquide
-      </Typography>
     </>
   );
 };
 
-const PriceInformationsSummary = ({
-  data,
-  isClient,
-  changePrice,
-  confirmPayment,
-  paying,
-  changingPrice,
-  price,
-  setprice,
-  setOpenDialog,
-}) => {
+const PriceInformationsSummary = ({ paying, changingPrice, setOpenDialog }) => {
+  const { data, isClient, feedback, price, setprice, changePrice, confirmPayment } =
+    useContext(ReservationContext);
+
   const [editing, setediting] = useState(false);
+  const history = useHistory();
+
   function handlePriceChanging() {
     changePrice();
     setediting(false);
@@ -143,43 +155,63 @@ const PriceInformationsSummary = ({
   }
 
   return (
-    <Paper
-      sx={{
-        flex: 1,
-        boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
-        borderRadius: 3,
-      }}
-      elevation={0}
-    >
-      <Stack spacing={2} color={COLORS.black} py={2} px={3}>
-        <Typography fontSize={18} fontWeight={555}>
-          Résumé
-        </Typography>
-        {editing ? (
-          <TextField
-            size="small"
-            label={"Prix final en " + data.currency}
-            value={price}
-            onChange={(e) => setprice(e.target.value)}
-            type="number"
-            helperText="Assurez vous que le client est au courant"
-          />
-        ) : (
-          <Summary data={data} />
-        )}
+    <>
+      <Paper
+        sx={{
+          flex: 1,
+          boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)",
+          borderRadius: 3,
+        }}
+        elevation={0}
+      >
+        <Stack spacing={2} color={COLORS.black} py={2} px={3}>
+          <Typography fontSize={18} fontWeight={555}>
+            Résumé
+          </Typography>
+          {editing ? (
+            <TextField
+              size="small"
+              label={"Prix final en " + data.currency}
+              value={price}
+              onChange={(e) => setprice(e.target.value)}
+              type="number"
+              helperText="Assurez vous que le client est au courant"
+            />
+          ) : (
+            <Summary data={data} />
+          )}
 
-        {!data?.paid && isClient === false && (
-          <GpPriceHandle
-            setOpenDialog={setOpenDialog}
-            setediting={setediting}
-            changingPrice={changingPrice}
-            editing={editing}
-            handlePriceChanging={handlePriceChanging}
-          />
-        )}
-        {data?.paid && <AfterPaidActions data={data} />}
-      </Stack>
-    </Paper>
+          {!data?.paid && isClient === false && (
+            <GpPriceHandle
+              setOpenDialog={setOpenDialog}
+              setediting={setediting}
+              changingPrice={changingPrice}
+              editing={editing}
+              handlePriceChanging={handlePriceChanging}
+            />
+          )}
+          {data?.paid && <AfterPaidActions />}
+          {/* {data?.paid && isClient && Tracker.getStep() >= 4 && ( */}
+          {/* réservation payée, le client, pas de feedback */}
+          {data?.paid && isClient && !feedback?.owner && (
+            <Button
+              variant="contained"
+              color="warning"
+              fullWidth
+              endIcon={<IoStar />}
+              href={"/feedback/" + data.id + "?g=" + data.gpId + "&c=" + data.owner}
+            >
+              Noter le transporteur
+            </Button>
+          )}
+          {data?.paid && (
+            <Typography color={COLORS.black} variant="caption" fontWeight={500}>
+              Payé en liquide
+            </Typography>
+          )}
+        </Stack>
+      </Paper>
+    </>
   );
 };
 

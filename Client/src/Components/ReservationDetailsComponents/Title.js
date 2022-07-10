@@ -27,26 +27,20 @@ const Title = ({ data }) => {
       .then(() => setdeleteDialog(false))
       .then(() => history.push("/profilDetails/" + currentUser?.uid));
   }
+  console.log("data.status", data.status);
 
   const SuppressionDialog = () => {
     return (
       <Dialog open={deleteDialog} onClose={() => setdeleteDialog(false)}>
         <DialogTitle>Confirmer la suppression</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Voulez-vous réellement supprimer la réservation ?
-          </DialogContentText>
+          <DialogContentText>Voulez-vous réellement supprimer la réservation ?</DialogContentText>
           <Stack flex={1} alignItems="center" my={2}>
             <MdOutlineDeleteForever size={60} color={COLORS.black} />
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button
-            fullWidth
-            variant="outlined"
-            size="medium"
-            onClick={() => setdeleteDialog(false)}
-          >
+          <Button fullWidth variant="outlined" size="medium" onClick={() => setdeleteDialog(false)}>
             Fermer
           </Button>
           <LoadingButton
@@ -94,6 +88,7 @@ const Title = ({ data }) => {
         color="error"
         onClick={() => setdeleteDialog(true)}
         endIcon={<MdOutlineDeleteForever />}
+        disabled={data?.status === "delivered"}
       >
         {" "}
         Supprimer

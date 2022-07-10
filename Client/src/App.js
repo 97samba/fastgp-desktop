@@ -10,7 +10,6 @@ import Account from "./Components/Pages/Account";
 import Search from "./Components/Pages/Search";
 import Home from "./Components/Pages/Home";
 import View from "./Components/Pages/View";
-import Footer from "./Components/Footer";
 import GPViewer from "./Components/Pages/GPViewer";
 import Login from "./Components/Pages/Login";
 import NotFound from "./Components/Pages/NotFound";
@@ -25,13 +24,13 @@ import ViewTransit from "./Components/Pages/ViewTransit";
 import ReservationViewer from "./Components/ProfileDetailsComponents/ReservationViewer";
 import ReservationDetails from "./Components/Pages/ReservationDetails";
 import HowTo from "./Components/Pages/HowTo";
+import Ratings from "./Components/ReservationDetailsComponents/Ratings";
 moment.locale("fr", {
   months:
     "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
       "_"
     ),
-  monthsShort:
-    "janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
+  monthsShort: "janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
   monthsParseExact: true,
   weekdays: "dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),
   weekdaysShort: "dim._lun._mar._mer._jeu._ven._sam.".split("_"),
@@ -141,48 +140,30 @@ const App = () => {
                   <Route path="/search" component={Search} />
                   <Route path="/create" component={Creation} />
                   <Route path="/view/:id" component={View} />
-                  <Route
-                    path="/viewTransit/:departureId/:destinationId"
-                    component={ViewTransit}
-                  />
+                  <Route path="/viewTransit/:departureId/:destinationId" component={ViewTransit} />
                   <Route path="/account" component={Account} />
                   <Route path="/GPprofile/:id" component={GPViewer} />
                   <Route path="/GPprofile" component={GPViewer} />
-                  <Route
-                    path="/profilDetails/:id/:subpage/:subID"
-                    component={ProfileDetails}
-                  />
-                  <Route
-                    path="/profilDetails/:id/:subpage"
-                    component={ProfileDetails}
-                  />
+                  <Route path="/profilDetails/:id/:subpage/:subID" component={ProfileDetails} />
+                  <Route path="/profilDetails/:id/:subpage" component={ProfileDetails} />
 
                   <Route path="/profilDetails/:id" component={ProfileDetails} />
-                  <Route
-                    path="/reservationDetails/:id"
-                    component={ReservationDetails}
-                  />
-                  <Route
-                    path="/reservationDetails"
-                    component={ReservationDetails}
-                  />
+                  <Route path="/reservationDetails/:id" component={ReservationDetails} />
+                  <Route path="/reservationDetails" component={ReservationDetails} />
 
                   <Route path="/login" component={Login} />
                   {/* <Route path="/register" component={Register} /> */}
                   <Route path="/register/:choice" component={Register} />
                   <Route path="/contactUs" component={ContactUs} />
                   <Route path="/shop" component={Shop} />
-                  <Route
-                    path="/verification/__/auth/"
-                    component={Verification}
-                  />
+                  <Route path="/verification/__/auth/" component={Verification} />
                   <Route path="/howTo" component={HowTo} />
+                  <Route path="/feedback/:id" component={Ratings} />
                   <Route path="*" component={NotFound} />
                 </Switch>
               </AuthProvider>
             </Layout>
           </Router>
-          <Footer />
         </LocalizationProvider>
       </ThemeProvider>
     </div>

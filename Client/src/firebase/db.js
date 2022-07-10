@@ -24,9 +24,7 @@ export const db = getFirestore(app);
 
 export const getAFlight = async (id) => {
   var flight;
-  await getDoc(doc(db, "flights", id)).then(
-    (data) => (flight = { ...data.data(), id: data.id })
-  );
+  await getDoc(doc(db, "flights", id)).then((data) => (flight = { ...data.data(), id: data.id }));
   return flight;
 };
 
@@ -36,9 +34,7 @@ export const postAflight = async (flight, email) => {
     .then(async (data) => {
       await updateDoc(doc(db, "users", email), {
         flights: arrayUnion(data.id),
-      }).catch((error) =>
-        console.log("erreur lors de l'ajout de l'id du vol", error)
-      );
+      }).catch((error) => console.log("erreur lors de l'ajout de l'id du vol", error));
       newFlightId = data.id;
     })
     .then(() => console.log("ajout avec succes"))
@@ -116,6 +112,7 @@ export async function userDetails(id) {
     .catch((erreur) => console.log("erreur", erreur));
   return user;
 }
+
 export const getUserFlights = async (userId, limitiation) => {
   let flights = [];
   limitiation === 5 ? (limitiation = 5) : (limitiation = 100);
@@ -173,11 +170,7 @@ export async function queryNextFlights(departure, destination, date, lastDoc) {
 }
 
 export async function QueryFlights(departure, destination, date) {
-  var exactResults = await getExactResults(
-    departure.name,
-    destination.name,
-    date
-  );
+  var exactResults = await getExactResults(departure.name, destination.name, date);
   var transitFlights = [];
 
   if (exactResults.length === 0) {
@@ -188,11 +181,7 @@ export async function QueryFlights(departure, destination, date) {
   // console.log(`exactResults`, exactResults.length);
   return { exact: exactResults, transit: transitFlights };
 }
-const getExactResults = async (
-  departureCity,
-  destinationCity,
-  departureDate
-) => {
+const getExactResults = async (departureCity, destinationCity, departureDate) => {
   var exacts = [];
   const q = query(
     collection(db, "flights"),
@@ -210,12 +199,7 @@ const getExactResults = async (
 
   return exacts;
 };
-const getNearResults = async (
-  departureCity,
-  destinationCity,
-  departureCountry,
-  departureDate
-) => {
+const getNearResults = async (departureCity, destinationCity, departureCountry, departureDate) => {
   var nearResults = [];
   const q = query(
     collection(db, "flights"),
@@ -280,22 +264,13 @@ const SearchForTransit = async (departure, destination, date) => {
     datas.docs.forEach((doc) => results2.push({ ...doc.data(), id: doc.id }))
   );
 
-  console.log(
-    "resultats 2:>> ",
-    "Dakar",
-    " :>> ",
-    destination.name,
-    results2.length
-  );
+  console.log("resultats 2:>> ", "Dakar", " :>> ", destination.name, results2.length);
 
   //Comparaison des dates
   results2.forEach((result2) => {
     results1.forEach((result1) => {
       let delay = Math.abs(
-        moment(result2.departureDate).diff(
-          moment(result1.departureDate),
-          "days"
-        )
+        moment(result2.departureDate).diff(moment(result1.departureDate), "days")
       );
       if (delay <= 10 && delay > 0) {
         console.log("One transit found");
@@ -312,12 +287,7 @@ const SearchForTransit = async (departure, destination, date) => {
   user details
 */
 
-export const UpdateUserDetails = async (
-  firstName,
-  lastName,
-  email,
-  address
-) => {
+export const UpdateUserDetails = async (firstName, lastName, email, address) => {
   const docRef = doc(db, "users/" + email);
 
   await updateDoc(docRef, { firstName, lastName, address }).catch((error) =>
@@ -344,10 +314,7 @@ export const GetAReservation = async (reservationId) => {
   let result;
   await getDoc(ref)
     .then((data) => (result = { ...data.data(), id: data.id }))
-    .catch((error) =>
-      console.log("erreur lors du get de la reservation ", error)
-    );
-  console.log("result :>> ", result);
+    .catch((error) => console.log("erreur lors du get de la reservation ", error));
   return result;
 };
 
@@ -361,16 +328,13 @@ export const getUserReservations = async (id) => {
   await getDocs(q)
     .then((datas) => {
       if (datas.size > 0) {
-        datas.forEach((data) =>
-          reservations.push({ ...data.data(), id: data.id })
-        );
+        datas.forEach((data) => reservations.push({ ...data.data(), id: data.id }));
       }
     })
-    .catch((error) =>
-      console.log(`error while retrieving reservations`, error)
-    );
+    .catch((error) => console.log(`error while retrieving reservations`, error));
   return reservations;
 };
+
 export const getGPReservations = async (id) => {
   const q = query(
     collection(db, "reservations"),
@@ -381,14 +345,10 @@ export const getGPReservations = async (id) => {
   await getDocs(q)
     .then((datas) => {
       if (datas.size > 0) {
-        datas.forEach((data) =>
-          reservations.push({ ...data.data(), id: data.id })
-        );
+        datas.forEach((data) => reservations.push({ ...data.data(), id: data.id }));
       }
     })
-    .catch((error) =>
-      console.log(`error while retrieving reservations`, error)
-    );
+    .catch((error) => console.log(`error while retrieving reservations`, error));
   return reservations;
 };
 
@@ -401,13 +361,7 @@ export const getGPReservations = async (id) => {
  * @param {*} owner id de la personne qui reserve
  * @returns l'ID de la reservation crée
  */
-export const postUserReservation = async (
-  sender,
-  reciever,
-  flight,
-  reservationInfo,
-  owner
-) => {
+export const postUserReservation = async (sender, reciever, flight, reservationInfo, owner) => {
   const docRef = collection(db, "reservations");
   const reservation = {
     sender,
@@ -444,6 +398,12 @@ export async function deleteUserReservation(reservationId) {
   await updateDoc(docRef, { deleted: true });
 }
 
+/**
+ * Permet de valider une reservation et d'ajouter l'idresevation au données du gp
+ * @param {*} id la reservation
+ * @param {*} status l'état de la réservation
+ * @param {*} email l'email du gp
+ */
 export const changeReservationStatus = async (id, status, email) => {
   const docRef = doc(db, "reservations", id);
 
@@ -457,6 +417,20 @@ export const changeReservationStatus = async (id, status, email) => {
 
 /**
  *
+ * @param {*} idReservation la reservation
+ * @returns {Boolean} si la réservation s'est bien passée
+ */
+export async function ConfirmReservationDelivery(idReservation) {
+  const docRef = doc(db, "reservations", idReservation);
+  let result = false;
+
+  await updateDoc(docRef, { status: "delivered" }).then(() => (result = true));
+
+  return result;
+}
+
+/**
+ *
  * @param {number} price prix de la reservation
  * @param {string} id l'id de la reservation
  * @param {boolean} isFinal l'id de la reservation
@@ -465,11 +439,11 @@ export const changeReservationStatus = async (id, status, email) => {
 export async function EditReservationPrice(price, id, isFinal) {
   const docRef = doc(db, "reservations", id);
 
-  let state = isFinal
-    ? { finalPrice: price, paid: true }
-    : { finalPrice: price };
+  let state = isFinal ? { finalPrice: price, paid: true } : { finalPrice: price };
 
-  await updateDoc(docRef, state).then(() => console.log("price edited"));
+  await updateDoc(docRef, state)
+    .then(() => console.log("price edited"))
+    .catch(() => console.log("error while changing price"));
 }
 
 /**
@@ -483,11 +457,10 @@ export const getFeaturedFlight = async () => {
     limit(5)
   );
   var results = [];
-  await getDocs(q).then((datas) =>
-    datas.forEach((data) => results.push(data.data()))
-  );
+  await getDocs(q).then((datas) => datas.forEach((data) => results.push(data.data())));
   return results;
 };
+
 export const getUserRecentFlights = async (userId) => {
   let flights = [];
   const q = query(
@@ -527,13 +500,58 @@ export async function getFollowers(ids) {
  * @param {int} id Identifiant de la personne qui suit
  */
 export async function getFollowedPeople(id) {
-  const q = query(
-    collection(db, "users"),
-    where("followers", "array-contains", id)
-  );
+  const q = query(collection(db, "users"), where("followers", "array-contains", id));
   let results = [];
   await getDocs(q).then((datas) =>
     datas.forEach((data) => results.push({ ...data.data(), id: data.id }))
   );
   return results;
+}
+
+/**
+ * Feedbacks
+ */
+
+/***
+ * Feedbacks
+ */
+
+/**
+ *
+ * @param {*} state le feedback du client
+ * @returns {Boolean}  true si bon, false si error
+ */
+export async function PostAFeedback(state) {
+  let res = false;
+  await addDoc(collection(db, "feedbacks"), state)
+    .then(() => (res = true))
+    .catch((e) => console.log("error while posting data", e));
+  return res;
+}
+
+/**
+ *
+ * @param {String} idReservation l'identifiant de la reservation
+ * @returns {Object} le feedback
+ */
+export async function GetFeedbackFromReservation(idReservation) {
+  const q = query(
+    collection(db, "feedbacks"),
+    where("reservationId", "==", idReservation, limit(1))
+  );
+  let res = {};
+  await getDocs(q).then((value) => (res = value.docs[0].data()));
+  return res;
+}
+/**
+ * fonction qui retourne les feedbacks d'un gp
+ * @param {String} id l'identifiant du gp
+ *
+ */
+export async function getFeedbacksFromGPId() {
+  const docRef = doc(db, "feedbacks");
+
+  await getDocs(docRef).then((values) => {
+    console.log("values", values.docs);
+  });
 }

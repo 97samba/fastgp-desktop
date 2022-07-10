@@ -66,8 +66,7 @@ const BoardingPass = ({ sender, receiver, state, currency }) => {
       return state.finalPrice + " " + state?.currency;
     }
     if (state?.prices) {
-      if (state.itemType === "thing")
-        return `${state.prices.pricePerKG} ${state.currency} /Kg`;
+      if (state.itemType === "thing") return `${state.prices.pricePerKG} ${state.currency} /Kg`;
       else return "à déterminer";
     } else {
       return "à déterminer";
@@ -252,7 +251,7 @@ const BoardingPass = ({ sender, receiver, state, currency }) => {
                       </Box>
                       <Box>
                         <Typography variant="caption">Payé :</Typography>
-                        <Typography>Non </Typography>
+                        <Typography>{state?.paid ? "Oui" : "Non"}</Typography>
                       </Box>
                     </Stack>
                   </Box>

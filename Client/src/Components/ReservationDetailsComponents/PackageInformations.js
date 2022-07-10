@@ -28,8 +28,7 @@ const PackageInformations = ({ data }) => {
       return data.finalPrice + " " + data?.currency;
     }
     if (data?.prices) {
-      if (data.itemType === "thing")
-        return `${data.prices.pricePerKG} ${data.currency} /Kg`;
+      if (data.itemType === "thing") return `${data.prices.pricePerKG} ${data.currency} /Kg`;
       else return "à déterminer";
     } else {
       return "à déterminer";
@@ -87,6 +86,7 @@ const PackageInformations = ({ data }) => {
             GPId: data.gpId,
             finalPrice: data?.finalPrice,
             currency: data.currency,
+            paid: data?.paid,
           }}
         />
       </Stack>
@@ -96,9 +96,7 @@ const PackageInformations = ({ data }) => {
           label="Transporteur"
           information={
             <Link href={"/profilDetails/" + data.gpId + "/myProfile"} underline="hover">
-              <Typography>
-                {data.publisher.firstName + " " + data.publisher.lastName}
-              </Typography>
+              <Typography>{data.publisher.firstName + " " + data.publisher.lastName}</Typography>
             </Link>
           }
         />
@@ -129,9 +127,7 @@ const PackageInformations = ({ data }) => {
         <InformationViewer
           icon={<MdTextsms size={15} color={COLORS.primary} />}
           label="Type de produit"
-          information={
-            <Typography color={COLORS.primary}>{getitemType().label}</Typography>
-          }
+          information={<Typography color={COLORS.primary}>{getitemType().label}</Typography>}
         />
         <InformationViewer
           icon={<FaEuroSign size={15} color={COLORS.primary} />}

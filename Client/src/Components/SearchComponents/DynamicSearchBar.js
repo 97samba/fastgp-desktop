@@ -4,6 +4,9 @@ import {
   Button,
   ButtonBase,
   Container,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   Divider,
   Drawer,
   Grid,
@@ -28,19 +31,17 @@ import moment from "moment";
 import { IoSwapVerticalOutline } from "react-icons/io5";
 import { BiFilterAlt } from "react-icons/bi";
 import { FaAngleDown } from "react-icons/fa";
+import { PaymentFilter, PriceFilter } from "./FilterBar";
 
 export const SearchContext = createContext();
 
 const Departure = ({ size }) => {
-  const { departure, setdeparture, departureError, handleError } =
-    useContext(SearchContext);
+  const { departure, setdeparture, departureError, handleError } = useContext(SearchContext);
   const [destinations, setdestinations] = useState([]);
   useEffect(() => {
     let newState = [];
     data.map((doc) => {
-      doc.states.map((state) =>
-        newState.push({ ...state, country: doc.translations.fr })
-      );
+      doc.states.map((state) => newState.push({ ...state, country: doc.translations.fr }));
     });
     setdestinations(newState);
   }, []);
@@ -61,9 +62,7 @@ const Departure = ({ size }) => {
       noOptionsText="Destination introuvable"
       getOptionLabel={getLabel}
       groupBy={(option) => option.country}
-      renderOption={(props, option) => (
-        <Typography {...props}>{option.name}</Typography>
-      )}
+      renderOption={(props, option) => <Typography {...props}>{option.name}</Typography>}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -93,15 +92,12 @@ const Departure = ({ size }) => {
   );
 };
 const Destination = ({ size }) => {
-  const { destination, setdestination, destinationError, handleError } =
-    useContext(SearchContext);
+  const { destination, setdestination, destinationError, handleError } = useContext(SearchContext);
   const [destinations, setdestinations] = useState([]);
   useEffect(() => {
     let newState = [];
     data.map((doc) => {
-      doc.states.map((state) =>
-        newState.push({ ...state, country: doc.translations.fr })
-      );
+      doc.states.map((state) => newState.push({ ...state, country: doc.translations.fr }));
     });
     setdestinations(newState);
   }, []);
@@ -122,9 +118,7 @@ const Destination = ({ size }) => {
       options={destinations}
       getOptionLabel={getLabel}
       groupBy={(option) => option.country}
-      renderOption={(props, option) => (
-        <Typography {...props}>{option.name}</Typography>
-      )}
+      renderOption={(props, option) => <Typography {...props}>{option.name}</Typography>}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -151,10 +145,25 @@ const Destination = ({ size }) => {
     />
   );
 };
+const MobileFilterDialog = ({ open, setopen }) => {
+  return (
+    <Dialog open={open} onClose={() => setopen(false)}>
+      <DialogTitle>Filtres</DialogTitle>
+      <DialogContent>
+        <Stack minWidth={300}>
+          <PriceFilter />
+          <Divider />
+          <PaymentFilter />
+        </Stack>
+      </DialogContent>
+    </Dialog>
+  );
+};
 const MobileFilter = () => {
   const { orderBy, setorderBy } = useContext(SearchPageContext);
   const [triAnchor, settriAnchor] = useState(null);
   const openTri = Boolean(triAnchor);
+  const [openFilterDialog, setopenFilterDialog] = useState(false);
 
   function changeTri(newTri) {
     setorderBy(newTri);
@@ -198,6 +207,7 @@ const MobileFilter = () => {
             bgcolor: "#e5e5e5",
             borderRadius: 1,
           }}
+          onClick={() => setopenFilterDialog(true)}
         >
           <Stack direction="row" alignItems="center" spacing={1}>
             <BiFilterAlt size={15} color={COLORS.primary} />
@@ -224,9 +234,11 @@ const MobileFilter = () => {
           Prix (croissant)
         </MenuItem>
       </Menu>
+      <MobileFilterDialog open={openFilterDialog} setopen={setopenFilterDialog} />
     </Box>
   );
 };
+
 const SearchSummaryMobile = ({
   searching,
   displaySearchingBar,
@@ -255,22 +267,13 @@ const SearchSummaryMobile = ({
             borderBottomRightRadius: 10,
           }}
         >
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
+          <Stack direction="row" justifyContent="space-between" alignItems="center">
             <IconButton onClick={displaySearchingBar}>
               <MdSearch color="white" />
             </IconButton>
 
             <Stack flex={1} alignItems="center" color="white">
-              <Stack
-                direction="row"
-                alignItems="center"
-                spacing={2}
-                fontWeight={555}
-              >
+              <Stack direction="row" alignItems="center" spacing={2} fontWeight={555}>
                 <Typography variant="body1">{departure?.name}</Typography>
                 <GoDash color={COLORS.warning} />
                 <Typography variant="body1">{destination?.name}</Typography>
@@ -294,13 +297,8 @@ const SearchSummaryMobile = ({
 
 const DynamicSearchBar = ({ size = "small" }) => {
   const history = useHistory();
-  const {
-    departureCity,
-    departureCountry,
-    destinationCity,
-    destinationCountry,
-    date,
-  } = useParams();
+  const { departureCity, departureCountry, destinationCity, destinationCountry, date } =
+    useParams();
   const { getSomeFlights } = useContext(SearchPageContext);
   const [departure, setdeparture] = useState({
     name: "Paris",
@@ -354,9 +352,9 @@ const DynamicSearchBar = ({ size = "small" }) => {
         getSomeFlights(departure, destination, departureDate.toJSON());
         displaySearchingBar();
         history.replace({
-          pathname: `/search/${departure.name}/${departure.country}/${
-            destination.name
-          }/${destination.country}/${departureDate.toJSON()}`,
+          pathname: `/search/${departure.name}/${departure.country}/${destination.name}/${
+            destination.country
+          }/${departureDate.toJSON()}`,
         });
       }
     }
@@ -401,12 +399,7 @@ const DynamicSearchBar = ({ size = "small" }) => {
           },
         }}
       >
-        <Grid
-          container
-          rowGap={2}
-          columnSpacing={2}
-          p={{ xs: 2, sm: 3, md: 0 }}
-        >
+        <Grid container rowGap={2} columnSpacing={2} p={{ xs: 2, sm: 3, md: 0 }}>
           <Grid item xs={12} sm={12} md={5} lg={5} xl={5} mb={{ xs: 0.5 }}>
             <Departure size={size} />
           </Grid>

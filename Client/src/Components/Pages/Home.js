@@ -11,29 +11,18 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import paris from "../../Images/paris.jpg";
 import { GiAirplaneDeparture, GiTakeMyMoney } from "react-icons/gi";
 import { FaAward, FaCoins, FaSuitcase, FaUserAlt } from "react-icons/fa";
 import SearchBar from "../SearchBar";
 import { SearchPageContext } from "./Search";
 import COLORS from "../../colors";
-import {
-  MdFilterAlt,
-  MdOutlineDeliveryDining,
-  MdSearch,
-  MdSecurity,
-} from "react-icons/md";
+import { MdAdd, MdOutlineDeliveryDining, MdSearch, MdSecurity } from "react-icons/md";
 import { getFeaturedFlight } from "../../firebase/db";
 import Flight from "../Flight";
 import FlightSkeleton from "../FlightSkeleton";
 import Carousel from "react-elastic-carousel";
-import sendFirstStep from "../../Images/Home/sendFirstStep.png";
-import sendSecondStep from "../../Images/Home/sendSecondStep.png";
-import sendThirdStep from "../../Images/Home/sendThirdStep.png";
-import sendFourthStep from "../../Images/Home/sendFourthStep.png";
-import { GoPackage } from "react-icons/go";
-import { AuthContext } from "../../Providers/AuthProvider";
 import { useAuth } from "../../firebase/auth";
 
 const PresentationImage =
@@ -69,13 +58,7 @@ const PopularDestinations = () => {
       <Grid container spacing={4}>
         <Grid item md={3} xl={3} lg={3}>
           <Card>
-            <CardMedia
-              component="img"
-              height="150"
-              width="100"
-              alt="paris"
-              image={paris}
-            />
+            <CardMedia component="img" height="150" width="100" alt="paris" image={paris} />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 Paris
@@ -108,13 +91,7 @@ const PopularDestinations = () => {
         </Grid>
         <Grid item md={3} xl={3} lg={3}>
           <Card>
-            <CardMedia
-              component="img"
-              height="150"
-              width="100"
-              alt="paris"
-              image={paris}
-            />
+            <CardMedia component="img" height="150" width="100" alt="paris" image={paris} />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 Dakar
@@ -147,13 +124,7 @@ const PopularDestinations = () => {
         </Grid>
         <Grid item md={3} xl={3} lg={3}>
           <Card>
-            <CardMedia
-              component="img"
-              height="150"
-              width="100"
-              alt="paris"
-              image={paris}
-            />
+            <CardMedia component="img" height="150" width="100" alt="paris" image={paris} />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 Casablanca
@@ -186,13 +157,7 @@ const PopularDestinations = () => {
         </Grid>
         <Grid item md={3} xl={3} lg={3}>
           <Card>
-            <CardMedia
-              component="img"
-              height="150"
-              width="100"
-              alt="paris"
-              image={paris}
-            />
+            <CardMedia component="img" height="150" width="100" alt="paris" image={paris} />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 Paris
@@ -251,16 +216,7 @@ const OurValues = () => {
   return (
     <Grid container px={2} py={7} spacing={2}>
       {values.map((value, index) => (
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={4}
-          lg={4}
-          xl={4}
-          textAlign="center"
-          key={index}
-        >
+        <Grid item xs={12} sm={12} md={4} lg={4} xl={4} textAlign="center" key={index}>
           <IconButton size="large">{value.icon}</IconButton>
           <Typography fontWeight="bold" color="primary">
             {value.label}
@@ -294,16 +250,9 @@ const FeaturedFlight = () => {
           <FlightSkeleton />
         ) : (
           <>
-            <Carousel
-              showArrows={false}
-              pagination={true}
-              itemPadding={[2]}
-              itemsToShow={1}
-            >
+            <Carousel showArrows={false} pagination={true} itemPadding={[2]} itemsToShow={1}>
               {topFlights.length > 0 &&
-                topFlights.map((top, index) => (
-                  <Flight data={top} key={index} />
-                ))}
+                topFlights.map((top, index) => <Flight data={top} key={index} />)}
             </Carousel>
           </>
         )}
@@ -312,9 +261,9 @@ const FeaturedFlight = () => {
   );
 };
 
-const HowTo = ({ image, step, title, description, button, flip = 1 }) => {
+const EmbbedVideo = ({ embedId, step, title, description, button, flip = 1 }) => {
   return (
-    <Grid container p={2} spacing={2}>
+    <Grid container px={2} py={3} spacing={3}>
       <Grid
         item
         xs={12}
@@ -325,22 +274,22 @@ const HowTo = ({ image, step, title, description, button, flip = 1 }) => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        py={2}
+        py={3}
       >
-        <Stack width={320}>
-          <img src={image} alt="presentation" width="90%" />
+        <Stack flex={1} mt={{ xs: 2, md: 0 }}>
+          <iframe
+            width="100%"
+            height="400"
+            src={`https://www.youtube.com/embed/${embedId}`}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title="Embedded youtube"
+          />
         </Stack>
       </Grid>
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md={6}
-        lg={6}
-        xl={6}
-        order={{ xs: -1, sm: -1, md: flip }}
-      >
-        <Stack spacing={2} my={4}>
+      <Grid item xs={12} sm={12} md={6} lg={6} xl={6} order={{ xs: -1, sm: -1, md: flip }}>
+        <Stack spacing={1} my={4}>
           <Typography variant="body1" color={COLORS.warning}>
             {step}
           </Typography>
@@ -372,11 +321,7 @@ const Home = () => {
                   <Typography variant="h4" fontWeight="bold" color="primary">
                     Envoyer vos colis
                   </Typography>
-                  <Typography
-                    variant="h4"
-                    fontWeight="bold"
-                    color={COLORS.warning}
-                  >
+                  <Typography variant="h4" fontWeight="bold" color={COLORS.warning}>
                     partout dans le monde !
                   </Typography>
                 </Box>
@@ -388,8 +333,8 @@ const Home = () => {
                   }}
                 >
                   <Typography variant="body1" fontWeight={400} color="GrayText">
-                    Fast Gp est un grand réseau de covaliseurs inscrits et
-                    identifiés, plus des annonces pris partout dans le web.
+                    Fast Gp est un grand réseau de covaliseurs inscrits et identifiés, plus des
+                    annonces pris partout dans le web.
                   </Typography>
                   {!currentUser?.uid ? (
                     <Stack direction="row" spacing={1} mt={3}>
@@ -454,84 +399,16 @@ const Home = () => {
         </Box> */}
         <Box bgcolor="white">
           <Container>
-            <HowTo
-              image={sendFirstStep}
+            <EmbbedVideo
+              embedId="dsrwnfrJ-dA"
               step="- Première étape"
-              title="Renseigner le départ et la destination"
-              description="Vous pouvez effectuer votre recherche sur plusieurs villes du monde
-              ou taper le nom du pays et les villes vous seront proposées."
+              title="Comment créer une annonce ?"
+              description="Cette vidéo montre comment créer une annonce sur le site, n'hésiter pas à consulter notre chaine youtube."
               button={
-                <Button
-                  variant="contained"
-                  href="/search"
-                  endIcon={<MdSearch />}
-                >
-                  Commencer la recherche
+                <Button variant="contained" href="/create" endIcon={<MdAdd />}>
+                  Créer une annonce
                 </Button>
               }
-            />
-          </Container>
-        </Box>
-        <Box bgcolor="#F5F5F5">
-          <Container>
-            <HowTo
-              image={sendSecondStep}
-              step="- Deuxième étape"
-              title="Trier et filtrer les résultats"
-              description="Vous pouvez filtrer vos résultats pour trouver la date et le prix
-              qui vous arrange. Mais aussi, vous pouvez selectionner les
-              Transporteurs certifiés ou en fonction de leur expérience."
-              button={
-                <Button
-                  variant="contained"
-                  href="/search"
-                  endIcon={<MdFilterAlt />}
-                >
-                  Appliquer les filtres
-                </Button>
-              }
-              flip={-1}
-            />
-          </Container>
-        </Box>
-        <Box bgcolor="white">
-          <Container>
-            <HowTo
-              image={sendThirdStep}
-              step="- Troisième étape"
-              title="Réserver en ligne ou appeler le directement"
-              description="Vous avez le choix entre créer un compte pour réserver et suivre
-              votre colis ou bien appeler le transporteur directement."
-              button={
-                <Button
-                  variant="contained"
-                  href="/profilDetails"
-                  endIcon={<GoPackage />}
-                >
-                  Voir mes colis
-                </Button>
-              }
-            />
-          </Container>
-        </Box>
-        <Box bgcolor="#F5F5F5">
-          <Container>
-            <HowTo
-              image={sendFourthStep}
-              step="- Dernière étape"
-              title="Suivre le colis"
-              description="Apres validation de la part du transporteur, vous avez une page
-              dédiée pour suivre l'évolution du statut de votre colis."
-              button={
-                <Button
-                  variant="contained"
-                  href="/profilDetails"
-                  endIcon={<MdOutlineDeliveryDining />}
-                >
-                  Suivre un colis
-                </Button>
-              }
-              flip={-1}
             />
           </Container>
         </Box>

@@ -1,4 +1,16 @@
 import moment from "moment";
+import COLORS from "../../colors";
+
+/**
+ *
+ * @param {*} data la reservatioon
+ * @returns {Number}
+ * 0 si en attente --
+ * 1 si en colis en livraison --
+ * 2 si colis arrivé mais avant date de livraison --
+ * 3 si aprés date de livraison --
+ * 4 si livré
+ */
 
 function getStep(data) {
   if (data?.id) {
@@ -6,10 +18,14 @@ function getStep(data) {
     if (data.status === "delivered") return 4;
 
     if (data.status === "ok") {
+      //aprés date d'arrivée
       if (moment().isSameOrAfter(data.departureDate)) {
+        //apres date de distribution
         if (moment().isSameOrAfter(data.distributionDate)) return 3;
+        //avant date de distribution
         else return 2;
       } else {
+        //avant date d'arrivée
         return 1;
       }
     }
@@ -24,13 +40,13 @@ function getStatus(data) {
         return {
           color: "primary",
           text: "Colis à récupérer",
-          textColor: "black",
+          textColor: COLORS.black,
         };
       } else {
         return {
           color: "primary",
           text: "Transport en cours",
-          textColor: "black",
+          textColor: COLORS.black,
         };
       }
     } else {
