@@ -194,7 +194,7 @@ const DeletedPackage = ({ data }) => {
   }
   return (
     <Paper sx={{ flex: 1, boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }} elevation={0}>
-      <Accordion elevation={0} disabled>
+      <Accordion elevation={0}>
         <AccordionSummary
           expandIcon={<MdExpandMore />}
           aria-controls="panel1a-content"

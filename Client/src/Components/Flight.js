@@ -62,13 +62,7 @@ const Flight = ({ data, size = "100%" }) => {
           </Box>
           <FaRegDotCircle size={13} />
         </Stack>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="center"
-          spacing={1}
-          my={2}
-        >
+        <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} my={2}>
           <Typography fontSize={12} color="gray">
             {calculateWeight()} kg
           </Typography>
@@ -193,12 +187,7 @@ const Flight = ({ data, size = "100%" }) => {
             </Paper>
           </Stack>
           <Stack direction="row" my={1}>
-            <Stack
-              direction="row"
-              alignItems="flex-end"
-              spacing={1}
-              flexGrow={1}
-            >
+            <Stack direction="row" alignItems="flex-end" spacing={1} flexGrow={1}>
               <Typography fontSize={22} fontWeight="555" color="primary">
                 {data.prices.pricePerKG}
               </Typography>
@@ -252,39 +241,27 @@ const Flight = ({ data, size = "100%" }) => {
         >
           <Stack direction="row" alignItems="center" flex={1} spacing={1}>
             {/* <Link underline="none" href={`/GPprofile/${data.ownerId}`}> */}
-            <Link
-              underline="none"
-              href={`/profilDetails/${data.ownerId}/myProfile`}
-            >
+            <Link underline="none" href={`/profilDetails/${data.ownerId}/myProfile`}>
               <Avatar
                 alt={data.publisher?.photoURL}
                 src={data.publisher?.photoURL}
                 sx={{ width: 24, height: 24 }}
               >
-                <Typography fontSize={11}>
-                  {data.publisher.firstName[0].toUpperCase()}
-                </Typography>
+                <Typography fontSize={11}>{data.publisher.firstName[0].toUpperCase()}</Typography>
               </Avatar>
             </Link>
             <Box>
               {/* <Link underline="hover" href={`/GPprofile/${data.ownerId}`}> */}
-              <Link
-                underline="none"
-                href={`/profilDetails/${data.ownerId}/myProfile`}
-              >
+              <Link underline="none" href={`/profilDetails/${data.ownerId}/myProfile`}>
                 <Stack direction="row" alignItems="center" spacing={1}>
-                  <Typography fontSize={14}>
-                    {data.publisher.firstName}
-                  </Typography>
+                  <Typography fontSize={14}>{data.publisher.firstName}</Typography>
                   {data.publisher?.documentVerified && (
                     <BsPatchCheckFill color={COLORS.primary} size={12} />
                   )}
                 </Stack>
               </Link>
               <Stack direction="row" alignItems="center" spacing={0.3}>
-                <Typography fontSize={9}>
-                  {moment(data.createdAt).fromNow()}
-                </Typography>
+                <Typography fontSize={9}>{moment(data.createdAt).fromNow()}</Typography>
                 <Typography fontSize={9}>. </Typography>
                 <FaGlobeAfrica size={10} color="#C5C5C5" />
               </Stack>
@@ -378,16 +355,7 @@ const Flight = ({ data, size = "100%" }) => {
       elevation={0}
     >
       <Grid container>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={9}
-          xl={9}
-          lg={9}
-          alignItems="center"
-          flex={1}
-        >
+        <Grid item xs={12} sm={12} md={9} xl={9} lg={9} alignItems="center" flex={1}>
           <Ticket />
         </Grid>
         <Grid

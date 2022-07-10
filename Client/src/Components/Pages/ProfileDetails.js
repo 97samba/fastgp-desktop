@@ -20,20 +20,11 @@ import { FaHome, FaPlaneDeparture, FaUserAlt } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
 import { IoMdHeartEmpty, IoMdPricetags } from "react-icons/io";
 import { IoDocument, IoLocationSharp } from "react-icons/io5";
-import {
-  MdExpandMore,
-  MdOutlineBlock,
-  MdPayment,
-  MdPerson,
-} from "react-icons/md";
+import { MdExpandMore, MdOutlineBlock, MdPayment, MdPerson } from "react-icons/md";
 import COLORS from "../../colors";
 import Profile from "../ProfileDetailsComponents/Profile";
 import { useHistory, useParams } from "react-router-dom";
-import {
-  getGPReservations,
-  getUserReservations,
-  userDetails,
-} from "../../firebase/db";
+import { getGPReservations, getUserReservations, userDetails } from "../../firebase/db";
 import PaymentMethod from "../ProfileDetailsComponents/PaymentMethod";
 import Location from "../ProfileDetailsComponents/Location";
 import Packages from "../ProfileDetailsComponents/Packages";
@@ -69,6 +60,7 @@ export const boardTab = [
   //     secured: true,
   // },
 ];
+
 export const dashTab = [
   {
     label: "Mes colis",
@@ -96,9 +88,7 @@ export const dashTab = [
   },
 ];
 const Left = () => {
-  const { profilState, goToPage, currentUser, id } = useContext(
-    ProfileDetailsContext
-  );
+  const { profilState, goToPage, currentUser, id } = useContext(ProfileDetailsContext);
 
   return (
     <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
@@ -118,9 +108,7 @@ const Left = () => {
                         borderLeft: "4px solid " + COLORS.warning,
                       },
                       borderLeft:
-                        profilState.label === tab.label
-                          ? "4px solid " + COLORS.warning
-                          : "none",
+                        profilState.label === tab.label ? "4px solid " + COLORS.warning : "none",
                     }}
                     onClick={() => goToPage(tab.label, tab.key, tab.icon)}
                   >
@@ -146,9 +134,7 @@ const Left = () => {
                         borderLeft: "4px solid " + COLORS.warning,
                       },
                       borderLeft:
-                        profilState.label === dash.label
-                          ? "4px solid " + COLORS.warning
-                          : "none",
+                        profilState.label === dash.label ? "4px solid " + COLORS.warning : "none",
                     }}
                     onClick={() => goToPage(dash.label, dash.key, dash.icon)}
                   >
@@ -218,10 +204,7 @@ const Unauthorized = () => {
   const history = useHistory();
   return (
     <Box flex={1} m={2} p={2}>
-      <Paper
-        elevation={0}
-        sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}
-      >
+      <Paper elevation={0} sx={{ boxShadow: "0px 1px 3px rgba(3, 0, 71, 0.2)" }}>
         <Stack alignItems="center" spacing={2} textAlign="center" p={4}>
           <MdOutlineBlock size={30} color="red" />
           <Typography variant="h5"> Unauthorized ressources</Typography>
@@ -229,11 +212,7 @@ const Unauthorized = () => {
             <Button onClick={() => history.push("/")} endIcon={<FaHome />}>
               Acceuil
             </Button>
-            <Button
-              color="warning"
-              onClick={() => history.push("/login")}
-              endIcon={<MdPerson />}
-            >
+            <Button color="warning" onClick={() => history.push("/login")} endIcon={<MdPerson />}>
               Connexion
             </Button>
           </Stack>
@@ -359,13 +338,9 @@ const ProfileDetails = () => {
               key={profilState.key}
               sx={{
                 borderLeft:
-                  profilState.label === profilState.label
-                    ? "4px solid " + COLORS.warning
-                    : "none",
+                  profilState.label === profilState.label ? "4px solid " + COLORS.warning : "none",
               }}
-              onClick={() =>
-                goToPage(profilState.label, profilState.key, profilState.icon)
-              }
+              onClick={() => goToPage(profilState.label, profilState.key, profilState.icon)}
             >
               <ListItemIcon>{profilState.icon}</ListItemIcon>
               <ListItemText>{profilState.label}</ListItemText>
@@ -381,9 +356,7 @@ const ProfileDetails = () => {
                       key={tab.key}
                       sx={{
                         borderLeft:
-                          profilState.label === tab.label
-                            ? "4px solid " + COLORS.warning
-                            : "none",
+                          profilState.label === tab.label ? "4px solid " + COLORS.warning : "none",
                       }}
                       onClick={() => goToPage(tab.label, tab.key, tab.icon)}
                     >

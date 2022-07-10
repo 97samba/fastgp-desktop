@@ -413,7 +413,7 @@ const DeletedReservation = ({ data }) => {
       }}
       elevation={0}
     >
-      <Accordion elevation={0} disabled>
+      <Accordion elevation={0}>
         <AccordionSummary
           expandIcon={<MdExpandMore />}
           aria-controls="panel1a-content"

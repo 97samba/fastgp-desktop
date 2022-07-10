@@ -10,6 +10,7 @@ import { IoLogOut, IoPersonSharp } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
 import {
   Avatar,
+  ButtonBase,
   Divider,
   Drawer,
   Link,
@@ -31,6 +32,7 @@ import { MdLogout, MdOutlineInsertPhoto } from "react-icons/md";
 
 const barHeight = "60 px";
 const drawerWidth = "250px";
+
 const UserMenu = ({ history, currentUser }) => {
   const [anchorEl, setanchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -64,48 +66,41 @@ const UserMenu = ({ history, currentUser }) => {
           {getAvatar()}
         </Avatar>
       </IconButton>
-      <Menu
-        open={open}
-        onClose={handleClose}
-        anchorEl={anchorEl}
-        sx={{ mt: 1 }}
-        elevation={1}
-      >
-        <Stack alignItems="center" py={2} px={4}>
-          <Avatar
-            alt={currentUser?.photoURL}
-            src={currentUser?.photoURL}
-            sx={{ width: 50, height: 50 }}
-          >
-            {getAvatar()}
-          </Avatar>
+      <Menu open={open} onClose={handleClose} anchorEl={anchorEl} sx={{ mt: 1 }} elevation={1}>
+        <ButtonBase onClick={() => gotoPage("myProfile")}>
+          <Stack alignItems="center" py={2} px={4}>
+            <Avatar
+              alt={currentUser?.photoURL}
+              src={currentUser?.photoURL}
+              sx={{ width: 50, height: 50 }}
+            >
+              {getAvatar()}
+            </Avatar>
 
-          <IconButton
-            color="primary"
-            size="small"
-            sx={{
-              mt: -2,
-              ml: 6,
-              background: "white",
-              textAlign: "center",
-            }}
-          >
-            <MdOutlineInsertPhoto />
-          </IconButton>
-          <Typography variant="body1" fontWeight="bold" color="primary">
-            {currentUser?.displayName}
-          </Typography>
-          <Typography variant="body2" color="GrayText">
-            {currentUser?.email}
-          </Typography>
-        </Stack>
+            <IconButton
+              color="primary"
+              size="small"
+              sx={{
+                mt: -2,
+                ml: 6,
+                background: "white",
+                textAlign: "center",
+              }}
+            >
+              <MdOutlineInsertPhoto />
+            </IconButton>
+            <Typography variant="body1" fontWeight="bold" color="primary">
+              {currentUser?.displayName}
+            </Typography>
+            <Typography variant="body2" color="GrayText">
+              {currentUser?.email}
+            </Typography>
+          </Stack>{" "}
+        </ButtonBase>
         <Box px={1}>
           <Divider />
         </Box>
-        <Link
-          href={`/profilDetails/${currentUser?.uid}/myProfile`}
-          underline="none"
-        >
+        <Link href={`/profilDetails/${currentUser?.uid}/myProfile`} underline="none">
           <MenuItem>
             {/* <MenuItem onClick={() => gotoPage("myProfile")}> */}
             <ListItemIcon>
@@ -114,10 +109,7 @@ const UserMenu = ({ history, currentUser }) => {
             Mon profil
           </MenuItem>
         </Link>
-        <Link
-          href={`/profilDetails/${currentUser?.uid}/packages`}
-          underline="none"
-        >
+        <Link href={`/profilDetails/${currentUser?.uid}/packages`} underline="none">
           <MenuItem>
             <ListItemIcon>
               <FaShippingFast />
@@ -125,10 +117,7 @@ const UserMenu = ({ history, currentUser }) => {
             Mes colis
           </MenuItem>
         </Link>
-        <Link
-          href={`/profilDetails/${currentUser?.uid}/reservations`}
-          underline="none"
-        >
+        <Link href={`/profilDetails/${currentUser?.uid}/reservations`} underline="none">
           <MenuItem>
             <ListItemIcon>
               <GoPackage />
@@ -227,10 +216,7 @@ export default function NavBar() {
             <MenuIcon />
           </IconButton>
           <Stack direction="row" flexGrow={1}>
-            <Button
-              href="/"
-              endIcon={<FaShippingFast color="white" size={25} />}
-            >
+            <Button href="/" endIcon={<FaShippingFast color="white" size={25} />}>
               <Typography variant="h6" color="white">
                 Fast GP
               </Typography>
@@ -282,9 +268,7 @@ export default function NavBar() {
           {currentUser?.uid ? (
             <MenuItem
               disableGutters
-              onClick={() =>
-                goToPage("/profilDetails/" + currentUser.uid + "/myProfile")
-              }
+              onClick={() => goToPage("/profilDetails/" + currentUser.uid + "/myProfile")}
             >
               <Stack direction="row" spacing={1} my={1} mt={2}>
                 {currentUser.photoURL ? (

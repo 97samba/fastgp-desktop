@@ -56,9 +56,9 @@ const ReservationDetails = () => {
     setreservation(result);
     currentUser?.uid === result?.gpId ? setIsClient(false) : setIsClient(true);
     result = undefined;
-    setloading(false);
     let feed = await GetFeedbackFromReservation(id);
     setfeedback(feed);
+    setloading(false);
     feed = undefined;
   }
 

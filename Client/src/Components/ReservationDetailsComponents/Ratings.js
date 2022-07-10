@@ -99,7 +99,11 @@ const Ratings = () => {
 
   async function fetchDatas() {
     let feedback = await GetFeedbackFromReservation(id);
-    feedback?.owner ? setAlreadyFeedback(true) : setAlreadyFeedback(false);
+    if (feedback?.owner) {
+      setAlreadyFeedback(true);
+      setloading(false);
+      return;
+    }
     let result = await GetAReservation(id);
     setreservation(result);
     result = undefined;
@@ -142,6 +146,9 @@ const Ratings = () => {
       gpId: reservation.gpId,
       owner: reservation.owner,
       reservationId: id,
+      clientFirstName: reservation?.sender?.firstName,
+      createdAt: new Date().toJSON(),
+      photoURL: currentUser?.photoURL,
     });
     res
       ? setdialogState({ ...dialogState, title: "Merci à bientôt", done: true })
@@ -197,6 +204,7 @@ const Ratings = () => {
                                 <IoStar
                                   size={25}
                                   color="goldenrod"
+                                  key={value}
                                   onClick={() =>
                                     setstate({
                                       ...state,
@@ -241,6 +249,7 @@ const Ratings = () => {
                               {value <= state.price ? (
                                 <IoStar
                                   size={25}
+                                  key={value}
                                   color="goldenrod"
                                   onClick={() => {
                                     setstate({

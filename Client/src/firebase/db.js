@@ -14,8 +14,6 @@ import {
   arrayUnion,
   arrayRemove,
   startAfter,
-  setDoc,
-  deleteDoc,
 } from "firebase/firestore";
 import moment from "moment";
 import { app } from "./config";
@@ -424,7 +422,9 @@ export async function ConfirmReservationDelivery(idReservation) {
   const docRef = doc(db, "reservations", idReservation);
   let result = false;
 
-  await updateDoc(docRef, { status: "delivered" }).then(() => (result = true));
+  await updateDoc(docRef, { status: "delivered", lastModified: new Date() }).then(
+    () => (result = true)
+  );
 
   return result;
 }
@@ -461,13 +461,19 @@ export const getFeaturedFlight = async () => {
   return results;
 };
 
+/**
+ *
+ * @param {*} userId l'id du gp
+ * @returns retourne les 5 annonces les plus récentes du GP
+ */
 export const getUserRecentFlights = async (userId) => {
   let flights = [];
   const q = query(
     collection(db, "flights"),
     // where("departureDate", ">=", Timestamp.fromDate(new Date())),
     where("ownerId", "==", userId),
-    orderBy("departureDate", "asc")
+    orderBy("departureDate", "asc"),
+    limit(5)
   );
   await getDocs(q).then((data) => {
     data.docs.forEach(
@@ -508,10 +514,6 @@ export async function getFollowedPeople(id) {
   return results;
 }
 
-/**
- * Feedbacks
- */
-
 /***
  * Feedbacks
  */
@@ -524,7 +526,15 @@ export async function getFollowedPeople(id) {
 export async function PostAFeedback(state) {
   let res = false;
   await addDoc(collection(db, "feedbacks"), state)
-    .then(() => (res = true))
+    .then(async (data) => {
+      const user = await userDetails(state.gpId);
+      if (user?.email) {
+        await updateDoc(doc(db, "users", user?.email), {
+          feedbacks: arrayUnion(data.id),
+        }).catch((error) => console.log("erreur lors de l'ajout de l'id du feedback", error));
+        res = true;
+      }
+    })
     .catch((e) => console.log("error while posting data", e));
   return res;
 }
@@ -540,7 +550,7 @@ export async function GetFeedbackFromReservation(idReservation) {
     where("reservationId", "==", idReservation, limit(1))
   );
   let res = {};
-  await getDocs(q).then((value) => (res = value.docs[0].data()));
+  await getDocs(q).then((value) => value.size > 0 && (res = value.docs[0].data()));
   return res;
 }
 /**
@@ -548,10 +558,12 @@ export async function GetFeedbackFromReservation(idReservation) {
  * @param {String} id l'identifiant du gp
  *
  */
-export async function getFeedbacksFromGPId() {
-  const docRef = doc(db, "feedbacks");
+export async function getFeedbacksFromGPId(id) {
+  const q = query(collection(db, "feedbacks"), where("gpId", "==", id));
+  let results = [];
 
-  await getDocs(docRef).then((values) => {
-    console.log("values", values.docs);
+  await getDocs(q).then((values) => {
+    values.docs.forEach((value) => results.push({ ...value.data(), id: value.id }));
   });
+  return results;
 }

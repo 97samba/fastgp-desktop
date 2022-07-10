@@ -27,7 +27,6 @@ const Title = ({ data }) => {
       .then(() => setdeleteDialog(false))
       .then(() => history.push("/profilDetails/" + currentUser?.uid));
   }
-  console.log("data.status", data.status);
 
   const SuppressionDialog = () => {
     return (
