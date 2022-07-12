@@ -294,79 +294,41 @@ const Creation = () => {
         <Typography variant="subtitle1">Résumé</Typography>
         <Stack spacing={1}>
           <Paper elevation={0} sx={{ border: 1, borderColor: "#D5D5D5" }}>
-            <Stack
-              direction="row"
-              p={1}
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Stack direction="row" p={1} alignItems="center" justifyContent="space-between">
               <Stack direction="row" alignItems="center">
                 <FaPlaneDeparture color="#A5A5A5" />
                 <Typography ml={2}>{departure?.name}</Typography>
               </Stack>
-              {departure?.name ? (
-                <FaCheckCircle color="green" />
-              ) : (
-                <FaRegCircle color="gray" />
-              )}
+              {departure?.name ? <FaCheckCircle color="green" /> : <FaRegCircle color="gray" />}
             </Stack>
           </Paper>
           <Paper elevation={0} sx={{ border: 1, borderColor: "#D5D5D5" }}>
-            <Stack
-              direction="row"
-              p={1}
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Stack direction="row" p={1} alignItems="center" justifyContent="space-between">
               <Stack direction="row" alignItems="center">
                 <FaPlaneArrival color="#A5A5A5" />
                 <Typography ml={2}>{destination?.name}</Typography>
               </Stack>
-              {destination?.name ? (
-                <FaCheckCircle color="green" />
-              ) : (
-                <FaRegCircle color="gray" />
-              )}
+              {destination?.name ? <FaCheckCircle color="green" /> : <FaRegCircle color="gray" />}
             </Stack>
           </Paper>
           <Paper elevation={0} sx={{ border: 1, borderColor: "#D5D5D5" }}>
-            <Stack
-              direction="row"
-              p={1}
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Stack direction="row" p={1} alignItems="center" justifyContent="space-between">
               <Stack direction="row" alignItems="center">
                 <FaCalendarAlt color="#A5A5A5" />
-                <Typography ml={2}>
-                  {moment(departureDate).format("DD/M/Y")}
-                </Typography>
+                <Typography ml={2}>{moment(departureDate).format("DD/M/Y")}</Typography>
               </Stack>
-              {destination?.name ? (
-                <FaCheckCircle color="green" />
-              ) : (
-                <FaRegCircle color="gray" />
-              )}
+              {destination?.name ? <FaCheckCircle color="green" /> : <FaRegCircle color="gray" />}
             </Stack>
           </Paper>
           <Paper elevation={0} sx={{ border: 1, borderColor: "#D5D5D5" }}>
-            <Stack
-              direction="row"
-              p={1}
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Stack direction="row" p={1} alignItems="center" justifyContent="space-between">
               <Stack direction="row" alignItems="center">
                 <FaMoneyBillWave color="#A5A5A5" />
                 <Typography ml={2}>
-                  {
-                    prices.filter((price) => price.type === "pricePerKG")[0]
-                      .price
-                  }
+                  {prices.filter((price) => price.type === "pricePerKG")[0].price}
                 </Typography>
               </Stack>
-              {prices.filter((price) => price.type === "pricePerKG")[0].price >
-              0 ? (
+              {prices.filter((price) => price.type === "pricePerKG")[0].price > 0 ? (
                 <FaCheckCircle color="green" />
               ) : (
                 <FaRegCircle color="gray" />
@@ -374,12 +336,7 @@ const Creation = () => {
             </Stack>
           </Paper>
           <Paper elevation={0} sx={{ border: 1, borderColor: "#D5D5D5" }}>
-            <Stack
-              direction="row"
-              p={1}
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Stack direction="row" p={1} alignItems="center" justifyContent="space-between">
               <Stack direction="row" alignItems="center">
                 <FaSuitcase color="#A5A5A5" />
                 <Typography ml={2}>
@@ -395,7 +352,7 @@ const Creation = () => {
             </Stack>
           </Paper>
           <PaymentButton />
-          <QrCodeAndSummary />
+          <QrCodeAndSummary id={state?.createdItemId} />
         </Stack>
       </Paper>
     );
@@ -403,11 +360,7 @@ const Creation = () => {
 
   function testFlightOwner(publication) {
     if (publication?.ownerId !== currentUser?.uid) {
-      console.log(
-        "redirecting to home bad owner ",
-        publication?.ownerId,
-        currentUser?.uid
-      );
+      console.log("redirecting to home bad owner ", publication?.ownerId, currentUser?.uid);
       history.push("/");
     }
   }
@@ -444,8 +397,7 @@ const Creation = () => {
             flights: flights,
             user: user,
           });
-          var whatshappNumber =
-            user.whatsapp2 === "oui" ? user.phone2 : user.phone;
+          var whatshappNumber = user.whatsapp2 === "oui" ? user.phone2 : user.phone;
           setpublisher({
             firstName: user.firstName,
             lastName: user.lastName,
@@ -466,10 +418,7 @@ const Creation = () => {
         history.push("/login");
       } else {
         if (currentUser?.uid) {
-          if (
-            history.location?.state?.edit === true ||
-            queryParams.get("mode") === "edit"
-          ) {
+          if (history.location?.state?.edit === true || queryParams.get("mode") === "edit") {
             changeToEditMode();
             console.log("Mode", queryParams.get("mode"));
             let model;
@@ -491,10 +440,7 @@ const Creation = () => {
             setfacebookLink(model.facebookLink);
             setdepartureDate(new Date(model.departureDate));
             setdistributionDate(new Date(model.distributionDate));
-            uploadPrices(
-              model.prices.pricePerKG,
-              model.prices.pricePerSuitcase
-            );
+            uploadPrices(model.prices.pricePerKG, model.prices.pricePerSuitcase);
             var user = await userDetails(currentUser.uid);
 
             setstate({
@@ -504,9 +450,9 @@ const Creation = () => {
               currency: model.currency,
               user: user,
               openDialog: false,
+              createdItemId: model?.id,
             });
-            var whatshappNumber =
-              user.whatsapp2 === "oui" ? user.phone2 : user.phone;
+            var whatshappNumber = user.whatsapp2 === "oui" ? user.phone2 : user.phone;
             setpublisher({
               firstName: user.firstName,
               lastName: user.lastName,

@@ -69,7 +69,7 @@ const Contribution = () => {
               </RadioGroup>
               {state.contributionPaymentMethod === "money" ? (
                 <Typography variant="body2" color="GrayText">
-                  Le livreur encaissera la somme en même temps que les colis.
+                  Nous vous contacterons pour encaisser la somme.
                 </Typography>
               ) : (
                 <Typography variant="body2" color="GrayText">

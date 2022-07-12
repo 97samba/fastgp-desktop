@@ -6,7 +6,7 @@ import ProfilDescriptor from "../ViewComponents/ProfilDescriptor";
 import Reservation from "../ViewComponents/Reservation";
 import ContactInfo from "../ViewComponents/ContactInfo";
 import FlightInformations from "../ViewComponents/FlightInformations";
-import { getAFlight } from "../../firebase/db";
+import { getAFlight, userDetails } from "../../firebase/db";
 import { useAuth } from "../../firebase/auth";
 import COLORS from "../../colors";
 import FlightNotFound from "../ViewComponents/FlightNotFound";
@@ -40,6 +40,7 @@ const View = () => {
   });
   const [adViewed, setadViewed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [gpInformations, setgpInformations] = useState({});
 
   const visitProfil = () => {
     if (flightState.ownerId) {
@@ -53,9 +54,10 @@ const View = () => {
       if (id === undefined) history.push("/");
       if (id && history.location.state === undefined) {
         var flight = await getAFlight(id);
-        console.log("flight :>> ", flight);
+        console.log("flight", flight);
+        var gp = await userDetails(flight?.ownerId);
+        console.log("gp", gp);
         if (flight?.ownerId) {
-          setflightState(flight);
           setLoading(false);
         } else {
           setnotFound(true);
@@ -100,26 +102,14 @@ const View = () => {
       >
         {!notFound ? (
           <Grid container minHeight={300} spacing={2}>
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={3}
-              lg={3}
-              xl={3}
-              order={{ xs: 1, sm: 1, md: 0 }}
-            >
+            <Grid item xs={12} sm={12} md={3} lg={3} xl={3} order={{ xs: 1, sm: 1, md: 0 }}>
               <ProfilDescriptor state={flightState} />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
               <Stack direction="column" spacing={2}>
                 <FlightInformations state={flightState} context={ViewContext} />
                 <Reservation />
-                <ContactInfo
-                  state={flightState}
-                  loading={loading}
-                  ViewContext={ViewContext}
-                />
+                <ContactInfo state={flightState} loading={loading} ViewContext={ViewContext} />
               </Stack>
             </Grid>
             <Grid
